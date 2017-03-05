@@ -1,0 +1,5 @@
+Front end qs
+    -How will routing and the side bar be compatible?
+        Will every page have the side bar?
+        And if not, what then?
+        Should the routing target the entire body?
