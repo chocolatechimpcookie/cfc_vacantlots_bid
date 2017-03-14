@@ -1,7 +1,8 @@
+console.log("test hamburger outside");
 
-
-angular.controller('SidebarController', function($scope) 
+angular.module('vacantlotsApp').controller('SidebarController', function($scope) 
 	{
+console.log("test hamburger inside1");
 		
 		$scope.state = false;
 		
@@ -11,11 +12,14 @@ angular.controller('SidebarController', function($scope)
 		    //$scope.state = !$scope.state;
 		    console.log('Toggling!!!');
 		};
-		
+		console.log("test hamburger inside1a");
+
 	});
 
-angular.directive('sidebarDirective', function()
+angular.module('vacantlotsApp').directive('sidebarDirective', function()
 {
+console.log("test hamburger inside 2");
+
     return {
         link : function(scope, element, attr)
         {
