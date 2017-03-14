@@ -1,4 +1,4 @@
-angular.module('vacantlots', ['ui.router'])
+angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
     {
         $urlRouterProvider.otherwise('/');
@@ -7,7 +7,15 @@ angular.module('vacantlots', ['ui.router'])
         {
             url:'/',
             templateUrl:'views/map.html',
-            //controller
+            controller: "MapCtrl as map"
         })
         ;
-    }]);
+    }])
+    
+    
+    
+    
+    
+    ;
+    
+//How do I implement multiple module configs?
