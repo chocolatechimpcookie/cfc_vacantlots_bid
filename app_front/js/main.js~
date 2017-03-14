@@ -6,8 +6,8 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
         .state('homePage',
         {
             url:'/',
-            templateUrl:'views/map.html'
-            //controller: "MapCtrl as map"
+            templateUrl:'views/map.html',
+            controller: "MapCtrl as map"
         })
 		.state('loginPage',
 		{
@@ -22,11 +22,14 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
 			controller: "RegisterCtrl as register"
 		})
         ;
-		//$locationProvider.html5Mode(true);
-
 
 
     }])
+    
+    
+    
+    
+    
     ;
     
 //How do I implement multiple module configs?

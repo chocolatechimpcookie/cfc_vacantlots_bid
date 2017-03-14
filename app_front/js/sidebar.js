@@ -1,20 +1,10 @@
-console.log("test hamburger outside");
+//console.log("test hamburger outside");
 
-angular.module('vacantlotsApp').controller('SidebarController', function($scope) 
-	{
-console.log("test hamburger inside1");
-		
-		$scope.state = false;
-		
-		// Just a dummy function to show we are connecting with angular
-		$scope.toggleState = function() 
-		{
-		    //$scope.state = !$scope.state;
-		    console.log('Toggling!!!');
-		};
-		console.log("test hamburger inside1a");
-
-	});
+angular.module('vacantlotsApp').controller('SidebarController', function() 
+{
+	//console.log("test hamburger inside1");
+	this.state = false;
+});
 
 angular.module('vacantlotsApp').directive('sidebarDirective', function()
 {
