@@ -70,30 +70,28 @@
                     </li>
                 </ul>
             </div>
-        </div>
         
-        <div id="page-content-wrapper">
-
-            <nav class="navbar navbar-default" ng-controller="SidebarController">
-                <button id="menu-toggle" style="float:left" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <h1>Vacant Lots</h1>
-                <h3>Newark</h3>
-            
-            </nav>
+            <div id="page-content-wrapper">
+    
+                <nav class="navbar navbar-default" ng-controller="SidebarController">
+                    <button ng-click="toggleState()" href="#menu-toggle" id="menu-toggle" style="float:left" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <h1>Vacant Lots</h1>
+                    <h3>Newark</h3>
+                
+                </nav>
+            </div>
+        
+        
+            <div ui-view></div>
+        
         </div>
-    
-    
-        <div ui-view></div> 
-        <!--<div class="container">-->
-        <!--    <div class="row">-->
-        <!--        -->
-        <!--    </div>-->
-        <!--</div>-->
+        <!--wrapper-->
+
 
     </body>
     
