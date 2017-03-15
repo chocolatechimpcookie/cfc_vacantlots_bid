@@ -1,20 +1,33 @@
 Cina's Notes
 
 Do
-    -UI router needs to have a nicer URL
+
     -Login page
     -Register page
     
     
     
     
-Did
+I Did
+    -Integrated side panel into main app
+    
+    
+David Did
+    -Found/made template for side panel
 
 
 
 
-
-
+Bugs
+    Bug-UI router needs to have a nicer URL; htmltrue,location provider
+        and base cause errors; this problem doesn't exist on RouterProvider
+        but does on UIrouter. Should I switch?
+        
+        
+        
+        
+        
+        
 
 General Notes On Angular:
     Module: stores the different parts of the app (below)
@@ -42,3 +55,8 @@ General Notes On Angular:
     
         -Router: watches URL and loads the correct template
         into the controller.
+        
+        
+        
+
+    

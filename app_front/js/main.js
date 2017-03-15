@@ -1,13 +1,17 @@
 angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
     {
+        //.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider)
+    //{
         $urlRouterProvider.otherwise('/');
+        //$locationProvider.html5Mode(true);
+        //$locationProvider.html5Mode({ enabled: true, requireBase: false });
         $stateProvider
         .state('homePage',
         {
             url:'/',
-            templateUrl:'views/map.html'
-            //controller: "MapCtrl as map"
+            templateUrl:'views/map.html',
+            controller: "MapCtrl as map"
         })
 		.state('loginPage',
 		{
@@ -22,7 +26,6 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
 			controller: "RegisterCtrl as register"
 		})
         ;
-		//$locationProvider.html5Mode(true);
 
 
 
@@ -30,3 +33,6 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
     ;
     
 //How do I implement multiple module configs?
+
+//    .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider)
+    //{

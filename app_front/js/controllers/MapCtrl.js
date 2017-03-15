@@ -6,7 +6,7 @@ angular.module('vacantlotsApp')
         //});
 
         this.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };        
-
+        //console.log(map);
     
     
     });
