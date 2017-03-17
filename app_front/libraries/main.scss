@@ -37,7 +37,8 @@ height: 400px;
 //
 //}
 
-#header_nav
+#page-content-wrapper
+//#header_nav
 {
    span
    {
@@ -52,9 +53,10 @@ height: 400px;
    {
       height:100%;
       border:none;
-      &:active
-      {
       
+      &:focus
+      {
+         height:100%;      
       }
       
       .icon-bar
@@ -64,16 +66,28 @@ height: 400px;
          color:black;
       }
    
+      margin-left:20px;
    }
    
-   
-   border-top: 0px;
+   //border:none;
+   border-top: none;
    border-left: 0px;
    border-right:0px;
    margin-right:0px;
    margin-left:0px;
-   
+   //background-color: #f8f8f8;
    width:100%;
+   
+   nav
+   {
+      border:none;
+      width:100%;
+      border-left: 0px !important;
+      padding: 0px 0px 0px 0px;
+      border:0px 0px 0px 0px;
+      margin:0px 0px 0px 0px;
+   
+   }
 }
 
 
@@ -102,7 +116,8 @@ height: 400px;
 }
 
 
-#sidebar-wrapper {
+#sidebar-wrapper
+{
     z-index: 1000;
     position: fixed;
     left: 250px;
@@ -126,7 +141,7 @@ height: 400px;
 {
     //width: 100%;
     position: absolute;
-    padding: 15px;
+    //padding: 15px;
 }
 
 #wrapper.toggled #page-content-wrapper
@@ -236,7 +251,7 @@ height: 400px;
 
     #page-content-wrapper
     {
-        padding: 20px;
+        //padding: 20px;
         position: relative;
     }
 
