@@ -27,30 +27,30 @@
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
                     <li class="sidebar-brand">
-                        <a ui-sref="homePage">
+                        <a class="sidebar_links" ui-sref="homePage">
                             Welcome
                         </a>
                     </li>
                     <li>
-                        <a ui-sref="loginPage">Login</a>
+                        <a class="sidebar_links" ui-sref="loginPage">Login</a>
                     </li>
                     <li>
-                        <a ui-sref="registerPage">Register</a>
+                        <a class="sidebar_links" ui-sref="registerPage">Register</a>
                     </li>
                 </ul>
             </div>
         
             <div id="page-content-wrapper">
     
-                <nav class="navbar navbar-default" ng-controller="SidebarController">
-                    <button ng-click="toggleState()" id="menu-toggle" style="float:left" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <nav id="header_nav" class="navbar navbar-default" ng-controller="SidebarController">
+                    <button ng-click="toggleState()" id="menu-toggle" style="float:left; " type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                       <span class="sr-only">Toggle navigation</span>
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                     </button>
-                    <h1>Vacant Lots</h1>
-                    <h3>Newark</h3>
+                    <span >Vacant Lots <small>Newark</small></span>
+                    
                 
                 </nav>
             </div>
@@ -68,10 +68,12 @@
     
     $(document).ready(function()
     {
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
+        $("#menu-toggle, .sidebar_links").click(function(e) {
+        //$("#menu-toggle").click(function(e) {
+            //e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
+
     });
     </script> 
     

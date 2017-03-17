@@ -2,7 +2,7 @@
 
 angular.module('vacantlotsApp').controller('SidebarController', function() 
 {
-	//console.log("test hamburger inside1");
+	console.log("test hamburger inside1");
 	this.state = false;
 });
 

@@ -3,6 +3,7 @@
 //default values
 
 
+
 .angular-google-map-container
 {
 height: 400px;
@@ -19,12 +20,66 @@ height: 400px;
 .nav-bar
 {
    padding-top:0px;
+}
+
+//#page-content-wrapper
+//{
+//   
+//   border-top: 0px;
+//   border-left: 0px;
+//   border-right:0px;
+//   margin-right:0px;
+//   margin-left:0px;
+//   padding-left:0px;
+//   padding-right:0px;
+//   padding-top:0px;
+//
+//
+//}
+
+#header_nav
+{
+   span
+   {
+      font-size:35px;
+      small
+      {
+         color:grey;
+      }
+   }
    
+   button
+   {
+      height:100%;
+      border:none;
+      &:active
+      {
+      
+      }
+      
+      .icon-bar
+      {
+         height: 5px;
+         width:25px;
+         color:black;
+      }
+   
+   }
+   
+   
+   border-top: 0px;
+   border-left: 0px;
+   border-right:0px;
+   margin-right:0px;
+   margin-left:0px;
+   
+   width:100%;
 }
 
 
 
- body {
+ body
+ {
     overflow-x: hidden;
  }
 
@@ -62,17 +117,20 @@ height: 400px;
     transition: all 0.5s ease;
 }
 
-#wrapper.toggled #sidebar-wrapper {
+#wrapper.toggled #sidebar-wrapper
+{
     width: 250px;
 }
 
-#page-content-wrapper {
+#page-content-wrapper
+{
     //width: 100%;
     position: absolute;
     padding: 15px;
 }
 
-#wrapper.toggled #page-content-wrapper {
+#wrapper.toggled #page-content-wrapper
+{
     position: absolute;
     margin-right: -250px;
 }
@@ -176,7 +234,8 @@ height: 400px;
         width: 250px;
     }
 
-    #page-content-wrapper {
+    #page-content-wrapper
+    {
         padding: 20px;
         position: relative;
     }

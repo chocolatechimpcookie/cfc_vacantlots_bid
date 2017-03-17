@@ -9,6 +9,7 @@ Cina's Notes
     
     
 ### Did
+ -after login or register is clicked, the menu should retract
 
 
 
