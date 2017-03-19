@@ -37,6 +37,37 @@ height: 400px;
 //
 //}
 
+
+#login_form, #register_form
+{
+   width:40%;
+   
+   input
+   {
+      width:214px;
+   }
+   
+   .form-control
+   {
+      border-radius: 1px;
+      margin-bottom: 15px;
+   }
+   
+   button
+   {
+      height: 60px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      width:214px;
+      color:white;
+      font-weight: 800;
+      font-size: 20px;
+      background-color: blue;
+   }
+   
+
+}
+
 #page-content-wrapper
 //#header_nav
 {
