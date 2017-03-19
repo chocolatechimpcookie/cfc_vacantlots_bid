@@ -61,9 +61,16 @@ height: 400px;
       width:214px;
       color:white;
       font-weight: 800;
-      font-size: 20px;
-      background-color: blue;
+      font-size: 25px;
+      background-color: #00BFFF;
+      
+      &:hover, &:active
+      {
+        //box-shadow: 2px 1pbx 1px 1px grey;
+         background-color:#1E90FF;
+      }
    }
+   
    
 
 }
