@@ -17,10 +17,22 @@ height: 400px;
    display:inherit;
 }
 
-.nav-bar
+.navbar
 {
    padding-top:0px;
 }
+
+.navbar-default .navbar-toggle:focus
+{
+      background-color:#f8f8f8;
+
+}
+
+.navbar:hover, .navbar-default .navbar-toggle:hover
+{
+   background-color: #ddd;
+}
+
 
 //#page-content-wrapper
 //{
@@ -124,6 +136,12 @@ height: 400px;
       padding: 0px 0px 0px 0px;
       border:0px 0px 0px 0px;
       margin:0px 0px 0px 0px;
+   
+   }
+   
+   h1
+   {
+      font-weight: 900;
    
    }
 }
