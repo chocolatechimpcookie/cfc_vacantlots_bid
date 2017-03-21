@@ -25,4 +25,14 @@ console.log("test hamburger inside 2");
             });
         }
     };
-});  
+});
+
+$(document).ready(function()
+    {
+        $("#menu-toggle, .sidebar_links").click(function(e) {
+        //$("#menu-toggle").click(function(e) {
+            //e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+    });
