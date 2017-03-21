@@ -4,7 +4,8 @@ app = angular.module('vacantlotsApp');
 app.config(function(uiGmapGoogleMapApiProvider) {
     console.log('In config')
     uiGmapGoogleMapApiProvider.configure({
-        key: "input key",
+        //TODO: Factor this into another js file that isn't tracked with git?
+        key: "AIzaSyA5sCewJikG42pgRQOIJ_NjnVv3c6O_d6I",
         v: '3.20', //defaults to latest 3.X anyhow
         libraries: 'weather,geometry,visualization'
     });
