@@ -15,7 +15,7 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi) {
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
     // e.g. $scope.markers = []
-    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+    $scope.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
 
     // uiGmapGoogleMapApi is a promise.
     // The "then" callback function provides the google.maps object.
