@@ -1,10 +1,19 @@
 Cina's Notes
 
+Map
+    -map should be responsive and fully take up the remaining space
+    -dummy properties should be loaded into the map
+    -MapCtrl should work without having ng-controller in the view
+    since the router already assigns the controller (but removing it
+    stops it from working)
+    
+
 Do
 
     -Login page
     -Register page
-    
+    -Welcome should maybe just say map?
+    -There should be a way back to the map
     
     
     
