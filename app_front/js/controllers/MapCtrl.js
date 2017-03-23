@@ -11,7 +11,7 @@ app.config(function(uiGmapGoogleMapApiProvider) {
     });
 })
 
-app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi) {
+app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties) {
     console.log('In controller')
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
@@ -55,7 +55,7 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi) {
       var ret = {
         latitude: latitude,
         longitude: longitude,
-        title: 'm' + i,
+        title: '#' + i,
         icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png'
       };
       ret[idKey] = i;
@@ -70,8 +70,8 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi) {
     $scope.markerOptions = {draggable: true};
 
     $scope.goBid = function (marker, event, model){
-        console.log('AAAAAAAA')
-        console.log(model.title)
+        sharedProperties.setString(model.title)
+        $state.go('bidPage')
     };
 
 });

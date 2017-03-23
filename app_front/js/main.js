@@ -36,6 +36,27 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
 
 
     }])
+    // The service below allows us to share variables between controllers
+    // Based on http://jsfiddle.net/b2fCE/1/
+    .service('sharedProperties', function() {
+    var objectValue = {
+        data: 'not found'
+    };
+
+    return {
+        getString: function() {
+            return objectValue.data;
+        },
+        setString: function(value) {
+            console.log('Setting string through shared object')
+            objectValue.data = value;
+        },
+        getObject: function() {
+            return objectValue;
+        }
+    }
+});
+
     ;
     
 //How do I implement multiple module configs?
