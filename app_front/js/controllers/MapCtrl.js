@@ -1,8 +1,6 @@
 var app
 app = angular.module('vacantlotsApp');
 
-console.log('AAAAAAAAAAAAAAAAAA')
-
 app.config(function(uiGmapGoogleMapApiProvider) {
     console.log('In config')
     uiGmapGoogleMapApiProvider.configure({
@@ -13,7 +11,7 @@ app.config(function(uiGmapGoogleMapApiProvider) {
     });
 })
 
-app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties) {
+app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties, $http) {
     console.log('In controller')
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
@@ -25,40 +23,46 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
     uiGmapGoogleMapApi.then(function(maps) {
     });
 
-    //var properties = $scope.properties;
+
+
     //console.log($scope.properties)
-    var createMarker = function(address, latitude, longitude, idKey) {
+    var createMarker = function(i, address, latitude, longitude, idKey) {
       var ret = {
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png'
+        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png',
+        id: i
       };
-      ret[idKey] = i;
+      //ret[idKey] = i;
       return ret;
     };
 
     var markers = [];
+    var properties
+    $http.get('myprop.json')
+       .then(function(res){
+           properties = res.data;
+           var numProperties = properties.length;
+           for (var i = 0; i < 5; i++) {
+               propertyI = properties[i]
+               latitude = propertyI['latitude']
+               longitude = propertyI['longitude']
+               street = propertyI['Vital Street Name']
+               houseNumber = propertyI['Vital House Number']
+               address = street + houseNumber
+               markers.push(createMarker(i, address, latitude, longitude, i))
+           }
+           $scope.randomMarkers = markers;
+           console.log('MARKERS: ' + markers)
 
-    // FIXME: Need way to get properties variable to MapCtrl.js
-    //var numProperties = properties.length;
-//    for (var i = 0; i < numProperties; i++) {
-//        propertyI = properties[i]
-//        latitude = propertyI['latitude']
-//        longitude = propertyI['longitude']
-//        street = propertyI['Vital Street Name']
-//        houseNumber = propertyI['Vital House Number']
-//        address = street + houseNumber
-//        markers.push(createMarker(address, latitude, longitude))
-//    }
+           $scope.markerOptions = {draggable: true};
 
-    $scope.randomMarkers = []//markers;
 
-    $scope.markerOptions = {draggable: true};
+        });
 
     $scope.goBid = function (marker, event, model){
-        sharedProperties.setString(model.title)
-        $state.go('bidPage')
-    };
-
+               sharedProperties.setString(model.title)
+               $state.go('bidPage')
+           };
 });
