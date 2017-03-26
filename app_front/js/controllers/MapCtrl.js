@@ -11,28 +11,30 @@ app.config(function(uiGmapGoogleMapApiProvider) {
     });
 })
 
-app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties) {
+app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties, $http) {
     console.log('In controller')
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
     // e.g. $scope.markers = []
+
     $scope.map = {
-      center: {
-        latitude: 40.1451,
-        longitude: -99.6680
-      },
-      zoom: 4,
-      bounds: {
-        northeast: {
-          latitude: 45.1451,
-          longitude: -80.6680
-        },
-        southwest: {
-          latitude: 30.000,
-          longitude: -120.6680
-        }
-      }
-    };
+              center: {
+                latitude: 40.1451,
+                longitude: -99.6680
+              },
+              zoom: 4,
+              bounds: {
+                northeast: {
+                  latitude: 45.1451,
+                  longitude: -80.6680
+                },
+                southwest: {
+                  latitude: 30.000,
+                  longitude: -120.6680
+                }
+              }
+            };
+
     //$scope.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
 
     // uiGmapGoogleMapApi is a promise.
@@ -61,13 +63,37 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
       ret[idKey] = i;
       return ret;
     };
-    var markers = [];
-    for (var i = 0; i < 50; i++) {
-      markers.push(createRandomMarker(i, $scope.map.bounds))
-    }
-    $scope.randomMarkers = markers;
 
-    $scope.markerOptions = {draggable: true};
+    var markers = [];
+
+    $http.get('myprop.json')
+       .then(function(res){
+            // FIXME: It seems like we shouldn't need to define this again
+            $scope.map = {
+              center: {
+                latitude: 40.1451,
+                longitude: -99.6680
+              },
+              zoom: 4,
+              bounds: {
+                northeast: {
+                  latitude: 45.1451,
+                  longitude: -80.6680
+                },
+                southwest: {
+                  latitude: 30.000,
+                  longitude: -120.6680
+                }
+              }
+            };
+
+            for (var i = 0; i < 50; i++) {
+              markers.push(createRandomMarker(i, $scope.map.bounds));
+            };
+            $scope.randomMarkers = markers;
+
+            $scope.markerOptions = {draggable: true};
+       });
 
     $scope.goBid = function (marker, event, model){
         sharedProperties.setString(model.title)
