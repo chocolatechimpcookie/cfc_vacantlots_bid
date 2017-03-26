@@ -42,6 +42,21 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
     uiGmapGoogleMapApi.then(function(maps) {
     });
 
+    var createMarker = function(i, address, latitude, longitude, idKey) {
+      if (idKey == null) {
+        idKey = "id";
+      }
+      var ret = {
+        latitude: latitude,
+        longitude: longitude,
+        title: address,
+        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png'
+        //id: i
+      };
+      ret[idKey] = i;
+      return ret;
+    };
+
     var createRandomMarker = function(i, bounds, idKey) {
       var lat_min = bounds.southwest.latitude,
         lat_range = bounds.northeast.latitude - lat_min,
@@ -87,9 +102,20 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
               }
             };
 
-            for (var i = 0; i < 50; i++) {
-              markers.push(createRandomMarker(i, $scope.map.bounds));
-            };
+            properties = res.data;
+            var numProperties = properties.length;
+            for (var i = 0; i < 5; i++) {
+               propertyI = properties[i]
+               latitude = propertyI['Latitude']
+               longitude = propertyI['Longitude']
+               street = propertyI['Vital Street Name']
+               houseNumber = propertyI['Vital House Number']
+               address = street + houseNumber
+               console.log(i + address)
+               marker = createMarker(i, address, latitude, longitude)
+               console.log(marker)
+               markers.push(marker)
+            }
             $scope.randomMarkers = markers;
 
             $scope.markerOptions = {draggable: true};
