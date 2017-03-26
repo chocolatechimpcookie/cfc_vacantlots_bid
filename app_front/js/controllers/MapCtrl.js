@@ -32,14 +32,14 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
         longitude: longitude,
         title: address,
         icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png',
-        id: i
+        //id: i
       };
-      //ret[idKey] = i;
+      ret['id'] = i;
       return ret;
     };
 
     var markers = [];
-    var properties
+    var properties;
     $http.get('myprop.json')
        .then(function(res){
            properties = res.data;
@@ -51,10 +51,10 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
                street = propertyI['Vital Street Name']
                houseNumber = propertyI['Vital House Number']
                address = street + houseNumber
+               console.log(i + address)
                markers.push(createMarker(i, address, latitude, longitude, i))
            }
            $scope.randomMarkers = markers;
-           console.log('MARKERS: ' + markers)
 
            $scope.markerOptions = {draggable: true};
 
