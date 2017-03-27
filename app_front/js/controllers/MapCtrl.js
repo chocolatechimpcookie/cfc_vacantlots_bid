@@ -23,6 +23,7 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
     uiGmapGoogleMapApi.then(function(maps) {
     });
 
+    //Creates object containing info needed to create Google maps marker
     var createMarker = function(i, address, latitude, longitude, idKey) {
       if (idKey == null) {
         idKey = "id";
@@ -38,26 +39,32 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
       return ret;
     };
 
+    // Get relavant information for marker from property object from JSON
+    var extractPropertyInfo = function(property){
+        latitude = property['Latitude'];
+        longitude = property['Longitude'];
+        street = property['Vital Street Name'];
+        houseNumber = property['Vital House Number'];
+        address = houseNumber + ' ' + street;
+        return [address, latitude, longitude]
+    }
+
     var markers = [];
     var properties;
+    // HTTP get to load property data from JSON file.
     $http.get('myprop.json')
        .then(function(res){
            properties = res.data;
-           var numProperties = properties.length;
            //TODO: Need some way to filter properties. There are too many to look at at once.
-           for (var i = 0; i < 30; i++) {
-               propertyI = properties[i]
-               latitude = propertyI['Latitude']
-               longitude = propertyI['Longitude']
-               street = propertyI['Vital Street Name']
-               houseNumber = propertyI['Vital House Number']
-               address = houseNumber + ' ' + street
-               console.log(i + address + latitude + ' ' + longitude)
+           var numProperties = 30 //properties.length;
+           for (var i = 0; i < numProperties; i++) {
+               propertyInfo = extractPropertyInfo(properties[i])
+               address = propertyInfo[0]
+               latitude = propertyInfo[1]
+               longitude = propertyInfo[2]
                markers.push(createMarker(i, address, latitude, longitude))
            }
-           $scope.randomMarkers = markers;
-
-           $scope.markerOptions = {draggable: true};
+           $scope.markers = markers;
         });
 
     $scope.goBid = function (marker, event, model){
