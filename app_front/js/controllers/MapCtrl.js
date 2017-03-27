@@ -23,18 +23,18 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
     uiGmapGoogleMapApi.then(function(maps) {
     });
 
-
-
-    //console.log($scope.properties)
     var createMarker = function(i, address, latitude, longitude, idKey) {
+      if (idKey == null) {
+        idKey = "id";
+      }
       var ret = {
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png',
+        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png'
         //id: i
       };
-      ret['id'] = i;
+      ret[idKey] = i;
       return ret;
     };
 
@@ -44,21 +44,20 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
        .then(function(res){
            properties = res.data;
            var numProperties = properties.length;
-           for (var i = 0; i < 5; i++) {
+           //TODO: Need some way to filter properties. There are too many to look at at once.
+           for (var i = 0; i < 30; i++) {
                propertyI = properties[i]
-               latitude = propertyI['latitude']
-               longitude = propertyI['longitude']
+               latitude = propertyI['Latitude']
+               longitude = propertyI['Longitude']
                street = propertyI['Vital Street Name']
                houseNumber = propertyI['Vital House Number']
-               address = street + houseNumber
-               console.log(i + address)
-               markers.push(createMarker(i, address, latitude, longitude, i))
+               address = houseNumber + ' ' + street
+               console.log(i + address + latitude + ' ' + longitude)
+               markers.push(createMarker(i, address, latitude, longitude))
            }
            $scope.randomMarkers = markers;
 
            $scope.markerOptions = {draggable: true};
-
-
         });
 
     $scope.goBid = function (marker, event, model){
