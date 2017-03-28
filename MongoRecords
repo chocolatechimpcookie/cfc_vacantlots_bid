@@ -1,0 +1,11 @@
+db.newarkuser.insert({
+first: "Alesha",
+last: "Taylor",
+DateAccountCreated: "3-14-17",
+password : "xyc",
+email : "aaron.smith@gmail.com",
+phone : "220-434-2111",
+ListOfBids : ["3000","4500","299399"],
+ListOfFav : ["308 Broad st.", "2291 Central ave"],
+BidDate : new Date()
+})

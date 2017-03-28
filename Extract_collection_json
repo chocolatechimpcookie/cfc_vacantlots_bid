@@ -1,0 +1,10 @@
+ubuntu@ip-172-26-1-81:~$ mongoexport -d cfc -c properties -o myprop.json
+2017-03-23T08:43:08.352-0400	connected to: localhost
+2017-03-23T08:43:08.455-0400	exported 2367 records
+ubuntu@ip-172-26-1-81:~$ tail myprop.json 
+{"_id":{"$oid":"58c9259216870f9dd95db027"},"Vital House Number":"233-239","Vital Street Name":"NJRR AVE","Block":919,"Lot":1,"Latitude":40.726115,"Longitude":-74.171791247768,"Most Recent Inspection":"02-08-2016","Class Desc":"Abandoned","Owner Name":"SUMO REALTY INC","Owner Address":"27 PRINCE ST","City, State":"ELIZABETH, NJ","Zipcode":"","NetValue":0}
+{"_id":{"$oid":"58c9259216870f9dd95db028"},"Vital House Number":119,"Vital Street Name":"TICHENOR ST","Block":926,"Lot":33,"Latitude":40.72298117,"Longitude":-74.172687407178,"Most Recent Inspection":"10-20-2016","Class Desc":"Vacant","Owner Name":"CASTRO, FRANCELLE","Owner Address":"119 TICHENOR ST","City, State":"NEWARK, NJ","Zipcode":7105,"NetValue":0}
+{"_id":{"$oid":"58c9259216870f9dd95db029"},"Vital House Number":156,"Vital Street Name":"SOUTH ST","Block":927,"Lot":29,"Latitude":40.72234957,"Longitude":-74.171691013479,"Most Recent Inspection":"10-14-2016","Class Desc":"Vacant","Owner Name":"GOVEIA, ANDREZZA \u0026 ELIAS","Owner Address":"11 ELM ST.","City, State":"NEWARK, NJ","Zipcode":"","NetValue":0}
+
+
+I will include the json fine alone.
