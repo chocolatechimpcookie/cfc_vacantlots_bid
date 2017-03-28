@@ -20,6 +20,20 @@ height: 400px;
 .navbar
 {
    padding-top:0px;
+   //position:fixed;
+   z-index:2;
+   position: absolute;
+}
+
+#ui_view
+{
+   //z-index:1;
+   //position:absolute;
+}
+
+nav
+{
+
    
 }
 
