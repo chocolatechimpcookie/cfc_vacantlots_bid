@@ -20,6 +20,7 @@ height: 400px;
 .navbar
 {
    padding-top:0px;
+   
 }
 
 .navbar-default .navbar-toggle:focus
@@ -148,10 +149,10 @@ height: 400px;
 
 
 
- body
- {
-    overflow-x: hidden;
- }
+body
+{
+   overflow-x: hidden;
+}
 
 /* Toggle Styles */
 
@@ -289,19 +290,23 @@ height: 400px;
 //768 and up sm
 @media only screen and (min-width:768px)
 {
-     #wrapper {
-        padding-left: 0;
-    }
+   #wrapper
+   {
+      padding-left: 0;
+   }
 
-    #wrapper.toggled {
+    #wrapper.toggled
+    {
         padding-left: 250px;
     }
 
-    #sidebar-wrapper {
+    #sidebar-wrapper
+    {
         width: 0;
     }
 
-    #wrapper.toggled #sidebar-wrapper {
+    #wrapper.toggled #sidebar-wrapper
+    {
         width: 250px;
     }
 
@@ -311,7 +316,8 @@ height: 400px;
         position: relative;
     }
 
-    #wrapper.toggled #page-content-wrapper {
+    #wrapper.toggled #page-content-wrapper
+    {
         position: relative;
         margin-right: 0;
     } 
