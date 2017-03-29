@@ -1,0 +1,71 @@
+Cina's Notes
+
+Map
+    -map should be responsive and fully take up the remaining space
+    -dummy properties should be loaded into the map
+    -MapCtrl should work without having ng-controller in the view
+    since the router already assigns the controller (but removing it
+    stops it from working)
+    
+
+Do
+
+    -Login page
+    -Register page
+    -Welcome should maybe just say map?
+    -There should be a way back to the map
+    
+    
+    
+I Did
+    -Integrated side panel into main app
+    
+    
+David Did
+    -Found/made template for side panel
+
+
+
+
+Bugs
+    Bug-UI router needs to have a nicer URL; htmltrue,location provider
+        and base cause errors; this problem doesn't exist on RouterProvider
+        but does on UIrouter. Should I switch?
+        
+        
+        
+        
+        
+        
+
+General Notes On Angular:
+    Module: stores the different parts of the app (below)
+        -Template: the view
+            -directives: markers on a template
+            that tells the Angular HTML compiler
+            to attach special behavior
+            to a DOM element.
+            -Directives let you to write out logic onto HTML    
+    
+        -scope bind template and controller together,
+        if anything is changed on either end is updated
+            -Data gets set initially in the controller and into the scope
+            -The template grabs from scope
+            -when expressions change in template, controller is updated
+    
+        -controller: set up initial state and logic for A VIEW
+            -service is closely tied to controller
+            and lets you put view independent logic.
+            Then you can use that service in many different
+            controllers. A service can be used to fetch and
+            store a user object. Services can be injected into
+            controlllers.
+                -dependency injection
+    
+        -Router: watches URL and loads the correct template
+        into the controller.
+        
+        
+        
+
+    
