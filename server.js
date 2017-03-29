@@ -1,5 +1,4 @@
 const express = require("express")
-const _ = require("lodash")
 
 const bodyParser = require("body-parser")
 const jwt = require('jsonwebtoken')
@@ -12,40 +11,27 @@ const JwtStrategy = passportJWT.Strategy
 
 const { User } = require("./models.js")
 
+const bcrypt = require('bcryptjs')
 
-//in place of database for now
-var users = [
-  {
-    id: 1,
-    name: 'jonathan Hahn',
-    username: 'jonathanmh',
-    password: '%2yx4',
-    email: 'jon@gmail.com',
-    phone: '1234567890'
-  },
-  {
-    id: 2,
-    name: 'test test',
-    username: 'test',
-    password: 'test',
-    email: 'test@test.com',
-    phone: '1111111111'
-  }
-]
+//this is for my personal use since the database gets clogged with usless old test data and I have to empty it manually
+// User.remove({}, function(err,data) {
+//   console.log('hereeeeeff', err, 'los', data)
+// })
 
-var jwtOptions = {}
+let jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader()
 jwtOptions.secretOrKey = 'tasmanianDevil'
 
-var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   console.log('payload received', jwt_payload)
-  // usually this would be a database call:
-  var user = users[_.findIndex(users, {id: jwt_payload.id})]
-  if (user) {
-    next(null, user)
-  } else {
-    next(null, false)
-  }
+
+  User.findById(jwt_payload.id, function(err, user) {
+    if (user) {
+      next(null, user)
+    } else {
+      next(null, false)
+    }
+  })
 })
 
 passport.use(strategy)
@@ -65,9 +51,10 @@ app.get("/", function(req, res) {
 })
 
 app.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
-  res.json("Success! You can not see this without a token")
+  res.json("Success! You cannot see this without a token")
 })
 
+/*
 app.get("/secretDebug",
   function(req, res, next){
     console.log(req.get('Authorization'))
@@ -75,6 +62,7 @@ app.get("/secretDebug",
   }, function(req, res){
     res.json("debugging")
 })
+*/
 
 app.post("/login", function(req, res) {
   if(req.body.username && req.body.password){
@@ -82,48 +70,52 @@ app.post("/login", function(req, res) {
     var password = req.body.password
   }
 
-  // usually this would be a database call:
-  var user = users[_.findIndex(users, {username: username})]
-
-  if( ! user ){
-    res.status(401).json({message:"no such user found"})
-  }
-
-  if(user.password === password) {
-    // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
-    var payload = {id: user.id}
-    var token = jwt.sign(payload, jwtOptions.secretOrKey)
-    res.status(201).json({message: "ok", token: token})
-  } else {
-    res.status(401).json({message:"passwords did not match"})
-  }
+  User.findOne({ username: username }, function(err, user) {
+    if (err) {
+      console.log(err)
+    } else if (user) {
+      if (bcrypt.compareSync(password, user.password)) {
+        const payload = {id: user._id}
+        const token = jwt.sign(payload, jwtOptions.secretOrKey)
+        res.status(201).json({message: "ok", token: token})
+      } else {
+        res.status(401).json({message:"passwords did not match"})
+      }
+    } else {
+      res.status(401).json({message:"no such user found"})
+    }
+  })
 })
 
 app.post("/register", function(req, res) {
   if (req.body.name && req.body.username && req.body.password && req.body.email && req.body.phone) {
-    var name = req.body.name,
-        username = req.body.username,
-        password = req.body.password,
-        email = req.body.email,
-        phone = req.body.phone
+    var item = {
+        name : req.body.name,
+        username : req.body.username,
+        password : req.body.password,
+        email : req.body.email,
+        phone : req.body.phone
+        //check if dataCreated works/exists if you don't specify it here
+      }
   }
-  
-  var user = users[_.findIndex(users, {username: username})]
 
-  if (!user) {
-    users.push({id: users.length + 1, 
-                name: name,
-                username: username,
-                password: password,
-                email: email,
-                phone: phone})
-    res.status(201)
-  } else {
-    res.status(500).json({message:"username already in use"})
-  }
+  User.findOne({ username: req.body.username }, 'username', function(err, user) {
+    if (err) {
+      console.log(err)
+    } else if (user) {
+      res.status(500).json({message:"username already in use"})
+    } else {
+      const salt = bcrypt.genSaltSync(10)
+
+      item.password = bcrypt.hashSync(item.password, salt)
+      const user = new User(item)
+      user.save()
+      res.status(201)
+    }
+  })
 })
 
-var port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.listen(port, function() {
   console.log("Listening on port " + port)

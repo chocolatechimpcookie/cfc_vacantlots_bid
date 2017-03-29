@@ -5,12 +5,12 @@ mongoose.connection.once('open', function() { console.log('connected to database
 mongoose.connection.on('error', function(error) { console.log('Error: ' + error) })
 
 const userSchema = new mongoose.Schema({
-    //name: {type: String, required: true},
-    username: {type: String, required: true},
-    password: {type: String, required: true}//,
-    // email: {type: String, required: true},
-    // dateCreated: Date.now,
-    // phone: {type: String, required: true}
+    name: {type: String, required: true},
+    username: {type: String, required: true, unique: true},
+    password: {type: String, required: true},
+    email: {type: String, required: true},
+    dateCreated: {type: Date, default: Date.now},
+    phone: {type: String, required: true}
 })
 
 const User = mongoose.model('user', userSchema)

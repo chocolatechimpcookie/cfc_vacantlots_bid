@@ -11,10 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "jsonwebtoken": "^7.3.0",
-    "lodash": "^4.17.4",
     "mongoose": "^4.9.0",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1"
