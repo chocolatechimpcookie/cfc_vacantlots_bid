@@ -1,0 +1,54 @@
+
+<div></div>
+<!--icon-->
+
+<div class="container">
+    <div class="row">
+        <!--<div class="hidden-sm hidden-md hidden-lg">-->
+            <br><br><br><br>
+        <!--</div>-->
+        <div class="col-xs-12 col-sm-6">
+        
+            <form id="login_form" name="registerForm" ng-submit="register.submit()">
+                
+                <label>Name</label>
+                <div ng-class="{ 'has-error' : !registerForm.name.$pristine && registerForm.name.$invalid }">
+                    <input name="name" type="text" class="form-control" ng-model="user.name"  required></input>
+                    <p ng-show="registerForm.name.$invalid && !registerForm.name.$pristine" class="help-block">You name is required.</p>
+                </div>
+                
+                                
+                <label>Username</label>
+                <div ng-class="{ 'has-error': !registerForm.username.$pristine && registerForm.name.$invalid}">
+                    <input name="username" type="text" class="form-control" ng-minlength="3" ng-maxlength="12" ng-model="user.username" ></input>
+                    <p ng-show="registerForm.username.$error.minlength" class="help-block">Your username is not long enough.</p>
+                    <p ng-show="registerForm.username.$error.maxlength" class="help-block">Your username is too long.</p>
+                </div>
+                
+                <label>Password</label>
+                <input type="password" class="form-control"></input>
+                
+                
+                <label>Password (again)</label>
+                <input type="password" class="form-control"></input>
+                
+                
+                <label>Email Address</label>
+                <input type="email" class="form-control"></input>
+                
+                
+                <label>Phone Number</label>
+                <input type="text" class="form-control"></input>
+                
+                <button type="submit" class="btn submit_form" name="Register" >Register</button>
+          </form>
+          
+        </div>
+        
+        <div class="col-xs-12 col-sm-6">
+            <i class="material-icons" style="font-size:250px; text-shadow:4px 4px grey;">create</i>
+            <h3>With your VacantLots App account, you can make bids and check out lots.</h3>
+            <h6>Happy bidding</h6>
+        </div>
+    </div>
+</div>
