@@ -1,11 +1,8 @@
 <div ng-controller="MapCtrl">
 
-<!--<ui-gmap-google-map center='map.center' zoom='map.zoom'>-->
-<!--</ui-gmap-google-map>-->
-
-<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
-    <ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'" options="markerOptions" click="goBid">
-    </ui-gmap-markers>
-</ui-gmap-google-map>
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
+        <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" options="markerOptions" click="goBid">
+        </ui-gmap-markers>
+    </ui-gmap-google-map>
 
 </div>

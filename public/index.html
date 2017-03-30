@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title> VacantLots: Newark</title>
+<!--        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">-->
         <script src="./libraries/jquery-2.2.4.min.js"></script>
         <script src="./libraries/angular1_6_1.min.js"></script>
         <script src="./libraries/angular-ui-router.min.js"></script>
@@ -30,10 +34,17 @@
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
                     <li class="sidebar-brand">
-                        <a class="sidebar_links" ui-sref="homePage">
+                        <span style="color:white">
                             Welcome
+                        </span>
+                    </li>
+                    
+                    <li class="sidebar-links">
+                        <a class="sidebar_links" ui-sref="homePage">
+                            Map
                         </a>
                     </li>
+                    
                     <li>
                         <a class="sidebar_links" ui-sref="loginPage">Login</a>
                     </li>
