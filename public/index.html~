@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="./libraries/jquery-2.2.4.min.js"></script>
+        <script src="./libraries/angular1_6_1.min.js"></script>
+        <script src="./libraries/angular-ui-router.min.js"></script>
+        <!--<script language=javascript src='http://maps.google.com/maps/api/js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM' async defer></script>-->
+        <script src="./libraries/angular-simple-logger.js"></script>
+        <script src="./libraries/lodash3101.min.js"></script>
+        <script src="./libraries/angular-google-maps.min.js"></script>
+        <script src="./libraries/bootstrap.js"></script>
+        <link href="./libraries/bootstrap.min.css" rel="stylesheet" >
+        <link href="./libraries/bootstrap-theme.min.css" rel="stylesheet"></link>
+        <link href="./libraries/main.css" rel="stylesheet"></link>
+        <script src="./js/main.js"></script>
+        <script src="./js/controllers/MapCtrl.js"></script>
+        <script src="./js/directives/sidebarDirective.js"></script>
+<base href="/">
+    </head>
+    
+    <body ng-app="vacantlotsApp">
+        <div id="wrapper" >
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <a href="#2">
+                            Welcome
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref="loginPage">Login</a>
+                    </li>
+                    <li>
+                        <a ui-sref="registerPage">Register</a>
+                    </li>
+                </ul>
+            </div>
+        
+            <div id="page-content-wrapper">
+    
+                <nav class="navbar navbar-default" ng-controller="SidebarController">
+                    <button ng-click="toggleState()" id="menu-toggle" style="float:left" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <h1>Vacant Lots</h1>
+                    <h3>Newark</h3>
+                
+                </nav>
+            </div>
+        
+        
+            <div ui-view></div>
+        
+        </div>
+        <!--wrapper-->
+
+
+    </body>
+    
+    <script>
+    
+    $(document).ready(function()
+    {
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    });
+    </script> 
+    
+    
+    
+</html>
