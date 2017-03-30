@@ -5,15 +5,11 @@
 <div class="container">
     <div class="row">
         <!--<div class="hidden-sm hidden-md hidden-lg">-->
-            <br><br><br>
+            <br><br><br><br>
         <!--</div>-->
         <div class="col-xs-12 col-sm-6">
         
-
-            
-            <h1> Welcome </h1>
-        
-            <form id="login_form" name="registerForm" ng-submit="submitForm()">
+            <form id="login_form" name="registerForm" ng-submit="register.submit()">
                 
                 <label>Name</label>
                 <div ng-class="{ 'has-error' : !registerForm.name.$pristine && registerForm.name.$invalid }">
@@ -44,11 +40,11 @@
                 <label>Phone Number</label>
                 <input type="text" class="form-control"></input>
                 
-                <button class="btn" >Register</button>
-                
-
-        </form>
+                <button type="submit" class="btn submit_form" name="Register" >Register</button>
+          </form>
+          
         </div>
+        
         <div class="col-xs-12 col-sm-6">
             <i class="material-icons" style="font-size:250px; text-shadow:4px 4px grey;">create</i>
             <h3>With your VacantLots App account, you can make bids and check out lots.</h3>

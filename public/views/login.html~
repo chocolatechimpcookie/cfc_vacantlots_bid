@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <!--<div class="hidden-sm hidden-md hidden-lg">-->
-            <br><br><br>
+            <br><br><br><br>
         <!--</div>-->
         <div class="col-xs-12 col-sm-6">
             
@@ -17,12 +17,12 @@
                 <input type="text" class="form-control"></input>
                 Password
                 <input type="password" class="form-control"></input>
-                <button class="btn" >Login</button>
+
 
             </div>
             
             
-            <a ui-sref="registerPage">Register</a>
+
         </div>
 
         <div class="col-xs-12 col-sm-6">
