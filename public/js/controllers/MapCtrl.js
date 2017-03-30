@@ -40,7 +40,7 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
 
     var markers = [];
     var properties;
-    $http.get('public/myprop.json')
+    $http.get('myprop.json')
        .then(function(res){
            properties = res.data;
            var numProperties = properties.length;
