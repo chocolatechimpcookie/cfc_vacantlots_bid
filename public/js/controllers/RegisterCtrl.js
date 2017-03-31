@@ -18,13 +18,14 @@ angular.module('vacantlotsApp')
                 data:
                 {
                     name: this.name,
-                    username: this.password,
+                    username: this.username,
+                    password: this.password,
                     email: this.email,
                     phone: this.phone
                 }
             }).then(function success(res)
             {
-               console.log(res);
+               console.log("sucess" + res);
             }), function err(res)
             {
                 console.log(res);
