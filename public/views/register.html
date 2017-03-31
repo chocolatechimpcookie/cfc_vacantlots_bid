@@ -13,34 +13,34 @@
                 
                 <label>Name</label>
                 <div ng-class="{ 'has-error' : !registerForm.name.$pristine && registerForm.name.$invalid }">
-                    <input name="name" type="text" class="form-control" ng-model="user.name"  required></input>
+                    <input name="name" type="text" class="form-control" ng-model="register.name"  required></input>
                     <p ng-show="registerForm.name.$invalid && !registerForm.name.$pristine" class="help-block">You name is required.</p>
                 </div>
                 
                                 
                 <label>Username</label>
                 <div ng-class="{ 'has-error': !registerForm.username.$pristine && registerForm.name.$invalid}">
-                    <input name="username" type="text" class="form-control" ng-minlength="3" ng-maxlength="12" ng-model="user.username" ></input>
+                    <input name="username" type="text" class="form-control" ng-minlength="3" ng-maxlength="12" ng-model="register.username" required></input>
                     <p ng-show="registerForm.username.$error.minlength" class="help-block">Your username is not long enough.</p>
                     <p ng-show="registerForm.username.$error.maxlength" class="help-block">Your username is too long.</p>
                 </div>
                 
                 <label>Password</label>
-                <input type="password" class="form-control"></input>
+                <input type="password" class="form-control" ng-model="register.password" required></input>
                 
                 
-                <label>Password (again)</label>
-                <input type="password" class="form-control"></input>
-                
+                <!--<label>Password (again)</label>-->
+                <!--<input type="password" class="form-control" required></input>-->
+                <!---->
                 
                 <label>Email Address</label>
-                <input type="email" class="form-control"></input>
+                <input type="email" class="form-control" ng-model="register.email" required></input>
                 
                 
                 <label>Phone Number</label>
-                <input type="text" class="form-control"></input>
+                <input type="text" class="form-control" ng-model="register.phone" required></input>
                 
-                <button type="submit" class="btn submit_form" >Register</button>
+                <button type="submit" class="btn submit_form">Register</button>
           </form>
           
         </div>
@@ -52,3 +52,5 @@
         </div>
     </div>
 </div>
+
+
