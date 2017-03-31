@@ -10,6 +10,7 @@ angular.module('vacantlotsApp')
         this.submit = function()
         {
             console.log("register clicked");
+            console.log(this.password);
             $http(
             {
                 method: 'POST',

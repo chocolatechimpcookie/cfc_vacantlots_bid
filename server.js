@@ -9,11 +9,11 @@ const passportJWT = require("passport-jwt")
 const ExtractJwt = passportJWT.ExtractJwt
 const JwtStrategy = passportJWT.Strategy
 
-const { User } = require("./models.js")
+const { User, Bid } = require("./models.js")
 
 const bcrypt = require('bcryptjs')
 
-//this is for my personal use since the database gets clogged with usless old test data and I have to empty it manually
+//delete all users, only use if the database content doesn't matter
 // User.remove({}, function(err,data) {
 //   console.log('hereeeeeff', err, 'los', data)
 // })
@@ -68,23 +68,25 @@ app.post("/login", function(req, res) {
   if(req.body.username && req.body.password){
     var username = req.body.username
     var password = req.body.password
-  }
 
-  User.findOne({ username: username }, function(err, user) {
-    if (err) {
-      console.log(err)
-    } else if (user) {
-      if (bcrypt.compareSync(password, user.password)) {
-        const payload = {id: user._id}
-        const token = jwt.sign(payload, jwtOptions.secretOrKey)
-        res.status(201).json({message: "ok", token: token})
+    User.findOne({ username: username }, function(err, user) {
+      if (err) {
+        console.log(err)
+      } else if (user) {
+        if (bcrypt.compareSync(password, user.password)) {
+          const payload = {id: user._id}
+          const token = jwt.sign(payload, jwtOptions.secretOrKey)
+          res.status(201).json({message: "ok", token: token})
+        } else {
+          res.status(401).json({message:"passwords did not match"})
+        }
       } else {
-        res.status(401).json({message:"passwords did not match"})
+        res.status(401).json({message:"no such user found"})
       }
-    } else {
-      res.status(401).json({message:"no such user found"})
-    }
-  })
+    })
+  } else {
+    res.status(401).json({message:"incomplete login information"})
+  }
 })
 
 app.post("/register", function(req, res) {
@@ -97,22 +99,23 @@ app.post("/register", function(req, res) {
         phone : req.body.phone
         //check if dataCreated works/exists if you don't specify it here
       }
+      User.findOne({ username: req.body.username }, 'username', function(err, user) {
+        if (err) {
+          console.log(err)
+        } else if (user) {
+          res.status(500).json({message:"username already in use"})
+        } else {
+          const salt = bcrypt.genSaltSync(10)
+
+          item.password = bcrypt.hashSync(item.password, salt)
+          const user = new User(item)
+          user.save()
+          res.status(201)
+        }
+      })
+  } else {
+    res.status(401).json({message:"incomplete registration information"})
   }
-
-  User.findOne({ username: req.body.username }, 'username', function(err, user) {
-    if (err) {
-      console.log(err)
-    } else if (user) {
-      res.status(500).json({message:"username already in use"})
-    } else {
-      const salt = bcrypt.genSaltSync(10)
-
-      item.password = bcrypt.hashSync(item.password, salt)
-      const user = new User(item)
-      user.save()
-      res.status(201)
-    }
-  })
 })
 
 const port = process.env.PORT || 3000;
