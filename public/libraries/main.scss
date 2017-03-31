@@ -2,13 +2,23 @@
 
 //default values
 
-
-
-.angular-google-map-container
-{
-height: 400px;
+body, html {
+    height: 100%;
+    width: 100%;
 }
 
+.angular-google-map-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.middle {
+    display: table;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 
 .navbar-toggle
