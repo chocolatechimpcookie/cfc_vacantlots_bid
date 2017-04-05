@@ -295,7 +295,7 @@ body
 }
 
 
-
+//might want to combine the two here
 
 //smaller than xs
 @media only screen and (max-width:479px) and (min-width:0px)
@@ -310,23 +310,6 @@ body
 
 
 }
-
-
-//nothing to upper limit xs
-@media only screen and (max-width:767px) and (min-width:0px)
-{
-    #register_form, #login_form
-    {
-        input
-        {
-            width:90%;
-        }
-    }
-
-}
-
-
-
 
 
 //768 and up sm
