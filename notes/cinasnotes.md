@@ -29,7 +29,7 @@ Register Algorithm
         B) If failure, stay on page and let user know
     4) Server responds positively
         A)Tell the user they are registered with username X
-        *IN THE FUTURE, THIS CAN BE AN EMAIL
+         IN THE FUTURE, THIS CAN BE AN EMAIL
         B) Route to login
     
     Are they all mandatory?
