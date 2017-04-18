@@ -110,7 +110,7 @@ app.post("/register", function(req, res) {
           item.password = bcrypt.hashSync(item.password, salt)
           const user = new User(item)
           user.save()
-          res.status(201)
+          res.status(201).json({message:"success"})
         }
       })
   } else {
