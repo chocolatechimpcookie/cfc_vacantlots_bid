@@ -25,11 +25,11 @@ angular.module('vacantlotsApp')
                 }
             }).then(function success(res)
             {
-               console.log("sucess" + res);
-            }), function err(res)
+               console.log(res);
+            }, function err(res)
             {
                 console.log(res);
-            }
+            })
             
             
         };

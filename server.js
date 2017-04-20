@@ -102,8 +102,9 @@ app.post("/register", function(req, res) {
       User.findOne({ username: req.body.username }, 'username', function(err, user) {
         if (err) {
           console.log(err)
+          res.status(500).json({message:err})
         } else if (user) {
-          res.status(500).json({message:"username already in use"})
+          res.status(401).json({message:"username already in use"})
         } else {
           const salt = bcrypt.genSaltSync(10)
 
