@@ -60,8 +60,10 @@ Logout Link
 General Do
     -Welcome should maybe just say map?
     -There should be a way back to the map
-
     -learn about factories
+    
+Backend To do
+    -If you register with existing user login, the UI should tell the user.
     
     
 =====================================================================================        

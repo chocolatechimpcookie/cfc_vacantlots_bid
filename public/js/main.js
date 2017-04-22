@@ -48,7 +48,7 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
             return objectValue.data;
         },
         setString: function(value) {
-            console.log('Setting string through shared object')
+            console.log('Setting string through shared object');
             objectValue.data = value;
         },
         getObject: function() {
