@@ -1,5 +1,28 @@
 Cina's Notes
 
+
+
+Logout Link
+    1) Remove tokeng
+    
+    
+General Do
+    -Welcome should maybe just say map?
+    -There should be a way back to the map
+    -learn about factories
+    
+    
+    
+Backend To do
+    -If you register with existing user login, the UI should tell the user.
+    
+    
+Front End to do
+
+Front End Bugs
+    -UI Modal changes width of textbox in smaller versions
+
+
 Map
     -map should be responsive and fully take up the remaining space
     
@@ -53,17 +76,7 @@ Login Algorithm
             C) Add data, bid pages need associated account data.
             Account data needs to be accesible in other places or checked.
             
-Logout Link
-    1) Remove tokeng
-    
-    
-General Do
-    -Welcome should maybe just say map?
-    -There should be a way back to the map
-    -learn about factories
-    
-Backend To do
-    -If you register with existing user login, the UI should tell the user.
+
     
     
 =====================================================================================        
@@ -74,6 +87,7 @@ I Did
     -Integrated side panel into main app
     -Login page
     -Register page
+    -UI modal popup
     
 David Did
     -Found/made template for side panel

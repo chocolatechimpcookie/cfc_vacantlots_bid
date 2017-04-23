@@ -6,6 +6,17 @@ angular.module('vacantlotsApp')
         this.email = "";
         this.phone = "";
 
+    
+        $(function()
+        {
+            //$("").show();
+            $("#modal_text_header").html("Error has occured");
+            $("#modal_text_body").html("Check your username. It is likely not original");
+            $("#popup_modal").modal('show');
+            console.log("shown");
+
+        });
+
 
         this.submit = function()
         {
@@ -29,7 +40,7 @@ angular.module('vacantlotsApp')
                console.log(res);
                console.log(this.username);
                console.log(the_user);
-                alert("You have now been registered as" + the_user +  "You will now be redirected to login.");
+                //alert("You have now been registered as" + the_user +  "You will now be redirected to login.");
                 $location.path('/login');
 
             }, function err(res)
