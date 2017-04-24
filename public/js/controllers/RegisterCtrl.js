@@ -7,17 +7,6 @@ angular.module('vacantlotsApp')
         this.phone = "";
 
     
-        $(function()
-        {
-            //$("").show();
-            //$("#modal_text_header").html("Error has occured");
-            //$("#modal_text_body").html("Check your username. It is likely not original");
-            document.getElementById("modal_text_header").innerHTML = "Error has occured.";
-            document.getElementById("modal_text_body").innerHTML = "Check your username. It is not original";
-            $("#popup_modal").modal('show');
-            console.log("shown");
-
-        });
 
 
         this.submit = function()
@@ -39,16 +28,16 @@ angular.module('vacantlotsApp')
                 }
             }).then(function success(res)
             {
-               console.log(res);
-               console.log(this.username);
-               console.log(the_user);
-                //alert("You have now been registered as" + the_user +  "You will now be redirected to login.");
+                console.log(res);
+                console.log(this.username);
+                console.log(the_user);
+                popupModal("Registered.", "You have been registered as " + the_user + ". Please login.");
                 $location.path('/login');
 
             }, function err(res)
             {
                 console.log(res);
-                alert("There was an error. Your username is likely taken.");
+                popupModal("Error has occured.", "Check your username. It is not original");
             });
             
             
