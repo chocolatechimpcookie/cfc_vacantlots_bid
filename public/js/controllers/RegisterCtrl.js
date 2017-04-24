@@ -10,8 +10,10 @@ angular.module('vacantlotsApp')
         $(function()
         {
             //$("").show();
-            $("#modal_text_header").html("Error has occured");
-            $("#modal_text_body").html("Check your username. It is likely not original");
+            //$("#modal_text_header").html("Error has occured");
+            //$("#modal_text_body").html("Check your username. It is likely not original");
+            document.getElementById("modal_text_header").innerHTML = "Error has occured.";
+            document.getElementById("modal_text_body").innerHTML = "Check your username. It is not original";
             $("#popup_modal").modal('show');
             console.log("shown");
 

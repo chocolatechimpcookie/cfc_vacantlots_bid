@@ -1,7 +1,64 @@
+
+
 #popup_modal
 {
     width: 90% !important;
     padding-right:0 !important;
+    
+    .modal-content
+    {
+        border-radius: 2px;
+    }
+    
+    //.modal-body
+    //{
+    //    border: none !important;
+    //}
+    
+
+    
+    .modal-header
+    {
+        //border-bottom:2px;
+    }
+    
+    .modal-footer
+    {
+        border:none;
+        text-align: center;
+        
+        button
+        {
+            height: 60px;
+            //margin-top: 15px;
+            //margin-bottom: 15px;
+            width:214px;
+            color:white;
+            font-weight: 800;
+            font-size: 25px;
+            background-color: #00BFFF;
+            
+            margin-left: auto;
+            margin-right: auto;
+            //text-align: center;
+            
+            &:hover, &:active
+            {
+              //box-shadow: 2px 1pbx 1px 1px grey;
+               background-color:#1E90FF;
+            }
+        }
+    }   
+    
+    #modal_text_header
+    {
+        font-weight: 900;
+    }
+    
+    #modal_text_body
+    {
+        font-size: 20px;
+    }
 }
 
 //default values

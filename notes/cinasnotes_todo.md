@@ -18,7 +18,9 @@ Backend To do
     
     
 Front End to do
-
+    -need a general button class
+    -need center button sass variable or function
+    
 Front End Bugs
     -UI Modal changes width of textbox in smaller versions
 
