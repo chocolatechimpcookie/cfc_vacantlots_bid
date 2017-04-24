@@ -14,7 +14,7 @@ const { User, Bid, AbandonedLot } = require("./models.js")
 
 const bcrypt = require('bcryptjs')
 
-//This uses the newark api to load the most recent abandoned properties and print their records.
+//This uses the newark api to load the most recent abandoned properties and save them to database.
 var url = "http://data.ci.newark.nj.us/api/action/datastore_search?resource_id=796e2a01-d459-4574-9a48-23805fe0c3e0"
 request({
     url: url,
@@ -85,14 +85,12 @@ app.get("/secret", passport.authenticate('jwt', { session: false }), function(re
   res.json("Success! You cannot see this without a token")
 })
 
-
 app.get("/map",
   function (req, res) {
     AbandonedLot.find({}).exec(function (err, innerRes){
       res.json(innerRes)
     })
 })
-
 
 app.post("/login", function(req, res) {
   if(req.body.username && req.body.password){
