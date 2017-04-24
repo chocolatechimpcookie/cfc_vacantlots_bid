@@ -21,7 +21,25 @@ const bidSchema = new mongoose.Schema({
     //username
 })
 
+const abandonedLotSchema = new mongoose.Schema({
+    _id: {type: Number, required: true},
+    longitude: {type: Number, required: true},
+    latitude: {type: Number, required: true},
+    vitalStreetName: {type: String, required: true},
+    vitalHouseNumber: {type: String, required: true},
+    ownerName: {type: String, required: false},
+    ownerAddress: {type: String, required: false},
+    classDesc: {type: String, required: false},
+    zipcode: {type: Number, required: false},
+    netValue: {type: Number, required: false},
+    lot: {type: String, required: false},
+    block: {type: String, required: false},
+    cityState: {type: String, required: false}
+})
+
+
 const User = mongoose.model('user', userSchema)
 const Bid = mongoose.model('bid', bidSchema)
+const AbandonedLot = mongoose.model('abandonedLot', abandonedLotSchema)
 
-module.exports = { User, Bid }
+module.exports = { User, Bid, AbandonedLot }

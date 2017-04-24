@@ -1,4 +1,5 @@
 const express = require("express")
+var request = require("request")
 
 const bodyParser = require("body-parser")
 const jwt = require('jsonwebtoken')
@@ -9,9 +10,39 @@ const passportJWT = require("passport-jwt")
 const ExtractJwt = passportJWT.ExtractJwt
 const JwtStrategy = passportJWT.Strategy
 
-const { User, Bid } = require("./models.js")
+const { User, Bid, AbandonedLot } = require("./models.js")
 
 const bcrypt = require('bcryptjs')
+
+//This uses the newark api to load the most recent abandoned properties and print their records.
+var url = "http://data.ci.newark.nj.us/api/action/datastore_search?resource_id=796e2a01-d459-4574-9a48-23805fe0c3e0"
+request({
+    url: url,
+    json: true
+}, function (error, response, body) {
+    if (!error && response.statusCode === 200) {
+        for (var i = 0; i <  body.result.records.length; i++){
+            var record = body.result.records[i]
+            var item = {
+                _id: record['_id'],
+                longitude: record.Longitude,
+                latitude: record.Latitude,
+                vitalStreetName: record['Vital Street Name'],
+                vitalHouseNumber: record['Vital House Number'],
+                ownerName: record['Owner Name'],
+                ownerAddress: record['Owner Address'],
+                classDesc: record['Class Desc'],
+                zipcode: record['Zipcode'],
+                netValue: record['NetValue'],
+                lot: record['Lot'],
+                block: record['Block'],
+                cityState: record['City, State']
+            }
+            const abandonedLot = new AbandonedLot(item)
+            abandonedLot.save()
+        }
+    }
+})
 
 //delete all users, only use if the database content doesn't matter
 // User.remove({}, function(err,data) {
@@ -54,15 +85,14 @@ app.get("/secret", passport.authenticate('jwt', { session: false }), function(re
   res.json("Success! You cannot see this without a token")
 })
 
-/*
-app.get("/secretDebug",
-  function(req, res, next){
-    console.log(req.get('Authorization'))
-    next()
-  }, function(req, res){
-    res.json("debugging")
+
+app.get("/map",
+  function (req, res) {
+    AbandonedLot.find({}).exec(function (err, innerRes){
+      res.json(innerRes)
+    })
 })
-*/
+
 
 app.post("/login", function(req, res) {
   if(req.body.username && req.body.password){
