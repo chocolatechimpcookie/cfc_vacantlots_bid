@@ -39,33 +39,29 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
       return ret;
     };
 
-    // Get relavant information for marker from property object from JSON
-    var extractPropertyInfo = function(property){
-        latitude = property['Latitude'];
-        longitude = property['Longitude'];
-        street = property['Vital Street Name'];
-        houseNumber = property['Vital House Number'];
-        address = houseNumber + ' ' + street;
-        return [address, latitude, longitude]
-    }
-
     var markers = [];
     var properties;
     // HTTP get to load property data from JSON file.
-    $http.get('myprop.json')
-       .then(function(res){
-           properties = res.data;
-           //TODO: Need some way to filter properties. There are too many to look at at once.
-           var numProperties = 30 //properties.length;
-           for (var i = 0; i < numProperties; i++) {
-               propertyInfo = extractPropertyInfo(properties[i])
-               address = propertyInfo[0]
-               latitude = propertyInfo[1]
-               longitude = propertyInfo[2]
-               markers.push(createMarker(i, address, latitude, longitude))
-           }
-           $scope.markers = markers;
-        });
+    $http.get('/map').then(function success(res)
+            {
+                properties = res.data;
+                //TODO: Need some way to filter properties. There are too many to look at at once.
+                var numProperties = properties.length;
+                for (var i = 0; i < numProperties; i++) {
+                    property = properties[i]
+                    houseNumber = property.vitalHouseNumber
+                    street = property.vitalStreetName
+                    address = houseNumber + ' ' + street
+                    latitude = property.latitude
+                    longitude = property.longitude
+                    console.log(i, address, latitude, longitude)
+                    markers.push(createMarker(i, address, latitude, longitude))
+                }
+                $scope.markers = markers;
+            }, function err(res)
+            {
+                console.log(res);
+            });
 
     $scope.goBid = function (marker, event, model){
                sharedProperties.setString(model.title)
