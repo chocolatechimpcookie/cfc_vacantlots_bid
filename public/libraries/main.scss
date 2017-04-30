@@ -1,0 +1,435 @@
+
+
+#popup_modal
+{
+    width: 90% !important;
+    padding-right:0 !important;
+    
+    .modal-content
+    {
+        border-radius: 2px;
+    }
+    
+    //.modal-body
+    //{
+    //    border: none !important;
+    //}
+    
+
+    
+    .modal-header
+    {
+        //border-bottom:2px;
+    }
+    
+    .modal-footer
+    {
+        border:none;
+        text-align: center;
+        
+        button
+        {
+            height: 60px;
+            //margin-top: 15px;
+            //margin-bottom: 15px;
+            width:214px;
+            color:white;
+            font-weight: 800;
+            font-size: 25px;
+            background-color: #00BFFF;
+            
+            margin-left: auto;
+            margin-right: auto;
+            //text-align: center;
+            
+            &:hover, &:active
+            {
+              //box-shadow: 2px 1pbx 1px 1px grey;
+               background-color:#1E90FF;
+            }
+        }
+    }   
+    
+    #modal_text_header
+    {
+        font-weight: 900;
+    }
+    
+    #modal_text_body
+    {
+        font-size: 20px;
+    }
+}
+
+//default values
+
+body, html {
+    height: 100%;
+    width: 100%;
+}
+
+.angular-google-map-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.middle {
+    display: table;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.navbar-toggle
+{
+
+   display:inherit;
+}
+
+.navbar
+{
+   padding-top:0px;
+   //position:fixed;
+   z-index:2;
+   position: absolute;
+}
+
+#ui_view
+{
+   //z-index:1;
+   //position:absolute;
+}
+
+nav
+{
+
+   
+}
+
+.navbar-default .navbar-toggle:focus
+{
+      background-color:#f8f8f8;
+
+}
+
+.navbar:hover, .navbar-default .navbar-toggle:hover
+{
+   background-color: #ddd;
+}
+
+
+//#page-content-wrapper
+//{
+//   
+//   border-top: 0px;
+//   border-left: 0px;
+//   border-right:0px;
+//   margin-right:0px;
+//   margin-left:0px;
+//   padding-left:0px;
+//   padding-right:0px;
+//   padding-top:0px;
+//
+//
+//}
+
+
+#login_form, #register_form, #bid_form
+{
+   width:40%;
+   
+   input
+   {
+      width:214px;
+   }
+   
+   .form-control
+   {
+      border-radius: 1px;
+      margin-bottom: 15px;
+   }
+   
+   .submit_form, .bid_form
+   {
+      height: 60px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      width:214px;
+      color:white;
+      font-weight: 800;
+      font-size: 25px;
+      background-color: #00BFFF;
+      
+      &:hover, &:active
+      {
+        //box-shadow: 2px 1pbx 1px 1px grey;
+         background-color:#1E90FF;
+      }
+   }
+   
+   
+
+}
+
+#page-content-wrapper
+//#header_nav
+{
+   span
+   {
+      font-size:35px;
+      small
+      {
+         color:grey;
+      }
+   }
+   
+   button
+   {
+      height:100%;
+      border:none;
+      
+      &:focus
+      {
+         height:100%;      
+      }
+      
+      .icon-bar
+      {
+         height: 5px;
+         width:25px;
+         color:black;
+      }
+   
+      margin-left:20px;
+   }
+   
+   //border:none;
+   border-top: none;
+   border-left: 0px;
+   border-right:0px;
+   margin-right:0px;
+   margin-left:0px;
+   //background-color: #f8f8f8;
+   width:100%;
+   
+   nav
+   {
+      border:none;
+      width:100%;
+      border-left: 0px !important;
+      padding: 0px 0px 0px 0px;
+      border:0px 0px 0px 0px;
+      margin:0px 0px 0px 0px;
+   
+   }
+   
+   h1
+   {
+      font-weight: 900;
+   
+   }
+}
+
+
+
+body
+{
+   overflow-x: hidden;
+}
+
+/* Toggle Styles */
+
+#wrapper
+{
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    
+    
+   .toggled
+   {
+      padding-left: 250px;
+   }
+    
+}
+
+
+#sidebar-wrapper
+{
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #000;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper
+{
+    width: 250px;
+}
+
+#page-content-wrapper
+{
+    //width: 100%;
+    position: absolute;
+    //padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper
+{
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav
+{
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    
+    
+   li
+   {
+       text-indent: 20px;
+       line-height: 40px;
+   }
+   
+   li a
+   {
+       display: block;
+       text-decoration: none;
+       color: #999999;
+   }
+   
+   li a:hover
+   {
+       text-decoration: none;
+       color: #fff;
+       background: rgba(255,255,255,0.2);
+   }
+   
+   //li a:active,
+   //li a:focus
+   //{
+   //    text-decoration: none;
+   //}
+
+       
+    
+}
+
+
+
+
+.sidebar-nav > .sidebar-brand
+{
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a
+{
+    color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover
+{
+    color: #fff;
+    background: none;
+}
+
+
+
+
+//smaller than xs
+@media only screen and (max-width:479px) and (min-width:0px)
+{
+
+
+}
+
+//only xs
+@media only screen and (max-width:767) and (min-width:480px)
+{
+
+
+}
+
+
+//nothing to upper limit xs
+@media only screen and (max-width:767px) and (min-width:0px)
+{
+    #register_form, #login_form
+    {
+        input
+        {
+            width:90%;
+        }
+    }
+
+}
+
+
+
+
+
+//768 and up sm
+@media only screen and (min-width:768px)
+{
+   #wrapper
+   {
+      padding-left: 0;
+   }
+
+    #wrapper.toggled
+    {
+        padding-left: 250px;
+    }
+
+    #sidebar-wrapper
+    {
+        width: 0;
+    }
+
+    #wrapper.toggled #sidebar-wrapper
+    {
+        width: 250px;
+    }
+
+    #page-content-wrapper
+    {
+        //padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper
+    {
+        position: relative;
+        margin-right: 0;
+    } 
+
+}
+
+
+//large
+@media only screen and (min-width:1200px)
+{
+
+}
