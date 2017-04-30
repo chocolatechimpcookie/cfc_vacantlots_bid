@@ -1,5 +1,6 @@
 const express = require("express")
-var request = require("request")
+const rp = require("request-promise")
+const fetch = require("node-fetch")
 
 const bodyParser = require("body-parser")
 const jwt = require('jsonwebtoken')
@@ -15,34 +16,60 @@ const { User, Bid, AbandonedLot } = require("./models.js")
 const bcrypt = require('bcryptjs')
 
 //This uses the newark api to load the most recent abandoned properties and save them to database.
-var url = "http://data.ci.newark.nj.us/api/action/datastore_search?resource_id=796e2a01-d459-4574-9a48-23805fe0c3e0"
-request({
-    url: url,
-    json: true
-}, function (error, response, body) {
-    if (!error && response.statusCode === 200) {
-        for (var i = 0; i <  body.result.records.length; i++){
-            var record = body.result.records[i]
-            var item = {
-                _id: record['_id'],
-                longitude: record.Longitude,
-                latitude: record.Latitude,
-                vitalStreetName: record['Vital Street Name'],
-                vitalHouseNumber: record['Vital House Number'],
-                ownerName: record['Owner Name'],
-                ownerAddress: record['Owner Address'],
-                classDesc: record['Class Desc'],
-                zipcode: record['Zipcode'],
-                netValue: record['NetValue'],
-                lot: record['Lot'],
-                block: record['Block'],
-                cityState: record['City, State']
-            }
-            const abandonedLot = new AbandonedLot(item)
-            abandonedLot.save()
-        }
+const range = (lo, hi) => Array.from({ length: hi - lo }, (_, i) => lo + i)
+const base_url = 'http://data.ci.newark.nj.us/api/action/datastore_search?offset='
+const end_url = '&resource_id=796e2a01-d459-4574-9a48-23805fe0c3e0'
+
+const fetchAllLots = async () => {
+  try {
+    console.log('requesting data from Newark api')
+    //get the total record count so that the full request can be made in parallel
+    const lotBatchCount = parseInt(
+      await rp(base_url + '0' + end_url).then(res => Math.ceil(JSON.parse(res).result.total/100)).catch(err => console.log(err))
+    )
+    const lotBatchPromises = range(0, lotBatchCount).map(offset =>
+      fetch(base_url + offset * 100 + end_url).then(res => res.json()).catch(err => console.log(err))
+    )
+    console.log('starting request')
+    const lotBatches = await Promise.all(lotBatchPromises)
+    return lotBatches
+  } catch (err) {
+    console.log(`Error: ${err}`)
+  }
+}
+
+fetchAllLots().then(lots => {
+  const records = lots.reduce((allLotsList,lotList) => allLotsList.concat(lotList.result.records),[])
+  try {
+    if (records.length) {
+      console.log('success')  
     }
-})
+  } catch (err) {
+    console.log('Newark API Error')
+    console.log(`Error: ${err}`)
+  }
+  records.forEach(record => {
+    if (record.Longitude && record.Latitude) {
+      const item = {
+        _id: record['_id'],
+        longitude: record.Longitude,
+        latitude: record.Latitude,
+        vitalStreetName: record['Vital Street Name'],
+        vitalHouseNumber: record['Vital House Number'],
+        ownerName: record['Owner Name'],
+        ownerAddress: record['Owner Address'],
+        classDesc: record['Class Desc'],
+        zipcode: record['Zipcode'],
+        netValue: record['NetValue'],
+        lot: record['Lot'],
+        block: record['Block'],
+        cityState: record['City, State']
+      }
+      const abandonedLot = new AbandonedLot(item)
+      abandonedLot.save()
+    }
+  })
+}).catch(err => console.log(err))
 
 //delete all users, only use if the database content doesn't matter
 // User.remove({}, function(err,data) {
