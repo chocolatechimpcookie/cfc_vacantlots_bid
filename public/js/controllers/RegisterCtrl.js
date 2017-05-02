@@ -1,35 +1,36 @@
 angular.module('vacantlotsApp')
     .controller('RegisterCtrl', ['$http', '$location', function($http, $location)
     {
-        this.username = "";
-        this.password = "";
-        this.email = "";
-        this.phone = "";
+        var vm = this;
+        vm.username = "";
+        vm.password = "";
+        vm.email = "";
+        vm.phone = "";
 
     
 
 
-        this.submit = function()
+        vm.submit = function()
         {
             console.log("register clicked");
-            console.log(this.password);
-            var the_user = this.username;
+            console.log(vm.password);
+            var the_user = vm.username;
             $http(
             {
                 method: 'POST',
                 url: '/register',
                 data:
                 {
-                    name: this.name,
-                    username: this.username,
-                    password: this.password,
-                    email: this.email,
-                    phone: this.phone
+                    name: vm.name,
+                    username: vm.username,
+                    password: vm.password,
+                    email: vm.email,
+                    phone: vm.phone
                 }
             }).then(function success(res)
             {
                 console.log(res);
-                console.log(this.username);
+                console.log(vm.username);
                 console.log(the_user);
                 popupModal("Registered.", "You have been registered as " + the_user + ". Please login.");
                 $location.path('/login');
