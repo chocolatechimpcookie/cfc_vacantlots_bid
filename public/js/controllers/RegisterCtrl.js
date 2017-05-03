@@ -33,7 +33,7 @@ angular.module('vacantlotsApp')
                 console.log(vm.username);
                 console.log(the_user);
                 popupModal("Registered.", "You have been registered as " + the_user + ". Please login.");
-                $location.path('/login');
+                $location.path('/');
 
             }, function err(res)
             {

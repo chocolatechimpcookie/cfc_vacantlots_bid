@@ -1,5 +1,5 @@
 angular.module('vacantlotsApp')
-    .controller('LoginCtrl', ['$http',  function($http)
+    .controller('LoginCtrl', ['$http', '$location',  function($http, $location)
     {
       var vm = this;
 
@@ -7,7 +7,7 @@ angular.module('vacantlotsApp')
       vm.password = "";
       vm.message = "";
 
-      vm.login = function()
+      vm.submit = function()
       {
         $http
         ({
@@ -20,10 +20,14 @@ angular.module('vacantlotsApp')
             }
         }).then (function success(response)
         {
-          if (response.token)
+          console.log("You have been logged in");
+          console.log(response);
+          if (response.data.token)
           {
             console.log("Token recieved");
-            localStorage.setItem("token", data.token);
+            localStorage.setItem("token", response.data.token);
+            $location.path('/home');
+
           }
           else
           {
@@ -33,7 +37,8 @@ angular.module('vacantlotsApp')
         {
           console.log('error');
           console.log(response);
+          popupModal("Error has occured.", "Check your username and password.");
         });
 
-      }
+      };
     }]);
