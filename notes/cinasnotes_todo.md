@@ -1,14 +1,35 @@
 Cina's Notes
 
-
-
-Logout Link
-    1) Remove tokeng
+Login Brain Storming
+    Qs
+    -How does angular handle changing UI based on conditions?
+    -How does angular handle sharing data between different views?
+    
+    Comments
+    -I could just do it with jQuery pretty easily
+    -Checking for login would have to happen on a bunch of different pages
+    will likely have to be code I inject in different controllers
+      
+      
+    Post Login  
+        Change page information
+            A)Login has to disappear, logout has to appear,
+            no controller, just a button will do, maybe with a
+            popup.
+            B)Remove register?
+            C) Add data, bid pages need associated account data.
+            Account data needs to be accesible in other places or checked.
+            D) Map page will need a login checker as well as other pages potentially
+    Logout Link
+        1) Remove token
+        2) Reload page? or change menu
+        
+        
+Bugs
+    On Map page, "TypeError: Cannot read property 'gManager' of undefined"
     
     
 General Do
-    -Welcome should maybe just say map?
-    -There should be a way back to the map
     -learn about factories
     
     
@@ -20,7 +41,6 @@ Backend To do
 Front End to do
     -need a general button class
     -need center button sass variable or function
-    -make the modal call into a function itself?
     
 Front End Bugs
     -UI Modal changes width of textbox in smaller versions
@@ -38,25 +58,11 @@ Map
     -top menu disappears at shorter widths only happens on map view
         -Widths less than 960
 
-Token Checker service
-    -We need something that checks if the user is logged in across the board
+
     
-    
-Register Algorithm
-    1) Fill in form
-        A) two password forms need to match and need a directive to check this
-        B) Email address has to be an email address
-        C) Phone number has to be a phone number
-    2) Click Register
-        A) Form is checked for all necessary data
-        B) AJAX call
-    3) Server response
-        A) If success, go to 4
-        B) If failure, stay on page and let user know
-    4) Server responds positively
-        A)Tell the user they are registered with username X
-         IN THE FUTURE, THIS CAN BE AN EMAIL
-        B) Route to login
+Non Immediate Do
+    -After register, email user.
+
     
     Are they all mandatory?
     -required message
@@ -64,20 +70,7 @@ Register Algorithm
     -We need password checking directive
     -Also password length checking? required length?
     
-        
-Login Algorithm
-    1) Fill in form
-    2) Send to server
-    3) Server response
-        A) If Success, go to 4
-        B) If failure, stay on page and let user know
-    4) Success message
-        A)Put token in local storage
-    5) Change page information
-            A)Change login to logout
-            B)Remove register?
-            C) Add data, bid pages need associated account data.
-            Account data needs to be accesible in other places or checked.
+
             
 
     
@@ -138,5 +131,36 @@ General Notes On Angular:
         
         
         
-
+============OLD NOTES=============================================
     
+Login Algorithm
+    1) Fill in form
+    2) Send to server
+    3) Server response
+        A) If Success, go to 4
+        B) If failure, stay on page and let user know
+    4) Success message
+        A)Put token in local storage
+    5) Change page information
+            A)Change login to logout
+            B)Remove register?
+            C) Add data, bid pages need associated account data.
+            Account data needs to be accesible in other places or checked.
+            
+            
+            
+Register Algorithm
+    1) Fill in form
+        A) two password forms need to match and need a directive to check this
+        B) Email address has to be an email address
+        C) Phone number has to be a phone number
+    2) Click Register
+        A) Form is checked for all necessary data
+        B) AJAX call
+    3) Server response
+        A) If success, go to 4
+        B) If failure, stay on page and let user know
+    4) Server responds positively
+        A)Tell the user they are registered with username X
+         IN THE FUTURE, THIS CAN BE AN EMAIL
+        B) Route to login

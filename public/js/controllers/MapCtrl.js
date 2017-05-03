@@ -1,18 +1,20 @@
-var app
+var app;
 app = angular.module('vacantlotsApp');
 
-app.config(function(uiGmapGoogleMapApiProvider) {
-    console.log('In config')
-    uiGmapGoogleMapApiProvider.configure({
+app.config(function(uiGmapGoogleMapApiProvider)
+{
+    console.log('In config');
+    uiGmapGoogleMapApiProvider.configure(
+    {
         //TODO: Factor this into another js file that isn't tracked with git?
         key: "AIzaSyA5sCewJikG42pgRQOIJ_NjnVv3c6O_d6I",
         v: '3.20', //defaults to latest 3.X anyhow
         libraries: 'weather,geometry,visualization'
     });
-})
+});
 
 app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties, $http) {
-    console.log('In controller')
+    console.log('In controller');
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
     // e.g. $scope.markers = []
@@ -20,15 +22,19 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
 
     // uiGmapGoogleMapApi is a promise.
     // The "then" callback function provides the google.maps object.
-    uiGmapGoogleMapApi.then(function(maps) {
+    uiGmapGoogleMapApi.then(function(maps)
+    {
     });
 
     //Creates object containing info needed to create Google maps marker
-    var createMarker = function(i, address, latitude, longitude, idKey) {
-      if (idKey == null) {
+    var createMarker = function(i, address, latitude, longitude, idKey)
+    {
+      if (idKey == null)
+      {
         idKey = "id";
       }
-      var ret = {
+      var ret =
+      {
         latitude: latitude,
         longitude: longitude,
         title: address,
@@ -43,28 +49,30 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
     var properties;
     // HTTP get to load property data from JSON file.
     $http.get('/map').then(function success(res)
-            {
-                properties = res.data;
-                //TODO: Need some way to filter properties. There are too many to look at at once.
-                var numProperties = properties.length;
-                for (var i = 0; i < numProperties; i++) {
-                    property = properties[i]
-                    houseNumber = property.vitalHouseNumber
-                    street = property.vitalStreetName
-                    address = houseNumber + ' ' + street
-                    latitude = property.latitude
-                    longitude = property.longitude
-                    console.log(i, address, latitude, longitude)
-                    markers.push(createMarker(i, address, latitude, longitude))
-                }
-                $scope.markers = markers;
-            }, function err(res)
-            {
-                console.log(res);
-            });
+    {
+        properties = res.data;
+        //TODO: Need some way to filter properties. There are too many to look at at once.
+        var numProperties = properties.length;
+        for (var i = 0; i < numProperties; i++)
+        {
+            property = properties[i];
+            houseNumber = property.vitalHouseNumber;
+            street = property.vitalStreetName;
+            address = houseNumber + ' ' + street;
+            latitude = property.latitude;
+            longitude = property.longitude;
+            console.log(i, address, latitude, longitude);
+            markers.push(createMarker(i, address, latitude, longitude));
+        }
+        $scope.markers = markers;
+    }, function err(res)
+    {
+        console.log(res);
+    });
 
-    $scope.goBid = function (marker, event, model){
+    $scope.goBid = function (marker, event, model)
+    {
                sharedProperties.setString(model.title)
                $state.go('bidPage')
-           };
+    };
 });
