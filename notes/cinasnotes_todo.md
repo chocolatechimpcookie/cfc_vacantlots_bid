@@ -9,7 +9,11 @@ Login Brain Storming
     -I could just do it with jQuery pretty easily
     -Checking for login would have to happen on a bunch of different pages
     will likely have to be code I inject in different controllers
-      
+    
+    Need to
+    -Go over directives
+    -Go over factories
+    -Go over service vs controllers
       
     Post Login  
         Change page information
@@ -28,10 +32,8 @@ Login Brain Storming
 Bugs
     On Map page, "TypeError: Cannot read property 'gManager' of undefined"
     
-    
-General Do
-    -learn about factories
-    
+
+
     
     
 Backend To do
