@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+mongoose.Promise = require('bluebird')
 
 mongoose.connect('mongodb://localhost/bidapp')
 mongoose.connection.once('open', function() { console.log('connected to database') })

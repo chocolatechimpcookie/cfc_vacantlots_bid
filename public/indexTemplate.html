@@ -75,6 +75,29 @@
                     console.log(res)
                 })
             }
+
+            
+
+            /* This is the login status checker I just added */
+
+            $scope.loginStatus = function() {
+                $http({
+                    method: 'GET',
+                    url: '/loginstatus',
+                    data: null,
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    //if you are in this success path that means you are logged in but I added the loggedIn property, we can remove that if you feel it is unnecessary
+                    //res.data.loggedIn
+                    //res.data.username
+                    console.log(res.data)
+                }, function err(res) {
+                    console.log(res)
+                })
+            }
+
+
+
             //deletes jwt from local storage
             $scope.logout = function() {
                 localStorage.removeItem("token")
@@ -101,6 +124,7 @@
         <input type="submit" value="login">
     </form>
 
+    <button ng-click="loginStatus()">Logged in?</button>
     <button ng-click="getSecret()">Get Secret</button>
     <button ng-click="logout()">Log Out</button>
     <div>{{msg}}</div>

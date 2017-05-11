@@ -113,7 +113,7 @@ const job = new CronJob({
 })
 job.start()
 
-//if lots collection is empty request lots immediately
+//if lots collection is empty at startup request lots immediately
 AbandonedLot.count({},(err, c) => {
   if (c === 0) {
     lotsRequest()
@@ -141,6 +141,10 @@ app.get("/map", function (req, res) {
         res.status(500).json("no lot data available")
       }
     })
+})
+
+app.get("/loginstatus", passport.authenticate('jwt', { session: false }), function(req, res) {
+  res.json({loggedIn: true, username: req.user.username})
 })
 
 app.post("/login", function(req, res) {
