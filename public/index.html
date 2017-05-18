@@ -6,7 +6,7 @@
         <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
         <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">-->
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">	
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="./js/var.js"></script>
         <script src="./libraries/jquery-2.2.4.min.js"></script>
@@ -24,6 +24,7 @@
         <link href="./libraries/bootstrap-theme.min.css" rel="stylesheet"></link>
         <link href="./libraries/main.css" rel="stylesheet"></link>
         <script src="./js/main.js"></script>
+        <script src="./js/controllers/MainCtrl.js"></script>
         <script src="./js/controllers/MapCtrl.js"></script>
         <script src="./js/controllers/RegisterCtrl.js"></script>
         <script src="./js/controllers/LoginCtrl.js"></script>
@@ -33,7 +34,7 @@
                     <!--^404 bugs-->
     </head>
 
-    <body ng-app="vacantlotsApp">
+    <body ng-app="vacantlotsApp" ng-controller="MainCtrl as main">
         <div id="wrapper" >
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
@@ -42,24 +43,33 @@
                             Welcome
                         </span>
                     </li>
-                    
+
                     <li class="sidebar-links">
                         <a class="sidebar_links" ui-sref="homePage">
                             Map
                         </a>
                     </li>
-                    
+
                     <li>
-                        <a class="sidebar_links" ui-sref="loginPage">Login</a>
+                        <a class="sidebar_links" ng-hide="main.logstatus" ui-sref="loginPage">Login</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ui-sref="registerPage">Register</a>
+                        <a class="sidebar_links" ng-show="main.logstatus" ui-sref="myBids">My Bids</a>
+                    </li>
+                    <li>
+                        <a class="sidebar_links" ng-show="main.logstatus" ui-sref="myFavorites">My Favorites</a>
+                    </li>
+                    <li>
+                        <a class="sidebar_links" ng-show="main.logstatus" ng-click="main.logout()" style="cursor:pointer;">Logout</a>
+                    </li>
+                    <li>
+                        <a class="sidebar_links" ng-hide="main.logstatus" ui-sref="registerPage">Register</a>
                     </li>
                 </ul>
             </div>
-        
+
             <div id="page-content-wrapper">
-    
+
                 <nav id="header_nav" class="navbar navbar-default" ng-controller="SidebarController">
                     <button ng-click="toggleState()" id="menu-toggle" style="float:left; " type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                       <span class="sr-only">Toggle navigation</span>
@@ -69,16 +79,16 @@
                     </button>
                     <span style="font-size:40px; font-weight:800; letter-spacing:-3px; font-family:Raleway, Lato, sans-serif;">vacantlots <small>newark</small></span>
                 </nav>
-                
+
             </div>
-        
+
             <div ui-view></div>
             <!--<div ng-include="'./views/bid_page.html'"></div>-->
-            
-                
+
+
             <div id="popup_modal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-          
+
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -91,22 +101,22 @@
                   <button type="button" class="btn" data-dismiss="modal">Close</button>
                 </div>
               </div>
-          
+
             </div>
             </div>
-      
+
         </div>
         <!--wrapper-->
-        
-        
-        
-        
 
-              
-        
-        
+
+
+
+
+
+
+
 
     </body>
-    
-    
+
+
 </html>

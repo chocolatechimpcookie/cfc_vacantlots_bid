@@ -14,12 +14,17 @@ app.config(function(uiGmapGoogleMapApiProvider)
 });
 
 app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties, $http) {
-    console.log('In controller');
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
     // e.g. $scope.markers = []
     $scope.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
 
+    if (localStorage.getItem("token"))
+    {
+        console.log("Login token is present");
+        console.log(localStorage.getItem("token"));
+    }
+    
     // uiGmapGoogleMapApi is a promise.
     // The "then" callback function provides the google.maps object.
     uiGmapGoogleMapApi.then(function(maps)
@@ -61,7 +66,7 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
             address = houseNumber + ' ' + street;
             latitude = property.latitude;
             longitude = property.longitude;
-            console.log(i, address, latitude, longitude);
+            //console.log(i, address, latitude, longitude);
             markers.push(createMarker(i, address, latitude, longitude));
         }
         $scope.markers = markers;

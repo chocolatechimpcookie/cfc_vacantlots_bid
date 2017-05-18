@@ -77,14 +77,3 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
 
     ;
     
-//    
-//$(function()
-//{
-//    //$("#myModal").show();
-//    $("#myModal").modal('show');
-//    console.log("shown");
-//});
-//How do I implement multiple module configs?
-
-//    .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider)
-    //{
