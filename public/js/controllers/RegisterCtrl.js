@@ -1,4 +1,4 @@
-app.controller('RegisterCtrl', ['$http', '$location', function($http, $location)
+angular.module('vacantlotsApp').controller('RegisterCtrl', ['$http', '$location', function($http, $location)
 {
     var vm = this;
     vm.username = "";

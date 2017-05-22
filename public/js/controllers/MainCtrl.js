@@ -1,22 +1,6 @@
-app.controller('MainCtrl', function ()
+angular.module('vacantlotsApp').controller('MainCtrl', function (accountService)
 {
-    var vm = this;
-
-    //will have to check if this logic works with login and log out
-    if (localStorage.getItem('token'))
-    {
-        vm.logstatus = true;
-    }
-    else
-    {
-        vm.logstatus = false;
-    }
-
-    vm.logout = function()
-    {
-        localStorage.removeItem('token');
-        vm.logstatus = false;
-
-    };
+  var vm = this;
+  vm.accountService = accountService;
 
 });

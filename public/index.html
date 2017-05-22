@@ -24,6 +24,7 @@
         <link href="./libraries/bootstrap-theme.min.css" rel="stylesheet"></link>
         <link href="./libraries/main.css" rel="stylesheet"></link>
         <script src="./js/main.js"></script>
+        <script src="./js/services_factories/accountService.js"></script>
         <script src="./js/controllers/MainCtrl.js"></script>
         <script src="./js/controllers/MapCtrl.js"></script>
         <script src="./js/controllers/RegisterCtrl.js"></script>
@@ -51,19 +52,19 @@
                     </li>
 
                     <li>
-                        <a class="sidebar_links" ng-hide="main.logstatus" ui-sref="loginPage">Login</a>
+                        <a class="sidebar_links" ng-hide="main.accountService.getLogstatus" ui-sref="loginPage">Login</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ng-show="main.logstatus" ui-sref="myBids">My Bids</a>
+                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus" ui-sref="myBids">My Bids</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ng-show="main.logstatus" ui-sref="myFavorites">My Favorites</a>
+                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus" ui-sref="myFavorites">My Favorites</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ng-show="main.logstatus" ng-click="main.logout()" style="cursor:pointer;">Logout</a>
+                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus" ng-click="main.logout()" style="cursor:pointer;">Logout</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ng-hide="main.logstatus" ui-sref="registerPage">Register</a>
+                        <a class="sidebar_links" ng-hide="main.accountService.getLogstatus" ui-sref="registerPage">Register</a>
                     </li>
                 </ul>
             </div>

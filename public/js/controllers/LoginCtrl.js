@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', ['$http', '$location',  function($http, $location)
+angular.module('vacantlotsApp').controller('LoginCtrl', ['$http', '$location',  function($http, $location)
 {
   var vm = this;
 

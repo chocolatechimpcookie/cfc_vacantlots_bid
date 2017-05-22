@@ -1,4 +1,4 @@
-app.controller('BidCtrl', function($scope, sharedProperties)
+angular.module('vacantlotsApp').controller('BidCtrl', function($scope, sharedProperties)
 {
     console.log('In bid control.')
     $scope.propertyName = sharedProperties.getString();
