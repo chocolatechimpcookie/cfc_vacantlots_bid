@@ -24,8 +24,9 @@ angular.module('vacantlotsApp').service('accountService', function()
 
     setLogout: function()
     {
-        localStorage.removeItem('token');
-        logStatus = false;
+      console.log("Log out");
+      localStorage.removeItem('token');
+      logStatus = false;
 
     },
 
