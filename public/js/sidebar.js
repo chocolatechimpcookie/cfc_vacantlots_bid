@@ -1,12 +1,12 @@
 //console.log("test hamburger outside");
 
-angular.module('vacantlotsApp').controller('SidebarController', function() 
+app.controller('SidebarController', function()
 {
 	console.log("test hamburger inside1");
 	this.state = false;
 });
 
-angular.module('vacantlotsApp').directive('sidebarDirective', function()
+app.directive('sidebarDirective', function()
 {
 console.log("test hamburger inside 2");
 
@@ -18,7 +18,7 @@ console.log("test hamburger inside 2");
             {
                   if(newVal)
                   {
-                    element.addClass('show'); 
+                    element.addClass('show');
                     return;
                   }
                   element.removeClass('show');

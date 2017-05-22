@@ -1,0 +1,162 @@
+
+Sharing variables
+
+  DO I need getter and setter functions? what if the variable changes?
+    is it cause of encapsulation?
+
+
+
+
+
+
+
+
+
+Services vs factories:
+
+  http://www.codelord.net/2015/04/28/angularjs-whats-the-difference-between-factory-and-service/
+
+
+
+
+
+Testing:
+
+http://jsbin.com/vimagog
+
+Original:
+http://jsfiddle.net/b2fCE/1/
+
+Why doesn't the content in myController 1 change?
+
+
+
+This vs $scope?
+
+controller as vs not using it?
+
+  $scope and regular
+    Both inputs work across inputs and two divs, strings display at top
+    Input on bottom changes bottom input. Input on top changes both divs.
+
+      $scope and as
+        only bottom input and bottom div work. strings don't display at top
+
+
+  this and as
+    Bottom input works for bottom div. Top input only makes everything blank
+    Why? It's like there's no two way binding
+
+      this and regular
+        strings above don't show
+        controller two strings don't have a default
+        bottom input changes bottom div
+        nothing else changes
+
+
+The two divs:
+  <li>{{stringValue}}</li>
+  <li>{{objectValue.data}}</li>
+
+The two inputs:
+
+  <input type="text" ng-model="newValue"></input>
+  <button ng-click="setString(newValue)">Set Values</button><br/>
+  <input type="text" ng-model="objectValue.data"></input>2-way binding to objectValue
+
+
+  vm.stringValue = sharedProperties.getString();
+  vm.objectValue = sharedProperties.getObject();
+  vm.setString = function(newValue) {
+      vm.objectValue.data = newValue;
+      sharedProperties.setString(newValue);
+
+
+      var stringValue = 'test string value';
+      var objectValue = {
+          data: 'test object value'
+      };
+
+Analysis
+  So, they both start out as different values. Bottom input binds with bottom value directly.
+  The above one calls a function which changes the local objectValue data
+  and sets the string in the sharedProperties.
+  But does this change the original service?
+  And why does the latter only change the data in stringValue and Object value only
+  with scope?
+  Why doesn't it change data in the other controller?
+
+  It's like it creates a copy of the service INSIDE this controller. It shares
+  the initial data but not as it changes between controllers, like if they have their own changes.
+
+  Why doesn't it change on the vm side?
+
+
+Adding the same methods on top and bottom
+
+  using $scope
+
+
+  using this
+
+  In both of them, the top inputs bottom input becomes unuseable
+
+
+
+Is it necessary to return controller stuff like that? Can I just use regular functions?
+
+
+Sounds like I need watchers.
+  http://stackoverflow.com/questions/25748001/use-this-watch-instead-of-scope-watch-with-controller-as
+
+Isn't the whole point of angular, two way binding? When do I need watchers?
+Will variables update even though I am referencing through another variable?
+
+When do I not need watchers?
+  ng-repeat: https://daveceddia.com/sharing-data-between-controllers-best-practice-use-a-service/
+
+I mean I could do I want really easily without using angular's framework by creating
+a global variable. I don't see why I shouldn't just do this.
+
+
+Why not just access the data in the service directly?
+  Because its a function
+
+
+
+
+https://toddmotto.com/digging-into-angulars-controller-as-syntax/
+
+https://thinkster.io/a-better-way-to-learn-angularjs/services
+http://stackoverflow.com/questions/12008908/angularjs-how-can-i-pass-variables-between-controllers
+
+
+
+*It seems like $scope has better binding across the spectrum
+
+Need to know exactly:
+
+  What is the difference between controller as vs regular controller syntax
+
+  This vs $scope
+
+
+
+
+General binding through getters and setters:
+  call the service within the controller
+
+
+
+On the fly binding between controllers:
+
+
+
+
+
+Data to share:
+
+-General account data
+
+
+Does the service has start up variables that use a server call on ?

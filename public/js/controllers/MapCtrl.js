@@ -1,6 +1,3 @@
-var app;
-app = angular.module('vacantlotsApp');
-
 app.config(function(uiGmapGoogleMapApiProvider)
 {
     console.log('In config');
@@ -24,7 +21,7 @@ app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedPro
         console.log("Login token is present");
         console.log(localStorage.getItem("token"));
     }
-    
+
     // uiGmapGoogleMapApi is a promise.
     // The "then" callback function provides the google.maps object.
     uiGmapGoogleMapApi.then(function(maps)
