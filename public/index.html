@@ -33,6 +33,8 @@
         <script src="./js/sidebar.js"></script>
                     <!--<base href="/"></base>-->
                     <!--^404 bugs-->
+
+
     </head>
 
     <body ng-app="vacantlotsApp" ng-controller="MainCtrl as main">
@@ -61,10 +63,13 @@
                         <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ui-sref="myFavorites">My Favorites</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ng-click="main.accountService.setLogout()" style="cursor:pointer;">Logout</a>
+                        <a class="sidebar_links" ng-hide="main.accountService.getLogstatus()" ui-sref="registerPage">Register</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ng-hide="main.accountService.getLogstatus()" ui-sref="registerPage">Register</a>
+                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ui-sref="myAccount">My Account</a>
+                    </li>
+                    <li>
+                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ng-click="main.accountService.setLogout()" style="cursor:pointer;">Logout</a>
                     </li>
                 </ul>
             </div>

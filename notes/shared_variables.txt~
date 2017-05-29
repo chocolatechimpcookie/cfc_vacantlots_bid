@@ -2,7 +2,7 @@ var app variable, how come it didn't work?
 
 
 
-
+Why do I need to mention the service twice in some places and not in others
 
 
 
@@ -18,7 +18,7 @@ Should I turn the modal into a directive?
 
 
 
-when do I need to define service dependencies? I didn't do it in the other examples.
+
 
 
 
