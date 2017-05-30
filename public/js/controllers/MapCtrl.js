@@ -70,7 +70,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', function(uiGmapGoogleMapAp
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png'
+        icon: 'https://amem.neocities.org/icons/icon1b.png'
+        // icon: ''
         //id: i
       };
       ret[idKey] = i;
