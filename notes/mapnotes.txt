@@ -1,0 +1,2 @@
+-sharedproperties shares data between the bid view and the marker (Which is on map)
+-

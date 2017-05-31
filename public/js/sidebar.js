@@ -1,6 +1,6 @@
 //console.log("test hamburger outside");
 
-angular.module('vacantlotsApp').controller('SidebarController', function() 
+angular.module('vacantlotsApp').controller('SidebarController', function()
 {
 	console.log("test hamburger inside1");
 	this.state = false;
@@ -8,7 +8,7 @@ angular.module('vacantlotsApp').controller('SidebarController', function()
 
 angular.module('vacantlotsApp').directive('sidebarDirective', function()
 {
-console.log("test hamburger inside 2");
+    console.log("test hamburger inside 2");
 
     return {
         link : function(scope, element, attr)
@@ -18,7 +18,7 @@ console.log("test hamburger inside 2");
             {
                   if(newVal)
                   {
-                    element.addClass('show'); 
+                    element.addClass('show');
                     return;
                   }
                   element.removeClass('show');
@@ -28,11 +28,11 @@ console.log("test hamburger inside 2");
 });
 
 $(document).ready(function()
-    {
-        $("#menu-toggle, .sidebar_links").click(function(e) {
-        //$("#menu-toggle").click(function(e) {
-            //e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-
+{
+    $("#menu-toggle, .sidebar_links").click(function(e) {
+    //$("#menu-toggle").click(function(e) {
+        //e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
     });
+
+});

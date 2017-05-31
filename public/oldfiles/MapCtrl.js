@@ -13,38 +13,32 @@ angular.module('vacantlotsApp').config(function(uiGmapGoogleMapApiProvider)
 
 //this needs to be changed
 
-angular.module('vacantlotsApp').service('sharedProperties', function()
-{
-  var objectValue = {
-  data: 'not found'
+angular.module('vacantlotsApp').service('sharedProperties', function() {
+var objectValue = {
+    data: 'not found'
 };
 
-  return {
-      getString: function()
-      {
-          return objectValue.data;
-      },
-      setString: function(value)
-      {
-          console.log('Setting string through shared object');
-          objectValue.data = value;
-      },
-      getObject: function()
-      {
-          return objectValue;
-      }
-  }
+return {
+    getString: function() {
+        return objectValue.data;
+    },
+    setString: function(value) {
+        console.log('Setting string through shared object');
+        objectValue.data = value;
+    },
+    getObject: function() {
+        return objectValue;
+    }
+}
 });
 
 
 
-angular.module('vacantlotsApp').controller('MapCtrl', function(uiGmapGoogleMapApi, $state, sharedProperties, $http)
-{
-  // Do stuff with your $scope.
-  // Note: Some of the directives require at least something to be defined originally!
-  // e.g. $scope.markers = []
-    var vm = this;
-    vm.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
+angular.module('vacantlotsApp').controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties, $http) {
+    // Do stuff with your $scope.
+    // Note: Some of the directives require at least something to be defined originally!
+    // e.g. $scope.markers = []
+    $scope.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
 
     if (localStorage.getItem("token"))
     {
@@ -70,8 +64,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', function(uiGmapGoogleMapAp
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: 'https://amem.neocities.org/icons/icon1b.png'
-        // icon: ''
+        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png'
         //id: i
       };
       ret[idKey] = i;
@@ -97,13 +90,13 @@ angular.module('vacantlotsApp').controller('MapCtrl', function(uiGmapGoogleMapAp
             //console.log(i, address, latitude, longitude);
             markers.push(createMarker(i, address, latitude, longitude));
         }
-        vm.markers = markers;
+        $scope.markers = markers;
     }, function err(res)
     {
         console.log(res);
     });
 
-    vm.goBid = function (marker, event, model)
+    $scope.goBid = function (marker, event, model)
     {
        sharedProperties.setString(model.title)
        $state.go('bidPage')

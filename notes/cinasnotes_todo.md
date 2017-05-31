@@ -4,7 +4,16 @@ Login Brain Storming
     Qs
     -How does angular handle changing UI based on conditions?
     -How does angular handle sharing data between different views?
+    -What view is it in before you click a menu item? Whatever it was in already.
+    -Should it validate the token each time it is on a view by calling the API?
+        How it should it store username information? Should it just be in a global array?
+        I guess there can be a variable that holds that information and you can still validate
+        with the API when you need to.
     
+    
+    -Where should I put favorites, bids and settings on the UI? I guess it should show when the user is logged
+    in.
+        
     Comments
     -I could just do it with jQuery pretty easily
     -Checking for login would have to happen on a bunch of different pages
@@ -24,14 +33,20 @@ Login Brain Storming
             C) Add data, bid pages need associated account data.
             Account data needs to be accesible in other places or checked.
             D) Map page will need a login checker as well as other pages potentially
+   
+   
     Logout Link
+        -Service? It'll need to be checked in every view and modify the menu.
+        
         1) Remove token
         2) Reload page? or change menu
         
         
+        
+        
 Bugs
-    On Map page, "TypeError: Cannot read property 'gManager' of undefined"
-    
+    -On Map page, "TypeError: Cannot read property 'gManager' of undefined"
+    -UI problem when side menu is open in mobile
 
 
     
