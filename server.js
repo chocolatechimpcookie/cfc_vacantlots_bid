@@ -1,24 +1,24 @@
-const express = require("express")
-const rp = require("request-promise")
-const fetch = require("node-fetch")
-const bodyParser = require("body-parser")
+const express = require('express')
+const rp = require('request-promise')
+const fetch = require('node-fetch')
+const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
-const passport = require("passport")
-const passportJWT = require("passport-jwt")
+const passport = require('passport')
+const passportJWT = require('passport-jwt')
 const ExtractJwt = passportJWT.ExtractJwt
 const JwtStrategy = passportJWT.Strategy
 const bcrypt = require('bcryptjs')
 const CronJob = require('cron').CronJob
-const { User, Bid, AbandonedLot, LotWithBids } = require("./models.js")
+const { User, Bid, AbandonedLot, LotWithBids } = require('./models.js')
 
 let jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader()
 jwtOptions.secretOrKey = 'tasmanianDevil'
 
-const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+const strategy = new JwtStrategy(jwtOptions, (jwt_payload, next) => {
   console.log('payload received', jwt_payload)
 
-  User.findById(jwt_payload.id, function(err, user) {
+  User.findById(jwt_payload.id, (err, user) => {
     if (user) {
       next(null, user)
     } else {
@@ -100,7 +100,7 @@ const lotsRequest = () => {
           }
 
           const abandonedLot = new AbandonedLot(item)
-          abandonedLot.save(function(err, result) {
+          abandonedLot.save((err, result) => {
             if (err) {reject(err)}
             resolve(result)
           })
@@ -184,7 +184,7 @@ const lotsRequest = () => {
         console.log(error, 'saving failed')
       })
     }
-  }).catch(err => console.log(err, "newark api completely overloaded"))
+  }).catch(err => console.log(err, 'newark api completely overloaded'))
 }
 
 // AbandonedLot.remove({}, (err, data) => {})
@@ -217,50 +217,84 @@ AbandonedLot.count({},(err, c) => {
 
 
 
-app.get("/", function(req, res) {
+app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/public/index.html')
 })
 
-app.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
-  res.json("Success! You cannot see this without a token")
+app.get('/secret', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.json('Success! You cannot see this without a token')
 })
 
 //send plain lot data to front
-app.get("/map", function (req, res) {
-    AbandonedLot.find({}).exec(function (err, innerRes){
-      if (err) {
-        console.log(err)
-        res.status(500).json("error loading lot data")
-      } else if (innerRes) {
-        res.status(200).json(innerRes)
+app.get('/map',  (req, res) => {
+    AbandonedLot.find({}).exec()
+    .then(lots => {
+      if (lots) {
+        res.status(200).json(lots)
       } else {
-        res.status(500).json("no lot data available")
+        res.status(403).json('unable to locate lotID in database')
       }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json('error executing find of lots')
     })
 })
 
-app.get("/loginstatus", passport.authenticate('jwt', { session: false }), function(req, res) {
+app.get('/loginstatus', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({loggedIn: true, username: req.user.username})
 })
 
+app.get('/avgbid/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+  LotWithBids.findOne({lotID: req.params.id}).exec()
+  .then(lot => {
+    if (lot) {
+      Bid.find({bidID: {$in: lot['bids']}}).exec()
+      .then(bids => {
+        if (bids.length === 0) {
+          res.status(200).json({bids: 0, avg: null})
+        } else {
+          userHash = {}
+          console.log(bids)
+          const uniqueUserBids = bids.slice().sort((a,b) => b - a)
+          .filter(bid => userHash[bid.username] === undefined ? userHash[bid.username] = true : false)
+          const avg = uniqueUserBids.reduce((total, bid) => total + bid.amount, 0) / uniqueUserBids.length
+          res.status(200).json({bids: uniqueUserBids.length, avg: avg})
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json('error executing find on bids')
+      })
+    } else {
+      res.status(403).json('unable to locate lotID in database')
+    }
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(403).json('error executing findOne on lotID')
+  })
+})
+
+
 const chars = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const rand = (size) => Math.floor(Math.random() * size)
-const getID = (size) => Array.from({length: size}).reduce((id) => id + chars[rand(chars.length)], "")
+const getID = (size) => Array.from({length: size}).reduce((id) => id + chars[rand(chars.length)], '')
 const getIDlen15 = () => getID(15)
 
-app.post("/bid", passport.authenticate('jwt', { session: false }), function(req, res) {
+app.post('/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
   bidID = getIDlen15()
   
   //if username is valid
   User.findOne({username: req.user.username}).exec().then(user => {
-    if (user === null) {throw "username not found"}
+    if (user === null) {throw 'username not found'}
 
     const promise = LotWithBids.findOne({lotID: req.body.lotID}).exec()
 
     //and if lotID is valid
     const lotPromise = promise.then(lot => {
-      if (lot === null) {throw "lotID not found"}
-      if (!isNaN(Number(req.body.lotID))) {throw "bid amount invalid"}
+      if (lot === null) {throw 'lotID not found'}
+      if (!isNaN(Number(req.body.lotID))) {throw 'bid amount invalid'}
 
         lot.bids = lot.bids.concat(bidID)
         updatedLot = new LotWithBids(lot)
@@ -281,49 +315,49 @@ app.post("/bid", passport.authenticate('jwt', { session: false }), function(req,
         return Promise.all([updatedLot.save(), updatedUser.save(), lotBid.save()])
     })
     .then(product => {
-        res.status(201).json({message: "bid saved"})
+        res.status(201).json({message: 'bid saved'})
     })
     .catch(err => {
       console.log(err)
-      if (err === "lotID not found") {
-        res.status(403).json({message: "lotID not found"})
+      if (err === 'lotID not found') {
+        res.status(403).json({message: 'lotID not found'})
       } else {
-        res.status(500).json({message: "failed to save, try again"})
+        res.status(500).json({message: 'failed to save, try again'})
       }
     })
   })
   .catch(err => {
     console.log(err)
-    res.status(403).json({message: "username not found"})
+    res.status(403).json({message: 'username not found'})
   })
 })
 
-app.post("/login", function(req, res) {
+app.post('/login', (req, res) => {
   if(req.body.username && req.body.password){
     const username = req.body.username
     const password = req.body.password
 
-    User.findOne({ username: username }, function(err, user) {
+    User.findOne({ username: username }, (err, user) => {
       if (err) {
         console.log(err)
       } else if (user) {
         if (bcrypt.compareSync(password, user.password)) {
           const payload = {id: user._id}
           const token = jwt.sign(payload, jwtOptions.secretOrKey)
-          res.status(201).json({message: "ok", token: token})
+          res.status(201).json({message: 'ok', token: token})
         } else {
-          res.status(403).json({message:"passwords did not match"})
+          res.status(403).json({message:'passwords did not match'})
         }
       } else {
-        res.status(403).json({message:"no such user found"})
+        res.status(403).json({message:'no such user found'})
       }
     })
   } else {
-    res.status(403).json({message:"incomplete login information"})
+    res.status(403).json({message:'incomplete login information'})
   }
 })
 
-app.post("/register", function(req, res) {
+app.post('/register', (req, res) => {
   if (req.body.name && req.body.username && req.body.password && req.body.email && req.body.phone) {
     let item = {
         name : req.body.name,
@@ -333,28 +367,28 @@ app.post("/register", function(req, res) {
         phone : req.body.phone
         //check if dataCreated works/exists if you don't specify it here
       }
-      User.findOne({ username: req.body.username }, 'username', function(err, user) {
+      User.findOne({ username: req.body.username }, 'username', (err, user) => {
         if (err) {
           console.log(err)
           res.status(500).json({message:err})
         } else if (user) {
-          res.status(403).json({message:"username already in use"})
+          res.status(403).json({message:'username already in use'})
         } else {
           const salt = bcrypt.genSaltSync(10)
 
           item.password = bcrypt.hashSync(item.password, salt)
           const user = new User(item)
           user.save()
-          res.status(201).json({message:"success"})
+          res.status(201).json({message:'success'})
         }
       })
   } else {
-    res.status(403).json({message:"incomplete registration information"})
+    res.status(403).json({message:'incomplete registration information'})
   }
 })
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, function() {
-  console.log("Listening on port " + port)
+app.listen(port, () => {
+  console.log('Listening on port ' + port)
 })

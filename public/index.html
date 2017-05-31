@@ -1,128 +1,188 @@
-<!DOCTYPE html>
-<html>
+<html ng-app="bidApp">
     <head>
-        <title> VacantLots: Newark</title>
-<!--        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="images/favicon/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">-->
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="./js/var.js"></script>
-        <script src="./libraries/jquery-2.2.4.min.js"></script>
-        <script src="./libraries/angular1_6_1.min.js"></script>
-        <script src="./libraries/angular-ui-router.min.js"></script>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-        <!--open source google icons https://material.io/icons/-->
-        <!--<script language=javascript src='http://maps.google.com/maps/api/js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM' async defer></script>-->
-        <script src="./libraries/angular-simple-logger.js"></script>
-        <script src="./libraries/lodash3101.min.js"></script>
-        <script src="./libraries/angular-google-maps.min.js"></script>
-        <script src="./libraries/bootstrap.js"></script>
-        <link href="./libraries/bootstrap.min.css" rel="stylesheet" >
-        <link href="./libraries/bootstrap-theme.min.css" rel="stylesheet"></link>
-        <link href="./libraries/main.css" rel="stylesheet"></link>
-        <script src="./js/main.js"></script>
-        <script src="./js/services_factories/accountService.js"></script>
-        <script src="./js/controllers/MainCtrl.js"></script>
-        <script src="./js/controllers/MapCtrl.js"></script>
-        <script src="./js/controllers/RegisterCtrl.js"></script>
-        <script src="./js/controllers/LoginCtrl.js"></script>
-        <script src="./js/controllers/BidCtrl.js"></script>
-        <script src="./js/sidebar.js"></script>
-                    <!--<base href="/"></base>-->
-                    <!--^404 bugs-->
-
-
+        <meta charset="utf-8">
+        <title>Bid App</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     </head>
+    <script>
+        //this is an ugly front end to demonstrate what the server can currently do
+        //if you are currently logged in and refresh the page the jwt will still exist even though the message won't say so
+        var bidApp = angular.module('bidApp', [])
+        bidApp.controller('login', ['$scope', '$http', function ($scope, $http) {
+            //login
+            $scope.loginUsername = ""
+            $scope.loginPassword = ""
+            //register
+            $scope.regUsername = ""
+            $scope.regPassword = ""
+            $scope.name = ""
+            $scope.email = ""
+            $scope.phone = ""
+            //"logged in"/"logged out"
+            $scope.msg = ""
+            //bid amount
+            $scope.bidAmount = ""
+            $scope.lotID = ""
 
-    <body ng-app="vacantlotsApp" ng-controller="MainCtrl as main">
-        <div id="wrapper" >
-            <div id="sidebar-wrapper">
-                <ul class="sidebar-nav">
-                    <li class="sidebar-brand">
-                        <span style="color:white">
-                            Welcome
-                        </span>
-                    </li>
+            $scope.displayLots = false
+            var lots = []
 
-                    <li class="sidebar-links">
-                        <a class="sidebar_links" ui-sref="homePage">
-                            Map
-                        </a>
-                    </li>
+            $http({
+                method: 'GET',
+                url: '/map',
+                data: null
+            }).then(function success(res) {
+                lots = res.data
+                $scope.displayLots = true
 
-                    <li>
-                        <a class="sidebar_links" ng-hide="main.accountService.getLogstatus()" ui-sref="loginPage">Login</a>
-                    </li>
-                    <li>
-                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ui-sref="myBids">My Bids</a>
-                    </li>
-                    <li>
-                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ui-sref="myFavorites">My Favorites</a>
-                    </li>
-                    <li>
-                        <a class="sidebar_links" ng-hide="main.accountService.getLogstatus()" ui-sref="registerPage">Register</a>
-                    </li>
-                    <li>
-                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ui-sref="myAccount">My Account</a>
-                    </li>
-                    <li>
-                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ng-click="main.accountService.setLogout()" style="cursor:pointer;">Logout</a>
-                    </li>
-                </ul>
-            </div>
+            }, function err(res) {
+                console.log('error getting lots')
+            })
 
-            <div id="page-content-wrapper">
+            $scope.login = function() {
+                if ($scope.loginUsername && $scope.loginPassword) {
+                    $http({
+                        method: 'POST',
+                        url: '/login',
+                        data: {username: $scope.loginUsername,
+                               password: $scope.loginPassword}
+                    }).then(function success(res) {
+                        console.log('success login')
+                        const data = res.data
+                        //if user received jwt
+                        if (data.token) {
+                            $scope.msg = "logged in"
+                            localStorage.setItem("token", data.token)
+                        } else {
+                            console.log("No token received")
+                        }
+                    }, function err(res) {
+                        console.log('error logging in')
+                        console.log(res)
+                    })
+                }
+            }
+            $scope.register = function() {
+                if ($scope.regUsername && $scope.regPassword && $scope.email && $scope.name && $scope.phone) {
+                    $http({
+                        method: 'POST',
+                        url: '/register',
+                        data: {name: $scope.name,
+                               username: $scope.regUsername,
+                               password: $scope.regPassword,
+                               email: $scope.email,
+                               phone: $scope.phone}
+                    }).then(function success(res) {
+                        console.log(res)
+                        console.log('success register')
+                    }, function err(res) {
+                        console.log(res)
+                        console.log('error registering')
+                    })
+                }
+            }
 
-                <nav id="header_nav" class="navbar navbar-default" ng-controller="SidebarController">
-                    <button ng-click="toggleState()" id="menu-toggle" style="float:left; " type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                      <span class="sr-only">Toggle navigation</span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                    </button>
-                    <span style="font-size:40px; font-weight:800; letter-spacing:-3px; font-family:Raleway, Lato, sans-serif;">vacantlots <small>newark</small></span>
-                </nav>
+            $scope.avgbid = function() {
+                if ($scope.bidAmount) {
+                    $http({
+                        method: 'GET',
+                        url: '/avgbid/' + lots[Math.floor(Math.random() * lots.length)]['lotID'],
+                        data: null,
+                        headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                    }).then(function success(res) {
+                        console.log(res.data)
+                    }, function err(res) {
+                        console.log(res)
+                        console.log("error retrieving average bid")
+                    })
+                }
+            }
 
-            </div>
+            $scope.bid = function() {
+                if ($scope.bidAmount) {
+                    $http({
+                        method: 'POST',
+                        url: '/bid',
+                        data: {bid: $scope.bidAmount,
+                               lotID: lots[Math.floor(Math.random() * lots.length)]['lotID']},
+                        headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                    }).then(function success(res) {
+                        console.log(res.data)
+                    }, function err(res) {
+                        console.log(res)
+                        console.log("error bidding")
+                    })
+                }
+            }
 
-            <div ui-view></div>
-            <!--<div ng-include="'./views/bid_page.html'"></div>-->
+            //prints message in console if you are currently logged in (in other words if you have a valid jwt)
+            $scope.getSecret = function() {
+                $http({
+                    method: 'GET',
+                    url: '/secret',
+                    data: null,
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                }, function err(res) {
+                    console.log(res)
+                })
+            }
+
+            
+
+            /* This is the login status checker I just added */
+
+            $scope.loginStatus = function() {
+                $http({
+                    method: 'GET',
+                    url: '/loginstatus',
+                    data: null,
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    //if you are in this success path that means you are logged in but I added the loggedIn property, we can remove that if you feel it is unnecessary
+                    //res.data.loggedIn
+                    //res.data.username
+                    console.log(res.data)
+                }, function err(res) {
+                    console.log(res)
+                })
+            }
 
 
-            <div id="popup_modal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
 
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title" id="modal_text_header"></h4>
-                </div>
-                <div class="modal-body">
-                  <p id="modal_text_body"></p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn" data-dismiss="modal">Close</button>
-                </div>
-              </div>
+            //deletes jwt from local storage
+            $scope.logout = function() {
+                localStorage.removeItem("token")
+                $scope.msg = "logged out"
+            }
+        }])
+    </script>
+    <body ng-controller="login">
 
-            </div>
-            </div>
+    <label>Register</label>
+    <form ng-submit="register()">
+        <input type="text" ng-model="name" placeholder="full name">
+        <input type="text" ng-model="regUsername" placeholder="username">
+        <input type="text" ng-model="regPassword" placeholder="password">
+        <input type="text" ng-model="email" placeholder="email">
+        <input type="text" ng-model="phone" placeholder="phone number">
+        <input type="submit" value="register">
+    </form>
 
-        </div>
-        <!--wrapper-->
+    <label>Login</label>
+    <form ng-submit="login()">
+        <input type="text" ng-model="loginUsername" placeholder="username">
+        <input type="text" ng-model="loginPassword" placeholder="password">
+        <input type="submit" value="login">
+    </form>
 
-
-
-
-
-
-
-
-
+    $<input type="text" ng-model="bidAmount" placeholder="bid amount">
+    <button ng-click="bid()" ng-if="displayLots">place bid on random lot</button>
+    <button ng-click="avgbid()" ng-if="displayLots">request average bid on random lot</button>
+    <br>
+    <button ng-click="loginStatus()">Logged in?</button>
+    <button ng-click="getSecret()">Get Secret</button>
+    <button ng-click="logout()">Log Out</button>
+    <div>{{msg}}</div>
     </body>
-
-
-</html>
