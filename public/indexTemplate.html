@@ -20,6 +20,25 @@
             $scope.phone = ""
             //"logged in"/"logged out"
             $scope.msg = ""
+            //bid amount
+            $scope.bidAmount = ""
+            $scope.lotID = ""
+
+            $scope.displayLots = false
+            var lots = []
+
+            $http({
+                method: 'GET',
+                url: '/map',
+                data: null
+            }).then(function success(res) {
+                lots = res.data
+                $scope.displayLots = true
+
+            }, function err(res) {
+                console.log('error getting lots')
+            })
+
             $scope.login = function() {
                 if ($scope.loginUsername && $scope.loginPassword) {
                     $http({
@@ -38,13 +57,13 @@
                             console.log("No token received")
                         }
                     }, function err(res) {
-                        console.log('error')
+                        console.log('error logging in')
                         console.log(res)
                     })
                 }
             }
             $scope.register = function() {
-                if ($scope.regUsername && $scope.regPassword) {
+                if ($scope.regUsername && $scope.regPassword && $scope.email && $scope.name && $scope.phone) {
                     $http({
                         method: 'POST',
                         url: '/register',
@@ -58,10 +77,28 @@
                         console.log('success register')
                     }, function err(res) {
                         console.log(res)
-                        console.log('error')
+                        console.log('error registering')
                     })
                 }
             }
+
+            $scope.bid = function() {
+                if ($scope.bidAmount) {
+                    $http({
+                        method: 'POST',
+                        url: '/bid',
+                        data: {bid: $scope.bidAmount,
+                               lotID: lots[Math.floor(Math.random() * lots.length)]['lotID']},
+                        headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                    }).then(function success(res) {
+                        console.log(res.data)
+                    }, function err(res) {
+                        console.log(res)
+                        console.log("error bidding")
+                    })
+                }
+            }
+
             //prints message in console if you are currently logged in (in other words if you have a valid jwt)
             $scope.getSecret = function() {
                 $http({
@@ -124,6 +161,9 @@
         <input type="submit" value="login">
     </form>
 
+    $<input type="text" ng-model="bidAmount" placeholder="bid amount">
+    <button ng-click="bid()" ng-if="displayLots">place bid on random lot</button>
+    <br>
     <button ng-click="loginStatus()">Logged in?</button>
     <button ng-click="getSecret()">Get Secret</button>
     <button ng-click="logout()">Log Out</button>
