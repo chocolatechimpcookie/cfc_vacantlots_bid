@@ -70,7 +70,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', function(uiGmapGoogleMapAp
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: 'https://amem.neocities.org/icons/icon1b.png'
+        icon: '../../images/mappins/iconr.png'
         // icon: ''
         //id: i
       };

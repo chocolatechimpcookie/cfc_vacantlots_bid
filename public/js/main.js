@@ -34,6 +34,12 @@ angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
   	templateUrl:'views/bid_page.html',
   	controller: "BidCtrl as bid"
   })
+  .state('myaccountPage',
+  {
+    url:'/myaccount',
+    templateUrl: 'views/myaccount.html',
+    controller: 'AccountCtrl as account'
+  })
   ;
 
 

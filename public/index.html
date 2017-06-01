@@ -26,6 +26,7 @@
         <script src="./js/main.js"></script>
         <script src="./js/services_factories/accountService.js"></script>
         <script src="./js/controllers/MainCtrl.js"></script>
+        <script src="./js/controllers/AccountCtrl.js"></script>
         <script src="./js/controllers/MapCtrl.js"></script>
         <script src="./js/controllers/RegisterCtrl.js"></script>
         <script src="./js/controllers/LoginCtrl.js"></script>
@@ -66,7 +67,7 @@
                         <a class="sidebar_links" ng-hide="main.accountService.getLogstatus()" ui-sref="registerPage">Register</a>
                     </li>
                     <li>
-                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ui-sref="myAccount">My Account</a>
+                        <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ui-sref="myaccountPage">My Account</a>
                     </li>
                     <li>
                         <a class="sidebar_links" ng-show="main.accountService.getLogstatus()" ng-click="main.accountService.setLogout()" style="cursor:pointer;">Logout</a>
