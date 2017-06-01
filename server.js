@@ -39,6 +39,8 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static('public'))
 
+//global Lots array filled with lots from AbandonedLot model
+Lots = []
 
 const range = (lo, hi) => Array.from({ length: hi - lo }, (_, i) => lo + i)
 const url_front = 'http://data.ci.newark.nj.us/api/action/datastore_search?offset='
@@ -110,6 +112,10 @@ const lotsRequest = () => {
 
       Promise.all(lotPromises).then((results) => {
         console.log('updating lots in database')
+
+        //AbandonedLot model might be changed so reset global Lots array
+        Lots = []
+
         //now update lotsWithBids
         LotWithBids.find({}).exec((err, lots) => {
 
@@ -221,15 +227,15 @@ app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/public/index.html')
 })
 
-app.get('/secret', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.json('Success! You cannot see this without a token')
-})
-
 //send plain lot data to front
 app.get('/map',  (req, res) => {
+
+  //if global Lots array isn't empty then no need to do another find, just send it
+  if (Lots.length === 0) {
     AbandonedLot.find({}).exec()
     .then(lots => {
       if (lots) {
+        Lots = lots
         res.status(200).json(lots)
       } else {
         res.status(403).json('unable to locate lotID in database')
@@ -239,10 +245,51 @@ app.get('/map',  (req, res) => {
       console.log(err)
       res.status(500).json('error executing find of lots')
     })
+  } else {
+    res.status(200).json(Lots)
+  }
 })
 
 app.get('/loginstatus', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({loggedIn: true, username: req.user.username})
+})
+
+app.get('/userinfo', passport.authenticate('jwt', { session: false }), (req, res) => {
+  User.findOne({username: req.user.username}).exec()
+  .then(user => {
+    if (user) {
+      //name email phone bids (favorites in future)
+      Bid.find({bidID: {$in: user['bids']}}).exec()
+      .then(bids => {
+        //cuts out unneeded bid info
+        filteredInfoBids = bids.map(bid => {
+          return {amount: bid.amount,
+                  bidDate: bid.bidDate,
+                  lotID: bid.lotID,
+                  username: bid.username}
+        })
+        const userInfo = {
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+          bids: filteredInfoBids
+        }
+        console.log(userInfo)
+        res.status(200).json(userInfo)
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json('error executing find on bids')
+      })
+    } else {
+      res.status(403).json({message: 'username not found'})
+    }
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json(err)
+  })
 })
 
 app.get('/avgbid/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -349,7 +396,7 @@ app.post('/login', (req, res) => {
           res.status(403).json({message:'passwords did not match'})
         }
       } else {
-        res.status(403).json({message:'no such user found'})
+        res.status(403).json({message:'username not found'})
       }
     })
   } else {
@@ -361,6 +408,9 @@ app.post('/register', (req, res) => {
   if (req.body.name && req.body.username && req.body.password && req.body.email && req.body.phone) {
     let item = {
         name : req.body.name,
+        // change name to this in future
+        // firstname : req.body.first,
+        // lastname : req.body.last,
         username : req.body.username,
         password : req.body.password,
         email : req.body.email,
