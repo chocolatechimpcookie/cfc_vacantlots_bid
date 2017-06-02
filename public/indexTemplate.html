@@ -17,9 +17,8 @@
             //register
             $scope.regUsername = ""
             $scope.regPassword = ""
-            $scope.name = ""
-            // $scope.first = ""
-            // $scope.last = ""
+            $scope.first = ""
+            $scope.last = ""
             $scope.email = ""
             $scope.phone = ""
 
@@ -86,13 +85,12 @@
             }
 
             $scope.register = function() {
-                if ($scope.regUsername && $scope.regPassword && $scope.email && $scope.name && /*$scope.first && $scope.last &&*/ $scope.phone) {
+                if ($scope.regUsername && $scope.regPassword && $scope.email && $scope.first && $scope.last && $scope.phone) {
                     $http({
                         method: 'POST',
                         url: '/register',
-                        data: {name: $scope.name,
-                               //first: $scope.first,
-                               //last: $scope.last,
+                        data: {firstname: $scope.first,
+                               lastname: $scope.last,
                                username: $scope.regUsername,
                                password: $scope.regPassword,
                                email: $scope.email,
@@ -172,10 +170,8 @@
     <body ng-controller="login">
         <label>Register</label>
         <form ng-submit="register()">
-            <input type="text" ng-model="name" placeholder="full name">
-            <!-- change name to this in future-->
-            <!--<input type="text" ng-model="first" placeholder="first name">
-            <input type="text" ng-model="last" placeholder="last name">-->
+            <input type="text" ng-model="first" placeholder="first name">
+            <input type="text" ng-model="last" placeholder="last name">
             <input type="text" ng-model="regUsername" placeholder="username">
             <input type="text" ng-model="regPassword" placeholder="password">
             <input type="text" ng-model="email" placeholder="email">

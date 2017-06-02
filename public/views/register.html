@@ -11,10 +11,16 @@
         
             <form id="register_form" name="registerForm" ng-submit="register.submit()">
                 
-                <label>Name</label>
-                <div ng-class="{ 'has-error' : !registerForm.name.$pristine && registerForm.name.$invalid }">
-                    <input name="name" type="text" class="form-control" ng-model="register.name"  required></input>
-                    <p ng-show="registerForm.name.$invalid && !registerForm.name.$pristine" class="help-block">You name is required.</p>
+                <label>First Name</label>
+                <div ng-class="{ 'has-error' : !registerForm.firstName.$pristine && registerForm.name.$invalid }">
+                    <input name="firstName" type="text" class="form-control" ng-model="register.firstName"  required></input>
+                    <p ng-show="registerForm.firstName.$invalid && !registerForm.firstName.$pristine" class="help-block">You first name is required.</p>
+                </div>
+
+                <label>Last Name</label>
+                <div ng-class="{ 'has-error' : !registerForm.lastName.$pristine && registerForm.name.$invalid }">
+                    <input name="lastName" type="text" class="form-control" ng-model="register.lastName"  required></input>
+                    <p ng-show="registerForm.lastName.$invalid && !registerForm.lastName.$pristine" class="help-block">You last name is required.</p>
                 </div>
                 
                                 

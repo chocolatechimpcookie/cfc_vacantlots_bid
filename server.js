@@ -261,6 +261,7 @@ app.get('/userinfo', passport.authenticate('jwt', { session: false }), (req, res
       //name email phone bids (favorites in future)
       Bid.find({bidID: {$in: user['bids']}}).exec()
       .then(bids => {
+
         //cuts out unneeded bid info
         filteredInfoBids = bids.map(bid => {
           return {amount: bid.amount,
@@ -268,13 +269,16 @@ app.get('/userinfo', passport.authenticate('jwt', { session: false }), (req, res
                   lotID: bid.lotID,
                   username: bid.username}
         })
+
         const userInfo = {
-          name: user.name,
+          firstname: user.firstname,
+          lastname: user.lastname,
           username: user.username,
           email: user.email,
           phone: user.phone,
           bids: filteredInfoBids
         }
+
         console.log(userInfo)
         res.status(200).json(userInfo)
       })
@@ -405,12 +409,12 @@ app.post('/login', (req, res) => {
 })
 
 app.post('/register', (req, res) => {
-  if (req.body.name && req.body.username && req.body.password && req.body.email && req.body.phone) {
+  if (req.body.firstname && req.body.lastname && req.body.username && req.body.password && req.body.email && req.body.phone) {
     let item = {
-        name : req.body.name,
+        //name : req.body.name,
         // change name to this in future
-        // firstname : req.body.first,
-        // lastname : req.body.last,
+        firstname : req.body.firstname,
+        lastname : req.body.lastname,
         username : req.body.username,
         password : req.body.password,
         email : req.body.email,

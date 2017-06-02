@@ -20,7 +20,8 @@ angular.module('vacantlotsApp').controller('RegisterCtrl', ['$http', '$location'
             url: '/register',
             data:
             {
-                name: vm.name,
+                firstname: vm.firstName,
+                lastname: vm.lastName,
                 username: vm.username,
                 password: vm.password,
                 email: vm.email,
