@@ -11,8 +11,6 @@ const getID = (size) => Array.from({length: size}).reduce((id) => id + chars[ran
 const getIDlen15 = () => getID(15)
 
 const userSchema = new mongoose.Schema({
-    //name: {type: String, required: true},
-    // change name to this in future
     firstname: {type: String, required: true},
     lastname: {type: String, required: true},
     username: {type: String, required: true, unique: true},
@@ -24,7 +22,7 @@ const userSchema = new mongoose.Schema({
     //usertype: { type: String, required: true} //example, admin/standard
 })
 
-//
+//this is what a bid consists of
 const bidSchema = new mongoose.Schema({
     bidID: {type: String, require: true},
     lotID: {type: String, required: true},
@@ -33,25 +31,7 @@ const bidSchema = new mongoose.Schema({
     username: {type: String, required: true}
 })
 
-//this is the raw data (sent to front end)
-const abandonedLotSchema = new mongoose.Schema({
-    lotID: {type: String, required: true},
-    longitude: {type: Number, required: true},
-    latitude: {type: Number, required: true},
-    vitalStreetName: {type: String, required: true},
-    vitalHouseNumber: {type: String, required: true},
-    ownerName: {type: String, required: false},
-    ownerAddress: {type: String, required: false},
-    classDesc: {type: String, required: false},
-    zipcode: {type: String, required: false},
-    netValue: {type: String, required: false},
-    lot: {type: String, required: false},
-    block: {type: String, required: false},
-    cityState: {type: String, required: false}
-})
-
-//this will store all of the bids associated with
-//a given lot so that they are instantly retrievable
+//this will store all of the lot data and their associated bids
 const lotWithBidsSchema = new mongoose.Schema({
     lotID: {type: String, required: true},
     longitude: {type: Number, required: true},
@@ -74,7 +54,6 @@ const lotWithBidsSchema = new mongoose.Schema({
 
 const User = mongoose.model('user', userSchema)
 const Bid = mongoose.model('bid', bidSchema)
-const AbandonedLot = mongoose.model('abandonedLot', abandonedLotSchema)
 const LotWithBids = mongoose.model('lotsWithBids', lotWithBidsSchema)
 
-module.exports = { User, Bid, AbandonedLot, LotWithBids }
+module.exports = { User, Bid, LotWithBids }

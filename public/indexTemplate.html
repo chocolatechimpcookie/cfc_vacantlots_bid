@@ -108,21 +108,19 @@
             //$scope.avgbid purpose:
             //Contains API call for when you want to know the number of bids and average bid on a specific lot
             $scope.avgbid = function() {
-                if ($scope.bidAmount) {
-                    $http({
-                        method: 'GET',
-                        url: '/avgbid/' + lots[Math.floor(Math.random() * lots.length)]['lotID'],
-                        data: null,
-                        headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
-                    }).then(function success(res) {
-                        console.log(res.data)
-                        //number of bids (by unique users) is res.data.bids,
-                        //average of bids is res.data.avg
-                    }, function err(res) {
-                        console.log(res)
-                        console.log("error retrieving average bid")
-                    })
-                }
+                $http({
+                    method: 'GET',
+                    url: '/avgbid/' + lots[Math.floor(Math.random() * lots.length)]['lotID'],
+                    data: null,
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                    //number of bids (by unique users) is res.data.bids,
+                    //average of bids is res.data.avg
+                }, function err(res) {
+                    console.log(res)
+                    console.log("error retrieving average bid")
+                })
             }
 
             //$scope.bid purpose:
