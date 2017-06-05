@@ -9,7 +9,7 @@ const ExtractJwt = passportJWT.ExtractJwt
 const JwtStrategy = passportJWT.Strategy
 const bcrypt = require('bcryptjs')
 const CronJob = require('cron').CronJob
-const { User, Bid, LotWithBids } = require('./models.js')
+const { User, Bid, AbandonedLot } = require('./models.js')
 
 let jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader()
@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static('public'))
 
-//global Lots array filled with lots for sending to user
+//global Lots array filled with lots for sending to user via /map URL
 Lots = []
 
 const range = (lo, hi) => Array.from({ length: hi - lo }, (_, i) => lo + i)
@@ -88,7 +88,7 @@ const lotsRequest = () => {
       const usable_records = records.filter(record => record.Longitude && record.Latitude)
 
       //gather lots from database to compare to latest newark data
-      LotWithBids.find({}).exec()
+      AbandonedLot.find({}).exec()
       .then(lots => {
 
         let newLots = usable_records
@@ -127,7 +127,7 @@ const lotsRequest = () => {
             cityState: record['City, State']
           }
 
-          const newLot = new LotWithBids(item)
+          const newLot = new AbandonedLot(item)
           return newLot.save()
         })
 
@@ -152,9 +152,9 @@ const lotsRequest = () => {
   })
 }
 
-// LotWithBids.remove({}, (err, data) => {})
+// AbandonedLot.remove({}, (err, data) => {})
 // User.remove({}, (err, data) => {})
-// Bid.remove({}, (err, data) => {})
+Bid.remove({}, (err, data) => {})
 // lotsRequest()
 
 //request lots from newark every 3 hrs
@@ -169,7 +169,7 @@ const job = new CronJob({
 job.start()
 
 //if lots collection is empty at startup request lots immediately
-LotWithBids.count({},(err, c) => {
+AbandonedLot.count({},(err, c) => {
   if (c === 0) {
     lotsRequest()
   }
@@ -180,13 +180,13 @@ app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/public/index.html')
 })
 
-//send plain lot data to front
+//send lot data to front
 app.get('/map',  (req, res) => {
 
   //if global Lots array isn't empty then no need to do another find, just send it
   if (Lots.length === 0) {
 
-    LotWithBids.find({}).exec()
+    AbandonedLot.find({}).exec()
     .then(lots => {
 
       if (lots) {
@@ -195,7 +195,6 @@ app.get('/map',  (req, res) => {
           let newLot = Object.create(lot)
           delete newLot['__v']
           delete newLot['_id']
-          delete newLot['bids']
           return newLot
         })
 
@@ -218,48 +217,28 @@ app.get('/loginstatus', passport.authenticate('jwt', { session: false }), (req, 
 })
 
 app.get('/userinfo', passport.authenticate('jwt', { session: false }), (req, res) => {
-  console.log(req.user)
-  User.findOne({username: req.user.username}).exec()
-  .then(user => {
+  const user = req.user
 
-    if (user) {
+  //name email phone bids (favorites in future)
+  Bid.find({username: req.user.username}).exec()
+  .then(bids => {
 
-      //name email phone bids (favorites in future)
-      Bid.find({username: req.user.username}).exec()
-      .then(bids => {
-
-        //cuts out unneeded bid info
-        filteredInfoBids = bids.map(bid => {
-          return {amount: bid.amount,
-                  bidDate: bid.bidDate,
-                  lotID: bid.lotID,
-                  username: bid.username}
-        })
-
-        const userInfo = {
-          firstname: user.firstname,
-          lastname: user.lastname,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-          bids: filteredInfoBids
-        }
-
-        console.log(userInfo)
-        res.status(200).json(userInfo)
-      })
-      .catch(err => {
-        console.log(err)
-        res.status(500).json('error executing find on bids')
-      })
-    } else {
-      res.status(403).json({message: 'username not found'})
+    const userInfo = {
+      firstname: user.firstname,
+      lastname: user.lastname,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+      bids: bids
     }
+
+    res.status(200).json(userInfo)
   })
   .catch(err => {
     console.log(err)
-    res.status(500).json(err)
+    res.status(500).json('error executing find on bids')
   })
+
 })
 
 app.get('/avgbid/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -292,39 +271,28 @@ const getID = (size) => Array.from({length: size}).reduce((id) => id + chars[ran
 const getIDlen15 = () => getID(15)
 
 app.post('/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
-  bidID = getIDlen15()
-  console.log('here')
-  //if username is valid
-  User.findOne({username: req.user.username}).exec().then(user => {
-    if (user === null) {throw 'username not found'}
 
-    const promise = LotWithBids.findOne({lotID: req.body.lotID}).exec()
+  //is bid amount valid?
+  if (isNaN(req.body.bid)) {
+    res.status(400).json({message: 'invalid bid amount'})
+  } else {
 
-    //and if lotID is valid
-    const lotPromise = promise.then(lot => {
+    //is lotID valid?
+    AbandonedLot.findOne({lotID: req.body.lotID}).exec()
+    .then(lot => {
 
       if (lot === null) {throw 'lotID not found'}
-      if (!isNaN(Number(req.body.lotID))) {throw 'bid amount invalid'}
-
-        lot.bids = lot.bids.concat(bidID)
-        updatedLot = new LotWithBids(lot)
-
-        user.bids = user.bids.concat(bidID)
-        updatedUser = new User(user)
 
         let item = {
-          bidID: bidID,
           lotID: req.body.lotID,
           amount: Number(req.body.bid),
           username:req.user.username
         }
         const lotBid = new Bid(item)
 
-        //then save the bidID in the user's bids, lot's bids, and save the new bid
-        //if there is an error with user save or bid save there will be unwanted saved bidIDs in lot and or user model
-        return Promise.all([updatedLot.save(), updatedUser.save(), lotBid.save()])
+        return lotBid.save()
     })
-    .then(product => {
+    .then(() => {
         res.status(201).json({message: 'bid saved'})
     })
     .catch(err => {
@@ -337,11 +305,7 @@ app.post('/bid', passport.authenticate('jwt', { session: false }), (req, res) =>
       }
 
     })
-  })
-  .catch(err => {
-    console.log(err)
-    res.status(403).json({message: 'username not found'})
-  })
+  }
 })
 
 app.post('/login', (req, res) => {
