@@ -264,12 +264,6 @@ app.get('/avgbid/:id', passport.authenticate('jwt', {session: false}), (req, res
 
 })
 
-
-const chars = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const rand = (size) => Math.floor(Math.random() * size)
-const getID = (size) => Array.from({length: size}).reduce((id) => id + chars[rand(chars.length)], '')
-const getIDlen15 = () => getID(15)
-
 app.post('/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
 
   //is bid amount valid?

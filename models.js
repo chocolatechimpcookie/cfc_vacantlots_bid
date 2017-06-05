@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema({
     //usertype: { type: String, required: true} //example, admin/standard
 })
 
-//this is what a bid consists of
 const bidSchema = new mongoose.Schema({
     lotID: {type: String, required: true},
     amount: {type: Number, required: true},
@@ -24,7 +23,6 @@ const bidSchema = new mongoose.Schema({
     username: {type: String, required: true}
 })
 
-//this will store all of the lot data
 const abandonedLotSchema = new mongoose.Schema({
     lotID: {type: String, required: true},
     longitude: {type: Number, required: true},
