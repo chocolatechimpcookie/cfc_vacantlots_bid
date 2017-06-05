@@ -154,7 +154,7 @@ const lotsRequest = () => {
 
 // AbandonedLot.remove({}, (err, data) => {})
 // User.remove({}, (err, data) => {})
-Bid.remove({}, (err, data) => {})
+// Bid.remove({}, (err, data) => {})
 // lotsRequest()
 
 //request lots from newark every 3 hrs
