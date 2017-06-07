@@ -70,7 +70,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$s
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: '../../images/mappins/iconb.png'
+        icon: '../../images/iconideas/iconblue.png'
         // icon: ''
         //id: i
       };
