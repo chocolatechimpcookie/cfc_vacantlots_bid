@@ -375,7 +375,7 @@ app.post('/favorite', passport.authenticate('jwt', { session: false }), (req, re
     Favorite.find({username: req.user.username}).exec()
     .then(favs => {
 
-      if (Array.from(favs).find(fav => fav.lotID === req.body.lotID) !== undefined) {
+      if (favs.find(fav => fav.lotID === req.body.lotID) !== undefined) {
         throw 'already a favorite'
       }
 
@@ -416,7 +416,7 @@ app.delete('/favorite/:id', passport.authenticate('jwt', { session: false }), (r
   //check if lot exists as a favorite of user
     Favorite.find({username: req.user.username}).exec()
     .then(favs => {
-      const fav = Array.from(favs).find(fav => fav.lotID === req.params.id)
+      const fav = favs.find(fav => fav.lotID === req.params.id)
       if (fav === undefined) {
         throw 'can\'t delete, not a favorite'
       }
