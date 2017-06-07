@@ -9,7 +9,7 @@ const ExtractJwt = passportJWT.ExtractJwt
 const JwtStrategy = passportJWT.Strategy
 const bcrypt = require('bcryptjs')
 const CronJob = require('cron').CronJob
-const { User, Bid, AbandonedLot } = require('./models.js')
+const { User, AbandonedLot, Bid, Favorite } = require('./models.js')
 
 let jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader()
@@ -157,6 +157,7 @@ const lotsRequest = () => {
 // Bid.remove({}, (err, data) => {})
 // lotsRequest()
 
+
 //request lots from newark every 3 hrs
 const job = new CronJob({
   cronTime: '0 */3 * * *',
@@ -219,8 +220,12 @@ app.get('/loginstatus', passport.authenticate('jwt', { session: false }), (req, 
 app.get('/userinfo', passport.authenticate('jwt', { session: false }), (req, res) => {
   const user = req.user
 
-  //name email phone bids (favorites in future)
-  Bid.find({username: req.user.username}).exec()
+  let favorites = null
+  Favorite.find({username: req.user.username}).exec()
+  .then(favs => {
+    favorites = favs
+    return Bid.find({username: req.user.username}).exec()
+  })
   .then(bids => {
 
     const userInfo = {
@@ -229,14 +234,15 @@ app.get('/userinfo', passport.authenticate('jwt', { session: false }), (req, res
       username: user.username,
       email: user.email,
       phone: user.phone,
-      bids: bids
+      bids: bids,
+      favorites: favorites
     }
 
     res.status(200).json(userInfo)
   })
   .catch(err => {
     console.log(err)
-    res.status(500).json('error executing find on bids')
+    res.status(500).json('error executing find on favorites/bids')
   })
 
 })
@@ -262,6 +268,67 @@ app.get('/avgbid/:id', passport.authenticate('jwt', {session: false}), (req, res
     res.status(500).json('error executing find on bids')
   })
 
+})
+
+app.post('/register', (req, res) => {
+  if (req.body.firstname && req.body.lastname && req.body.username && req.body.password && req.body.email && req.body.phone) {
+
+    let item = {
+        firstname : req.body.firstname,
+        lastname : req.body.lastname,
+        username : req.body.username,
+        password : req.body.password,
+        email : req.body.email,
+        phone : req.body.phone
+      }
+
+      User.findOne({ username: req.body.username }, 'username', (err, user) => {
+        if (err) {
+          console.log(err)
+          res.status(500).json({message:err})
+        } else if (user) {
+          res.status(401).json({message:'username already in use'})
+        } else {
+
+          const salt = bcrypt.genSaltSync(10)
+          item.password = bcrypt.hashSync(item.password, salt)
+
+          const user = new User(item)
+          user.save()
+          res.status(201).json({message:'success'})
+        }
+      })
+  } else {
+    res.status(401).json({message:'incomplete registration information'})
+  }
+})
+
+app.post('/login', (req, res) => {
+  if(req.body.username && req.body.password){
+    const username = req.body.username
+    const password = req.body.password
+
+    User.findOne({ username: username }, (err, user) => {
+      if (err) {
+        console.log(err)
+      } else if (user) {
+
+        if (bcrypt.compareSync(password, user.password)) {
+
+          const payload = {id: user._id}
+          const token = jwt.sign(payload, jwtOptions.secretOrKey)
+          res.status(200).json({message: 'ok', token: token})
+
+        } else {
+          res.status(401).json({message:'passwords did not match'})
+        }
+      } else {
+        res.status(401).json({message:'username not found'})
+      }
+    })
+  } else {
+    res.status(401).json({message:'incomplete login information'})
+  }
 })
 
 app.post('/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -302,65 +369,73 @@ app.post('/bid', passport.authenticate('jwt', { session: false }), (req, res) =>
   }
 })
 
-app.post('/login', (req, res) => {
-  if(req.body.username && req.body.password){
-    const username = req.body.username
-    const password = req.body.password
+app.post('/favorite', passport.authenticate('jwt', { session: false }), (req, res) => {
 
-    User.findOne({ username: username }, (err, user) => {
-      if (err) {
-        console.log(err)
-      } else if (user) {
+    //check if lot already exists as a favorite of user
+    Favorite.find({username: req.user.username}).exec()
+    .then(favs => {
 
-        if (bcrypt.compareSync(password, user.password)) {
-
-          const payload = {id: user._id}
-          const token = jwt.sign(payload, jwtOptions.secretOrKey)
-          res.status(200).json({message: 'ok', token: token})
-
-        } else {
-          res.status(401).json({message:'passwords did not match'})
-        }
-      } else {
-        res.status(401).json({message:'username not found'})
+      if (Array.from(favs).find(fav => fav.lotID === req.body.lotID) !== undefined) {
+        throw 'already a favorite'
       }
+
+      //is lotID valid?
+      return AbandonedLot.findOne({lotID: req.body.lotID}).exec()
     })
-  } else {
-    res.status(401).json({message:'incomplete login information'})
-  }
+    .then(lot => {
+
+      if (lot === null) {throw 'lotID not found'}
+
+        let item = {
+          lotID: req.body.lotID,
+          username:req.user.username
+        }
+        const fav = new Favorite(item)
+
+        return fav.save()
+    })
+    .then(() => {
+        res.status(201).json({message: 'favorite saved'})
+    })
+    .catch(err => {
+
+      console.log(err)
+      if (err === 'lotID not found') {
+        res.status(403).json({message: 'lotID not found'})
+      } else if (err === 'already a favorite') {
+        res.status(403).json({message: 'can\'t favorite a lot twice'})
+      } else {
+        res.status(500).json({message: 'failed to save, try again'})
+      }
+
+    })
 })
 
-app.post('/register', (req, res) => {
-  if (req.body.firstname && req.body.lastname && req.body.username && req.body.password && req.body.email && req.body.phone) {
+app.delete('/favorite/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
 
-    let item = {
-        firstname : req.body.firstname,
-        lastname : req.body.lastname,
-        username : req.body.username,
-        password : req.body.password,
-        email : req.body.email,
-        phone : req.body.phone
+  //check if lot exists as a favorite of user
+    Favorite.find({username: req.user.username}).exec()
+    .then(favs => {
+      const fav = Array.from(favs).find(fav => fav.lotID === req.params.id)
+      if (fav === undefined) {
+        throw 'can\'t delete, not a favorite'
       }
 
-      User.findOne({ username: req.body.username }, 'username', (err, user) => {
-        if (err) {
-          console.log(err)
-          res.status(500).json({message:err})
-        } else if (user) {
-          res.status(401).json({message:'username already in use'})
-        } else {
+      Favorite.remove({'_id': fav}).exec()
+    })
+    .then(() => {
+        res.status(204).json({message: 'successfully removed'})
+    })
+    .catch(err => {
 
-          const salt = bcrypt.genSaltSync(10)
-          item.password = bcrypt.hashSync(item.password, salt)
+      console.log(err)
+      if (err === 'can\'t delete, not a favorite') {
+        res.status(403).json({message: 'can\'t favorite a lot twice'})
+      } else {
+        res.status(500).json({message: 'failed to save, try again'})
+      }
 
-          const user = new User(item)
-          user.save()
-          res.status(201).json({message:'success'})
-        }
-      })
-  } else {
-    res.status(401).json({message:'incomplete registration information'})
-  }
+    })
 })
 
 const port = process.env.PORT || 3000;

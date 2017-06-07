@@ -32,6 +32,10 @@
 
             var lots = []
 
+            $scope.haveUserInfo = false
+
+            var userInfo = null
+
             $http({
                 method: 'GET',
                 url: '/map',
@@ -135,6 +139,8 @@
                         headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
                     }).then(function success(res) {
                         console.log(res.data)
+                        //keeps userInfo up to date
+                        $scope.userInfo()
                     }, function err(res) {
                         console.log(res)
                         console.log("error bidding")
@@ -142,8 +148,26 @@
                 }
             }
 
+            //$scope.favorite purpose:
+            //Contains API call for when the user wants to make a new favorite, this will take a lotID and store it as a favorite
+            $scope.favorite = function() {
+                $http({
+                    method: 'POST',
+                    url: '/favorite',
+                    data: {lotID: lots[Math.floor(Math.random() * lots.length)]['lotID']},
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                    //keeps userInfo up to date
+                    $scope.userInfo()
+                }, function err(res) {
+                    console.log(res)
+                    console.log("error favoriting")
+                })
+            }
+
             //$scope.userInfo purpose:
-            //Contains API call for retrieving user info (name, email, phone, bids, favorites (not added yet))
+            //Contains API call for retrieving user info (name, email, phone, bids, favorites)
             $scope.userInfo = function() {
                 $http({
                     method: 'GET',
@@ -152,9 +176,29 @@
                     headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
                 }).then(function success(res) {
                     console.log(res.data)
+                    userInfo = res.data
+                    $scope.haveUserInfo = true
+
                 }, function err(res) {
                     console.log(res)
                     console.log("user is not logged in")
+                })
+            }
+
+            //$scope.removeFavorite purpose:
+            //Contains API call for when the user wants to delete a favorite, this will take a lotID and delete the favorite associated with that lotID and the user
+            $scope.removeFavorite = function() {
+                $http({
+                    method: 'DELETE',
+                    url: '/favorite/' + userInfo.favorites[Math.floor(Math.random() * userInfo.favorites.length)]['lotID'],
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                    //keeps userInfo up to date
+                    $scope.userInfo()
+                }, function err(res) {
+                    console.log(res)
+                    console.log("error deleting favorite")
                 })
             }
 
@@ -187,6 +231,8 @@
         $<input type="text" ng-model="bidAmount" placeholder="bid amount">
         <button ng-click="bid()" ng-if="displayLots">place bid on random lot</button>
         <button ng-click="avgbid()" ng-if="displayLots">request average bid on random lot</button>
+        <button ng-click="favorite()" ng-if="displayLots">make random lot a favorite</button>
+        <button ng-click="removeFavorite()" ng-if="haveUserInfo">remove a favorite lot from favorites</button>
         <br>
         <button ng-click="userInfo()">request user info</button>
         <br>

@@ -16,13 +16,6 @@ const userSchema = new mongoose.Schema({
     //usertype: { type: String, required: true} //example, admin/standard
 })
 
-const bidSchema = new mongoose.Schema({
-    lotID: {type: String, required: true},
-    amount: {type: Number, required: true},
-    bidDate: {type: Date, default: Date.now},
-    username: {type: String, required: true}
-})
-
 const abandonedLotSchema = new mongoose.Schema({
     lotID: {type: String, required: true},
     longitude: {type: Number, required: true},
@@ -39,8 +32,21 @@ const abandonedLotSchema = new mongoose.Schema({
     cityState: {type: String, required: false}
 })
 
-const User = mongoose.model('user', userSchema)
-const Bid = mongoose.model('bid', bidSchema)
-const AbandonedLot = mongoose.model('lotsWithBids', abandonedLotSchema)
+const bidSchema = new mongoose.Schema({
+    lotID: {type: String, required: true},
+    amount: {type: Number, required: true},
+    bidDate: {type: Date, default: Date.now},
+    username: {type: String, required: true}
+})
 
-module.exports = { User, Bid, AbandonedLot }
+const favoriteSchema = new mongoose.Schema({
+    lotID: {type: String, required: true},
+    username: {type: String, required: true}
+})
+
+const User = mongoose.model('user', userSchema)
+const AbandonedLot = mongoose.model('lotsWithBids', abandonedLotSchema)
+const Bid = mongoose.model('bid', bidSchema)
+const Favorite = mongoose.model('favorite', favoriteSchema)
+
+module.exports = { User, AbandonedLot, Bid , Favorite }
