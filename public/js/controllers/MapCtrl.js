@@ -38,7 +38,7 @@ angular.module('vacantlotsApp').service('sharedProperties', function()
 
 
 
-angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$state', '$http', 'sharedProperties', function(uiGmapGoogleMapApi, $state, sharedProperties, $http)
+angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$state', '$http', 'sharedProperties', function(uiGmapGoogleMapApi, $state, $http, sharedProperties)
 {
   // Do stuff with your $scope.
   // Note: Some of the directives require at least something to be defined originally!
