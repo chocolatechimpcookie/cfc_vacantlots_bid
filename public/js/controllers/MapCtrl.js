@@ -113,19 +113,25 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$s
         this.show = false;
       },
       template: "../../views/mapwindow.html",
-      options: {}
+      test:"xtdfrcgvhbjnkm",
+      model:""
     }
 
-    vm.openWindow = function (marker, event, model)
-    {
-      console.log("inside open window");
-      vm.window.model = model;
-      vm.window.show = true;
-    };
-
-    // vm.goBid = function (marker, event, model)
+    // vm.openWindow = function (marker, event, model)
     // {
-    //    sharedProperties.setString(model.title)
-    //    $state.go('bidPage')
+    //   //why is model not printing?
+    //   console.log(model.title);
+    //   console.log("inside open window");
+    //   vm.window.model = model;
+    //   vm.window.show = true;
+    //   console.log(vm.window.test);
     // };
+
+    vm.goBid = function (marker, event, model)
+    {
+        console.log(model.title);
+        console.log("inside open window");
+       sharedProperties.setString(model.title)
+       $state.go('bidPage')
+    };
 }]);
