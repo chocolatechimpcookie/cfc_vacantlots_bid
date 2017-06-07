@@ -1,6 +1,15 @@
 <div>
   <ui-gmap-google-map center="map.map.center" zoom="map.map.zoom" draggable="true" options="options">
-      <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" options="markerOptions" click="map.goBid">
+      <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" options="markerOptions" click="map.openWindow()">
       </ui-gmap-markers>
+
+      <ui-gmap-window
+      templateUrl="'mapwindow.html'"
+      show="map.window.show"
+      coords="map.window.model"
+      options="map.window.options"
+      closeClick="map.window.closeClick()"
+      >
+      </ui-gmap-window>
   </ui-gmap-google-map>
 </div>
