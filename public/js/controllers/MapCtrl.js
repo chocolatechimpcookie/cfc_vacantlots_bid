@@ -13,32 +13,10 @@ angular.module('vacantlotsApp').config(function(uiGmapGoogleMapApiProvider)
 
 //this needs to be changed, perhaps in a seperate files with a more descriptive name
 
-angular.module('vacantlotsApp').service('sharedProperties', function()
-{
-  var objectValue = {
-  data: 'not found'
-};
-
-  return {
-      getString: function()
-      {
-          return objectValue.data;
-      },
-      setString: function(value)
-      {
-          console.log('Setting string through shared object');
-          objectValue.data = value;
-      },
-      getObject: function()
-      {
-          return objectValue;
-      }
-  }
-});
 
 
 
-angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$state', '$http', 'sharedProperties', function(uiGmapGoogleMapApi, $state, $http, sharedProperties)
+angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$state', '$http', 'sharedpropertiesService', function(uiGmapGoogleMapApi, $state, $http, sharedpropertiesService)
 {
   // Do stuff with your $scope.
   // Note: Some of the directives require at least something to be defined originally!
@@ -105,7 +83,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$s
 
     vm.goBid = function (marker, event, model)
     {
-       sharedProperties.setString(model.title)
+       sharedpropertiesService.setString(model.title)
        $state.go('bidPage')
     };
 }]);
