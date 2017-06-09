@@ -46,8 +46,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$s
     var vm = this;
     vm.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
 
-    // vm.windowOption
-
     if (localStorage.getItem("token"))
     {
         console.log("Login token is present");
@@ -72,13 +70,13 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$s
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: '../../images/iconideas/iconblue.png'
+        icon: '../../images/mapicons/iconblue.png'
+        // icon: ''
+        //id: i
       };
       ret[idKey] = i;
       return ret;
     };
-
-
 
     var markers = [];
     var properties;
@@ -105,32 +103,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$s
         console.log(res);
     });
 
-    vm.window =
-    {
-      marker: {},
-      show: false,
-      closeClick: function() {
-        this.show = false;
-      },
-      template: "../../views/mapwindow.html",
-      test:"xtdfrcgvhbjnkm",
-      model:""
-    }
-
-    // vm.openWindow = function (marker, event, model)
-    // {
-    //   //why is model not printing?
-    //   console.log(model.title);
-    //   console.log("inside open window");
-    //   vm.window.model = model;
-    //   vm.window.show = true;
-    //   console.log(vm.window.test);
-    // };
-
     vm.goBid = function (marker, event, model)
     {
-        console.log(model.title);
-        console.log("inside open window");
        sharedProperties.setString(model.title)
        $state.go('bidPage')
     };
