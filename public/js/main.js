@@ -3,7 +3,7 @@
 
 // var app = angular.module('vacantlotsApp');
 
-angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
+angular.module('vacantlotsApp', ['ui.router', 'ngMap'])
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
 {
   $urlRouterProvider.otherwise('/');
