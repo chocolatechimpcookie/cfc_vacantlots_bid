@@ -13,6 +13,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
+	"ngmap": "^1.18.4",
     "body-parser": "^1.17.1",
     "cron": "^1.2.1",
     "express": "^4.15.2",

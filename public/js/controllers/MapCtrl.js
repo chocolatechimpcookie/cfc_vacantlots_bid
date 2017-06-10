@@ -48,7 +48,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['uiGmapGoogleMapApi', '$s
         latitude: latitude,
         longitude: longitude,
         title: address,
-        icon: '../../images/mapicons/iconblue.png'
+        icon: '../../images/mapicons/iconblues2.png'
         // icon: ''
         //id: i
       };
