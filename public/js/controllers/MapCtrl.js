@@ -16,73 +16,95 @@
 
 
 
-angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', function($state, $http, sharedpropertiesService)
+angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
   // Do stuff with your $scope.
   // Note: Some of the directives require at least something to be defined originally!
   // e.g. $scope.markers = []
     var vm = this;
-    // vm.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
-    //
-    // if (localStorage.getItem("token"))
+    // vm.initMap = function(mapId)
     // {
-    //     console.log("Login token is present");
-    //     console.log(localStorage.getItem("token"));
+    //   vm.map = NgMap.initMap(mapId);
+    //   console.log('vm.map 2', vm.map)
     // }
-    //
-    // // uiGmapGoogleMapApi is a promise.
-    // // The "then" callback function provides the google.maps object.
-    // uiGmapGoogleMapApi.then(function(maps)
-    // {
-    // });
-    //
-    // //Creates object containing info needed to create Google maps marker
-    // var createMarker = function(i, address, latitude, longitude, idKey)
-    // {
-    //   // if (idKey == null)
-    //   // {
-    //   //   idKey = "id";
-    //   // }
-    //   var ret =
-    //   {
-    //     latitude: latitude,
-    //     longitude: longitude,
-    //     title: address,
-    //     icon: '../../images/mapicons/iconblue.png',
-    //     id: idKey
-    //   };
-    //   // ret[idKey] = i;
-    //   return ret;
-    // };
-    //
-    // var markers = [];
-    // var properties;
-    // // HTTP get to load property data from JSON file.
-    // $http.get('/map').then(function success(res)
-    // {
-    //     properties = res.data;
-    //     //TODO: Need some way to filter properties. There are too many to look at at once.
-    //     var numProperties = properties.length;
-    //     for (var i = 0; i < numProperties; i++)
-    //     {
-    //         property = properties[i];
-    //         houseNumber = property.vitalHouseNumber;
-    //         street = property.vitalStreetName;
-    //         address = houseNumber + ' ' + street;
-    //         latitude = property.latitude;
-    //         longitude = property.longitude;
-    //         //console.log(i, address, latitude, longitude);
-    //         markers.push(createMarker(i, address, latitude, longitude));
-    //     }
-    //     vm.markers = markers;
-    // }, function err(res)
-    // {
-    //     console.log(res);
-    // });
-    //
-    // vm.goBid = function (marker, event, model)
-    // {
-    //    sharedpropertiesService.setString(model.title)
-    //    $state.go('bidPage')
-    // };
+    // vm.coord = { center: { lat: 40.7356357, lng: -74.18 }, zoom: 13 };
+    // vm.coord = { center: [40.7356357, -74.18], zoom: 13 };
+    // vm.map = { center: {long: 40.7356357,lat: -74.18}, zoom: 13 };
+
+    // vm.mapcenter = [40.7356357, -74.18];
+    vm.initMap = function(mapId) {
+       vm.map = NgMap.initMap(mapId);
+       console.log('vm.map 2', vm.map)
+     }
+
+    vm.stores = {
+  foo: { position:[40.7356357, -74.18 ]}
+};
+
 }]);
+
+
+
+// console.log(vm.map.center);
+//
+// if (localStorage.getItem("token"))
+// {
+//     console.log("Login token is present");
+//     console.log(localStorage.getItem("token"));
+// }
+//
+// // uiGmapGoogleMapApi is a promise.
+// // The "then" callback function provides the google.maps object.
+// uiGmapGoogleMapApi.then(function(maps)
+// {
+// });
+//
+// //Creates object containing info needed to create Google maps marker
+// var createMarker = function(i, address, latitude, longitude, idKey)
+// {
+//   // if (idKey == null)
+//   // {
+//   //   idKey = "id";
+//   // }
+//   var ret =
+//   {
+//     latitude: latitude,
+//     longitude: longitude,
+//     title: address,
+//     icon: '../../images/mapicons/iconblue.png',
+//     id: idKey
+//   };
+//   // ret[idKey] = i;
+//   return ret;
+// };
+//
+// var markers = [];
+// var properties;
+// // HTTP get to load property data from JSON file.
+// $http.get('/map').then(function success(res)
+// {
+//     properties = res.data;
+//     //TODO: Need some way to filter properties. There are too many to look at at once.
+//     var numProperties = properties.length;
+//     for (var i = 0; i < numProperties; i++)
+//     {
+//         property = properties[i];
+//         houseNumber = property.vitalHouseNumber;
+//         street = property.vitalStreetName;
+//         address = houseNumber + ' ' + street;
+//         latitude = property.latitude;
+//         longitude = property.longitude;
+//         //console.log(i, address, latitude, longitude);
+//         markers.push(createMarker(i, address, latitude, longitude));
+//     }
+//     vm.markers = markers;
+// }, function err(res)
+// {
+//     console.log(res);
+// });
+//
+// vm.goBid = function (marker, event, model)
+// {
+//    sharedpropertiesService.setString(model.title)
+//    $state.go('bidPage')
+// };

@@ -4,5 +4,25 @@
       </ui-gmap-markers>
 
   </ui-gmap-google-map> -->
-  <ng-map center="the statue of liberty"/>
+   <!-- <ng-map center="{{map.coord.center[0], map.coord.center[1]}}"/> -->
+   <!-- <ng-map center="map.coord.center"></ng-map> -->
+
+    <!-- <ng-map center="{{map.coord.center.lat, map.coord.center.lng}}"></ng-map> -->
+    <!-- <ng-map center="map.coordcenter"></ng-map> -->
+    <!-- <ng-map center="map.coord.center.lng, map.coord.center.lat"></ng-map> -->
+    <!-- <h1>{{map.center}} -->
+
+<!-- either of these work -->
+  <!-- <ng-map center="[40.7356357, -74.18]"/> -->
+  <!-- <ng-map center="40.7356357, -74.18"/> -->
+
+  <ng-map id="map"
+     center="{{map.stores.foo.position[0]}}, {{map.stores.foo.position[1]}}" zoom="13">
+     <!-- <div ng-repeat="x in mapmarkers">
+
+     </div> -->
+     <marker icon="./images/mapicons/iconred.png" position="[40.71, -74.21]" title="hello"></marker>
+
+
+   </ng-map>
 </div>
