@@ -18,28 +18,88 @@
 
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
-  // Do stuff with your $scope.
-  // Note: Some of the directives require at least something to be defined originally!
-  // e.g. $scope.markers = []
     var vm = this;
-    // vm.initMap = function(mapId)
-    // {
-    //   vm.map = NgMap.initMap(mapId);
-    //   console.log('vm.map 2', vm.map)
-    // }
-    // vm.coord = { center: { lat: 40.7356357, lng: -74.18 }, zoom: 13 };
-    // vm.coord = { center: [40.7356357, -74.18], zoom: 13 };
-    // vm.map = { center: {long: 40.7356357,lat: -74.18}, zoom: 13 };
 
-    // vm.mapcenter = [40.7356357, -74.18];
+
+
+
+
+
     vm.initMap = function(mapId) {
        vm.map = NgMap.initMap(mapId);
        console.log('vm.map 2', vm.map)
      }
 
-    vm.stores = {
-  foo: { position:[40.7356357, -74.18 ]}
-};
+    vm.genmap =
+    {
+        center:[40.7356357, -74.18 ]
+    };
+
+    vm.markers= [];
+
+    // var createMarker = function(i, address, latitude, longitude, idKey)
+    // {
+    //   // if (idKey == null)
+    //   // {
+    //   //   idKey = "id";
+    //   // }
+    //   var ret =
+    //
+    //   // ret[idKey] = i;
+    //   return ret;
+    // };
+
+    $http.get('/map').then(function success(res)
+    {
+      console.log("result");
+      console.log(res);
+      var properties = res.data;
+      var address="";
+      var tmpmarkers = [];
+      var propertyname = "";
+      var propnamet;
+      console.log(properties[700]);
+
+      for (var i = 0; i < properties.length; i++)
+      {
+          property = properties[i];
+          // address = property.vitalHouseNumber[0] +  property.vitalHouseNumber.slice(1).toLowerCase();
+          //   ' ' + property.vitalStreetName;
+
+          //Vital street name has a space before it
+          propnamet = property.vitalStreetName.trim();
+          propnamet = propnamet.split(" ");
+          // console.log(propnamet);
+          // if propnamet
+          for (var x = 0; x < propnamet.length; x++)
+          {
+            propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
+          }
+          address =
+          property.vitalHouseNumber
+          + propertyname;
+          ;
+          // tmpmarkers.push(
+          vm.markers.push(
+          {
+            latitude: property.latitude,
+            longitude: property.longitude,
+            address: address,
+            // icon: '../../images/mapicons/iconred.png',
+            id: property._id
+          });
+
+      }
+      // vm.markers = tmpmarkers;
+      console.log("these are the markers");
+      console.log(vm.markers);
+
+      // vm.markers = markers;
+    }, function err(res)
+    {
+        console.log(res);
+    });
+
 
 }]);
 
@@ -60,48 +120,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 // });
 //
 // //Creates object containing info needed to create Google maps marker
-// var createMarker = function(i, address, latitude, longitude, idKey)
-// {
-//   // if (idKey == null)
-//   // {
-//   //   idKey = "id";
-//   // }
-//   var ret =
-//   {
-//     latitude: latitude,
-//     longitude: longitude,
-//     title: address,
-//     icon: '../../images/mapicons/iconblue.png',
-//     id: idKey
-//   };
-//   // ret[idKey] = i;
-//   return ret;
-// };
+
 //
 // var markers = [];
 // var properties;
 // // HTTP get to load property data from JSON file.
-// $http.get('/map').then(function success(res)
-// {
-//     properties = res.data;
-//     //TODO: Need some way to filter properties. There are too many to look at at once.
-//     var numProperties = properties.length;
-//     for (var i = 0; i < numProperties; i++)
-//     {
-//         property = properties[i];
-//         houseNumber = property.vitalHouseNumber;
-//         street = property.vitalStreetName;
-//         address = houseNumber + ' ' + street;
-//         latitude = property.latitude;
-//         longitude = property.longitude;
-//         //console.log(i, address, latitude, longitude);
-//         markers.push(createMarker(i, address, latitude, longitude));
-//     }
-//     vm.markers = markers;
-// }, function err(res)
-// {
-//     console.log(res);
-// });
+
 //
 // vm.goBid = function (marker, event, model)
 // {
