@@ -19,8 +19,17 @@
   <ng-map id="map"
      center="{{map.genmap.center[0]}}, {{map.genmap.center[1]}}" zoom="13">
      <div ng-repeat="x in map.markers">
-       <marker icon="./images/mapicons/iconred.png" position="[{x.latitude}, {x.latitude}]" title="x.address"></marker>
+       <marker icon="./images/mapicons/iconred.png" position="{{x.latitude}}, {{x.longitude}}" title="{{x.address}}"></marker>
      </div>
+
+     <!-- <marker icon="./images/mapicons/iconred.png" position="{{map.markers[0].latitude}}, {{map.markers[0].longitude}}" title="{{map.markers[0].address}}"></marker> -->
+
+
+
+
+     <!-- <marker icon="./images/mapicons/iconred.png" position="[{map.markers[0].latitude}, {map.markers[0].latitude}]" title="map.markers[0].address"></marker> -->
+
+<!-- position="[{map.markers[0].latitude}, {map.markers[0].latitude}]"  -->
      <!-- <marker icon="./images/mapicons/iconred.png" position="[40.71, -74.21]" title="hello"></marker> -->
 
 

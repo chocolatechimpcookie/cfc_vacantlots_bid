@@ -62,6 +62,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
       for (var i = 0; i < properties.length; i++)
       {
+          propnamet= "";
+          propertyname ="";
           property = properties[i];
           // address = property.vitalHouseNumber[0] +  property.vitalHouseNumber.slice(1).toLowerCase();
           //   ' ' + property.vitalStreetName;
@@ -79,8 +81,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           property.vitalHouseNumber
           + propertyname;
           ;
-          // tmpmarkers.push(
-          vm.markers.push(
+          tmpmarkers.push(
+          // vm.markers.push(
           {
             latitude: property.latitude,
             longitude: property.longitude,
@@ -90,7 +92,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           });
 
       }
-      // vm.markers = tmpmarkers;
+      vm.markers = tmpmarkers;
       console.log("these are the markers");
       console.log(vm.markers);
 
