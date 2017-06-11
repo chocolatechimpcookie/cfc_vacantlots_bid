@@ -25,7 +25,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
 
 
-    vm.initMap = function(mapId) {
+    vm.initMap = function(mapId)
+    {
        vm.map = NgMap.initMap(mapId);
        console.log('vm.map 2', vm.map)
      }
@@ -49,6 +50,20 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     //   return ret;
     // };
 
+
+    // vm.createInfoWindow = function(arg1, arg2)
+    // {
+    //   console.log(arg1);
+    //   console.log(arg2);
+    // }
+
+    vm.showStore = function(evt, storeId)
+    {
+      console.log(evt, storeId);
+      // vm.store = vm.stores[storeId];
+      // vm.map.showInfoWindow(vm.store.infoWindow, this);
+    };
+
     $http.get('/map').then(function success(res)
     {
       console.log("result");
@@ -62,17 +77,13 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
       for (var i = 0; i < properties.length; i++)
       {
+
+          property = properties[i];
+
           propnamet= "";
           propertyname ="";
-          property = properties[i];
-          // address = property.vitalHouseNumber[0] +  property.vitalHouseNumber.slice(1).toLowerCase();
-          //   ' ' + property.vitalStreetName;
-
-          //Vital street name has a space before it
           propnamet = property.vitalStreetName.trim();
           propnamet = propnamet.split(" ");
-          // console.log(propnamet);
-          // if propnamet
           for (var x = 0; x < propnamet.length; x++)
           {
             propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
@@ -81,8 +92,15 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           property.vitalHouseNumber
           + propertyname;
           ;
-          tmpmarkers.push(
-          // vm.markers.push(
+
+
+          address =
+          property.vitalHouseNumber
+          + property.vitalStreetName;
+          ;
+
+          // tmpmarkers.push(
+          vm.markers.push(
           {
             latitude: property.latitude,
             longitude: property.longitude,
@@ -92,7 +110,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           });
 
       }
-      vm.markers = tmpmarkers;
+      // vm.markers = tmpmarkers;
       console.log("these are the markers");
       console.log(vm.markers);
 
