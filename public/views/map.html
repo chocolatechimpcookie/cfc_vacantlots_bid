@@ -1,22 +1,34 @@
 <div>
+
+  <!-- map with center as object reference is one of the unhandled rejection, the
+  other three are the marker
+   -->
   <ng-map id="map"
-     center="{{map.genmap.center[0]}}, {{map.genmap.center[1]}}" zoom="13">
-     <!-- <div ng-repeat="x in map.markers">
-       <marker icon="./images/mapicons/iconred.png" position="{{x.latitude}}, {{x.longitude}}" title="{{x.address}}"></marker>
-     </div> -->
+  center="{{map.genmap.center[0]}}, {{map.genmap.center[1]}}" zoom="13">
 
-     <marker id="test" icon="./images/mapicons/iconred.png"
-      position="{{map.markers[0].latitude}},
-       {{map.markers[0].longitude}}" title="{{map.markers[0].address}}"
-       on-click="map.showStore(event, id)"
+   <marker ng-repeat="x in map.markers"
+   icon="./images/mapicons/iconred.png" position="{{x.latitude}}, {{x.longitude}}" title="{{x.address}}">
+   </marker>
 
-       ></marker>
 
-       <!-- marker is creating 4 zero result error, or something associated  -->
 
-     <!-- <info-window visible-on-marker="test">
-       <h1>Hi! I'm a test!</h1>
-    </info-window> -->
+
+
+
+
+
+  <!-- <marker id="test" icon="./images/mapicons/iconred.png"
+  position="{{map.markers[1].latitude}},
+   {{map.markers[1].longitude}}" title="{{map.markers[1].address}}"
+   on-click="map.markerClick(map.markers[1])">
+  </marker>
+
+  <info-window visible-on-marker="test">
+    <h1>Hi! I'm a test!</h1>
+ </info-window> -->
+
+
+
      <!--It should create the marker on the fly when its clicked  -->
 
    </ng-map>

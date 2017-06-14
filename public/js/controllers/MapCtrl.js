@@ -20,49 +20,34 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 {
     var vm = this;
 
+    vm.markers= [];
 
+// markers appear and dispapear
 
+    // vm.initMap = function(mapId)
+    // {
+    //    vm.map = NgMap.initMap(mapId);
+    //    console.log('vm.map 2', vm.map)
+    //  }
 
+    vm.initMap = function(mapId) {
+   vm.map = NgMap.initMap(mapId);
+   console.log('vm.map 2', vm.map)
+    }
 
-
-    vm.initMap = function(mapId)
-    {
-       vm.map = NgMap.initMap(mapId);
-       console.log('vm.map 2', vm.map)
-     }
 
     vm.genmap =
     {
         center:[40.7356357, -74.18 ]
     };
 
-    vm.markers= [];
-
-    // var createMarker = function(i, address, latitude, longitude, idKey)
+    // vm.markerClick = function(e, stuff)
     // {
-    //   // if (idKey == null)
-    //   // {
-    //   //   idKey = "id";
-    //   // }
-    //   var ret =
-    //
-    //   // ret[idKey] = i;
-    //   return ret;
+    //   // console.log(stuff);
+    //   console.log("clicked");
+    //   // vm.store = vm.stores[storeId];
+    //   // vm.map.showInfoWindow(vm.store.infoWindow, this);
     // };
-
-
-    // vm.createInfoWindow = function(arg1, arg2)
-    // {
-    //   console.log(arg1);
-    //   console.log(arg2);
-    // }
-
-    vm.showStore = function(evt, storeId)
-    {
-      console.log(evt, storeId);
-      // vm.store = vm.stores[storeId];
-      // vm.map.showInfoWindow(vm.store.infoWindow, this);
-    };
 
     $http.get('/map').then(function success(res)
     {
@@ -99,8 +84,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           + property.vitalStreetName;
           ;
 
-          // tmpmarkers.push(
-          vm.markers.push(
+          tmpmarkers.push(
+          // vm.markers.push(
           {
             latitude: property.latitude,
             longitude: property.longitude,
@@ -110,7 +95,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           });
 
       }
-      // vm.markers = tmpmarkers;
+      vm.markers = tmpmarkers;
       console.log("these are the markers");
       console.log(vm.markers);
 
@@ -123,6 +108,18 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
 }]);
 
+
+// var createMarker = function(i, address, latitude, longitude, idKey)
+// {
+//   // if (idKey == null)
+//   // {
+//   //   idKey = "id";
+//   // }
+//   var ret =
+//
+//   // ret[idKey] = i;
+//   return ret;
+// };
 
 
 // console.log(vm.map.center);
