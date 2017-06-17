@@ -5,24 +5,28 @@
    -->
   <ng-map id="map"
   center="{{map.genmap.center[0]}}, {{map.genmap.center[1]}}" zoom="13">
+  <!-- ng if gets rid of the bajillion errors but leaves one -->
+  <!-- <marker ng-if="map.markers.length > 1" ng-repeat="x in map.markers"
+  icon="./images/mapicons/iconred.png" position="{{x.latitude}}, {{x.longitude}}"
+  title="{{x.address}}"
+  ng-click="map.showInfoWindow()"
 
-   <marker ng-repeat="x in map.markers"
-   icon="./images/mapicons/iconred.png" position="{{x.latitude}}, {{x.longitude}}" title="{{x.address}}">
-   </marker>
-
-
-
-
-
+  ></marker> -->
 
 
-
-  <!-- <marker id="test" icon="./images/mapicons/iconred.png"
-  position="{{map.markers[1].latitude}},
-   {{map.markers[1].longitude}}" title="{{map.markers[1].address}}"
-   on-click="map.markerClick(map.markers[1])">
+   <marker ng-if="map.markers.length > 0" id="test" icon="./images/mapicons/iconred.png"
+   position="{{map.markers[0].latitude}},
+   {{map.markers[0].longitude}}" title="{{map.markers[0].address}}"
+   ng-click="map.showInfoWindow()" >
   </marker>
 
+<!-- why is it returning zero results for a non query? -->
+<!-- why is click doing nothing -->
+
+<!-- on-click="{{map.showInfoWindow(map.markers[1])}}" -->
+
+
+<!--
   <info-window visible-on-marker="test">
     <h1>Hi! I'm a test!</h1>
  </info-window> -->

@@ -41,13 +41,31 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
         center:[40.7356357, -74.18 ]
     };
 
-    // vm.markerClick = function(e, stuff)
-    // {
-    //   // console.log(stuff);
-    //   console.log("clicked");
-    //   // vm.store = vm.stores[storeId];
-    //   // vm.map.showInfoWindow(vm.store.infoWindow, this);
-    // };
+// when I click it:
+//Possibly unhandled rejection: OVER_QUERY_LIMIT
+//or ZERO RESULTS
+//nothing happens if there's no assigned function
+
+//is it a google maps thing? Do I need to throw more money at this?
+//Why is it making a billion requests?
+
+
+//do it the old fashioned way? map id
+//large arrays, ng-repeat?
+
+//why not nest ng-repeat? why does each element have an ng-repeat
+//ng-repeat logic?
+
+
+//when its just one: Possibly unhandled rejection: ZERO_RESULTS
+
+    vm.showInfoWindow = function()
+    {
+      // console.log(stuff);
+      console.log("clicked");
+      // vm.store = vm.stores[storeId];
+      // vm.map.showInfoWindow(vm.store.infoWindow, this);
+    };
 
     $http.get('/map').then(function success(res)
     {
@@ -58,13 +76,11 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       var tmpmarkers = [];
       var propertyname = "";
       var propnamet;
-      console.log(properties[700]);
+      console.log(properties[0]);
 
       for (var i = 0; i < properties.length; i++)
       {
-
           property = properties[i];
-
           propnamet= "";
           propertyname ="";
           propnamet = property.vitalStreetName.trim();
@@ -96,10 +112,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
       }
       vm.markers = tmpmarkers;
-      console.log("these are the markers");
-      console.log(vm.markers);
+      // console.log("these are the markers");
+      // console.log(vm.markers);
 
-      // vm.markers = markers;
+      // So here, we either push the markers directly into vm.markers or we
+      // create a temp array and then then make markers equivelent to it
+
     }, function err(res)
     {
         console.log(res);
