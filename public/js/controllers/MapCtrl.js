@@ -30,9 +30,10 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     //    console.log('vm.map 2', vm.map)
     //  }
 
-    vm.initMap = function(mapId) {
-   vm.map = NgMap.initMap(mapId);
-   console.log('vm.map 2', vm.map)
+    vm.initMap = function(mapId)
+    {
+     vm.map = NgMap.initMap(mapId);
+     console.log('vm.map 2', vm.map)
     }
 
 
@@ -113,7 +114,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       }
       vm.markers = tmpmarkers;
       // console.log("these are the markers");
-      // console.log(vm.markers);
+      console.log(vm.markers);
 
       // So here, we either push the markers directly into vm.markers or we
       // create a temp array and then then make markers equivelent to it

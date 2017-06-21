@@ -3,6 +3,7 @@
 
 // var app = angular.module('vacantlotsApp');
 
+// angular.module('vacantlotsApp', ['ui.router', 'ngMap'])
 angular.module('vacantlotsApp', ['ui.router', 'ngMap'])
 .config(['$stateProvider', '$urlRouterProvider', '$qProvider', function($stateProvider, $urlRouterProvider, $qProvider)
 {
