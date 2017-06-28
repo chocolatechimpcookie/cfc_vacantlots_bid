@@ -94,20 +94,20 @@
 
 
 
+// original
+    vm.showDetail = function(e, shop)
+    {
+      console.log(shop);
+      vm.shop = shop;
+      vm.map.showInfoWindow('foo-iw', shop.id);
+    };
+
 
     // vm.showDetail = function(e, passedshop)
     // {
     //   console.log(shop);
-    //   vm.shop = shop;
-    //   vm.map.showInfoWindow('foo-iw', shop.id);
+    //   vm.map.showInfoWindow('pizza', shop.id);
     // };
-
-
-    vm.showDetail = function(e, passedshop)
-    {
-      console.log(shop);
-      vm.map.showInfoWindow('pizza', shop.id);
-    };
 
     // what does show infoWindow do?
 

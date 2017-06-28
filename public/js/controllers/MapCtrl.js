@@ -1,40 +1,14 @@
-// angular.module('vacantlotsApp').config(function(uiGmapGoogleMapApiProvider)
-// {
-//     console.log('In config');
-//     uiGmapGoogleMapApiProvider.configure(
-//     {
-//         //TODO: Factor this into another js file that isn't tracked with git?
-//         key: "AIzaSyA5sCewJikG42pgRQOIJ_NjnVv3c6O_d6I",
-//         v: '3.20', //defaults to latest 3.X anyhow
-//         libraries: 'weather,geometry,visualization'
-//     });
-// });
-
-
-//this needs to be changed, perhaps in a seperate files with a more descriptive name
-
-
-
-
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
     var vm = this;
-
     vm.markers= [];
 
-// markers appear and dispapear
 
-    // vm.initMap = function(mapId)
-    // {
-    //    vm.map = NgMap.initMap(mapId);
-    //    console.log('vm.map 2', vm.map)
-    //  }
-
-    vm.initMap = function(mapId)
+    NgMap.getMap().then(function(map)
     {
-     vm.map = NgMap.initMap(mapId);
-     console.log('vm.map 2', vm.map)
-    }
+      console.log('map', map);
+      vm.map = map;
+    });
 
 
     vm.genmap =
@@ -107,7 +81,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
             latitude: property.latitude,
             longitude: property.longitude,
             address: address,
-            // icon: '../../images/mapicons/iconred.png',
+            icon: '../../images/mapicons/iconred.png',
             id: property._id
           });
 
@@ -168,3 +142,17 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 //    sharedpropertiesService.setString(model.title)
 //    $state.go('bidPage')
 // };
+
+
+
+// vm.initMap = function(mapId)
+// {
+//    vm.map = NgMap.initMap(mapId);
+//    console.log('vm.map 2', vm.map)
+//  }
+
+// vm.initMap = function(mapId)
+// {
+//  vm.map = NgMap.initMap(mapId);
+//  console.log('vm.map 2', vm.map)
+// }
