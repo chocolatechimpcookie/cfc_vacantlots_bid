@@ -30,14 +30,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
+    var infowindow = new google.maps.InfoWindow();
 
-    vm.showInfoWindow = function()
-    {
-      // console.log(stuff);
-      console.log("clicked");
-      // vm.store = vm.stores[storeId];
-      // vm.map.showInfoWindow(vm.store.infoWindow, this);
-    };
 
     $http.get('/map').then(function success(res)
     {
@@ -46,6 +40,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       var properties = res.data;
       var address="";
       var tmpmarkers = [];
+      var locations = [];
       var propertyname = "";
       var propnamet;
       console.log(properties[0]);
@@ -77,6 +72,14 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
             position: propertyLatLng
           });
           tmpmarkers.push(propertyMarker)
+
+          locations.push([address, property.latitude, property.longitude, i])
+          google.maps.event.addListener(propertyMarker, 'click', (function(propertyMarker, i) {
+            return function() {
+                infowindow.setContent(locations[i][0]);
+                infowindow.open(map, propertyMarker);
+            }
+      })(propertyMarker, i));
 
       }
       vm.markers = tmpmarkers;
