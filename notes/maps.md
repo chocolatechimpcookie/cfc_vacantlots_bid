@@ -1,9 +1,19 @@
-Ngmaps
+##  Ngmaps
   - Any bugs down the line will leave us dependent on the framework developers
     - We could always fork it though or contribute
   - Faster development
 
-From scratch
+##  From scratch
   - Slower development
   - Not dependent on any other developers
   - Learn how the Googlemaps API works
+
+
+
+##  Weird bug
+  - It has something to do with calling the controller "map"
+  - it was not the surrounding wrapper
+  - 
+
+## Other Ngmap stuff
+  - Ngmap forces 300px height blocks on map and has to be overridden. very weird

@@ -1,22 +1,20 @@
 angular.module('vacantlotsApp').service('sharedpropertiesService', function()
-{
-  var objectValue = {
-  data: 'not found'
-};
+  {
+    var property = {};
 
   return {
-      getString: function()
+      getProperty: function()
       {
-          return objectValue.data;
+          return property;
       },
-      setString: function(value)
+      setProperty: function(value)
       {
           console.log('Setting string through shared object');
-          objectValue.data = value;
-      },
-      getObject: function()
-      {
-          return objectValue;
+          property = value;
       }
+      // getObject: function()
+      // {
+      //     return objectValue;
+      // }
   }
 });

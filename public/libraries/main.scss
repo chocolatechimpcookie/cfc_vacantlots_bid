@@ -1,5 +1,29 @@
 
 
+.genbutton
+{
+  height: 60px;
+  //margin-top: 15px;
+  //margin-bottom: 15px;
+  width:100%;
+  color:white;
+  font-weight: 800;
+  font-size: 25px;
+  background-color: #00BFFF;
+
+  margin-left: auto;
+  margin-right: auto;
+  //text-align: center;
+
+  &:hover, &:active
+  {
+    //box-shadow: 2px 1pbx 1px 1px grey;
+     background-color:#1E90FF;
+     color:white;
+  }
+}
+
+
 #popup_modal
 {
     width: 90% !important;
@@ -73,12 +97,19 @@ body, html {
 //     width: 100%;
 //     position: absolute;
 // }
-
-#map
+#ui_view
 {
-    height: 100%;
-    width: 100%;
+   //z-index:1;
+   position:absolute !important;
+   height: 100% !important;
+   width: 100% !important;
+}
+.themap
+{
+    height: 100% !important;
+    width: 100% !important;
     position: absolute;
+    display:block;
 }
 
 .middle {
@@ -103,11 +134,7 @@ body, html {
    position: absolute;
 }
 
-#ui_view
-{
-   //z-index:1;
-   //position:absolute;
-}
+
 
 nav
 {

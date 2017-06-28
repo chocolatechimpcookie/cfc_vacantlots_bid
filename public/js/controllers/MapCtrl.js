@@ -34,13 +34,13 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
 //when its just one: Possibly unhandled rejection: ZERO_RESULTS
 
-    vm.showInfoWindow = function()
-    {
-      // console.log(stuff);
-      console.log("clicked");
-      // vm.store = vm.stores[storeId];
-      // vm.map.showInfoWindow(vm.store.infoWindow, this);
-    };
+    // vm.showInfoWindow = function()
+    // {
+    //   // console.log(stuff);
+    //   console.log("clicked");
+    //   // vm.store = vm.stores[storeId];
+    //   // vm.map.showInfoWindow(vm.store.infoWindow, this);
+    // };
 
     $http.get('/map').then(function success(res)
     {
@@ -81,7 +81,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
             latitude: property.latitude,
             longitude: property.longitude,
             address: address,
-            icon: '../../images/mapicons/iconred.png',
+            // icon: '../../images/mapicons/iconred.png',
             id: property._id
           });
 
@@ -89,7 +89,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       vm.markers = tmpmarkers;
       // console.log("these are the markers");
       console.log(vm.markers);
-
       // So here, we either push the markers directly into vm.markers or we
       // create a temp array and then then make markers equivelent to it
 
@@ -98,8 +97,33 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
         console.log(res);
     });
 
+    vm.showBox = function(e, boxinfo)
+    {
+      console.log(boxinfo);
+      vm.boxinfo = boxinfo;
+      vm.map.showInfoWindow('main_window', boxinfo.id);
+    };
+
+    vm.clicked = function()
+    {
+         sharedpropertiesService.setProperty(vm.boxinfo);
+         $state.go('bidPage');
+    };
+
+
+
+
+
+
 
 }]);
+
+
+
+
+
+
+
 
 
 // var createMarker = function(i, address, latitude, longitude, idKey)

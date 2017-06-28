@@ -1,25 +1,54 @@
-<div>
-  <ng-map id="map" default-style="true"
-    center="{{map.genmap.center[0]}}, {{map.genmap.center[1]}}" zoom="13">
+<ng-map class="themap" default-style="true" center="40.7356357, -74.18" zoom="13">
+
+
+  <marker id='{{mark.id}}' position="{{mark.latitude}}, {{mark.longitude}}"
+    ng-repeat="mark in basem.markers"
+    icon="./images/mapicons/iconred.png"
+    on-click="basem.showBox(mark)">
+  </marker>
 
 
 
-     <marker
-     ng-repeat="x in map.markers"
-     position="{{x.latitude}},
-     {{x.longitude}}" title="{{x.address}}"
+  <info-window id="main_window">
+    <div ng-non-bindable>
+      <h1> {{basem.boxinfo.address}}</h1><br/>
+      <a href="#" ></a>
+      <button ng-click="basem.clicked()" class="btn genbutton"  >Bid</button>
+
+    </div>
+  </info-window>
+
+
+</ng-map>
+
+<!-- </div> -->
+
+
+<!-- calling an array for the center works for the sample but not map.html all of a sudden -->
+
+<!-- what was it? -->
+
+<!-- {{basem.genmap.center[0]}}, {{basem.genmap.center[1]}} -->
+<!-- center="40.7356357, -74.18" -->
+  <!-- it seems like map confuses something -->
+<!-- <div>
+  <ng-map default-style="true"
+    center="{{basem.genmap.center[0]}}, {{basem.genmap.center[1]}}" zoom="8">
+
+
+
+     <marker id='{{mark.id}}'
+     ng-repeat="mark in basem.markers"
+     position="{{mark.latitude}},
+     {{mark.longitude}}" title="{{mark.address}}"
+     icon="./images/mapicons/iconred.png"
+
       >
     </marker>
 
 
   </ng-map>
-</div>
-
-
-
-
-
-
+</div> -->
 
 
 

@@ -2,6 +2,6 @@ angular.module('vacantlotsApp').controller('BidCtrl', function(sharedpropertiesS
 {
     console.log('In bid control.')
   	var vm = this;
-    this.propertyName = sharedpropertiesService.getString();
+    this.property = sharedpropertiesService.getProperty();
 
 });

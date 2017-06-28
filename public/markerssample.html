@@ -19,8 +19,13 @@
       console.log('map', map);
       vm.map = map;
     });
+    vm.genmap =
+    {
+        center:[40.7356357, -74.18 ]
+    };
 
     vm.markers= [];
+    vm.shop;
 
     $http.get('/map').then(function success(res)
     {
@@ -61,7 +66,7 @@
             latitude: property.latitude,
             longitude: property.longitude,
             address: address,
-            icon: '../../images/mapicons/iconred.png',
+            // icon: '../../images/mapicons/iconred.png',
             id: property._id
           });
 
@@ -79,9 +84,11 @@
 
 
 
-    // vm.clicked = function() {
-    //   alert('Clicked a link inside infoWindow');
-    // };
+    vm.clicked = function() {
+      alert('Clicked a link inside infoWindow');
+    };
+
+
     //
     // vm.shops = [
     //   {id:'foo', name: 'FOO SHOP', position:[41,-87]},
@@ -137,66 +144,39 @@
 </script>
 </head>
 <body>
-  <div ng-controller="MyCtrl as vm">
+  <div ng-controller="MyCtrl as basem">
 
     <!-- <ng-map default-style="true" center="41,-87" zoom="3"> -->
-    <ng-map default-style="true" center="40.7356357, -74.18" zoom="8">
-
-      <!-- <marker id='{{shop.id}}' position="{{shop.latitude}}, {{shop.longitude}}"
-        ng-repeat="shop in vm.markers"
-        on-click="vm.showDetail(shop)">
-      </marker>
-
-      <info-window id="foo-iw">
-        <div ng-non-bindable="">
-          id: {{vm.shop.id}}<br/>
-          name: {{vm.shop.address}}<br/>
-          <a href="#" ng-click="vm.clicked()">Click Here</a>
-        </div>
-      </info-window>
-    </ng-map>
-
-    <button ng-click="vm.showDetail(e, vm.shop)">
-      show InfoWindow of the shop
-    </button>
-    <button ng-click="vm.hideDetail(e, vm.shop)">
-      Hide InfoWindow of the shop
-    </button> -->
+    <ng-map default-style="true" center="{{basem.genmap.center[0]}}, {{basem.genmap.center[1]}}" zoom="8">
 
 
-
-
-
-
-    <!-- how can info window be passed that specific info window
-    how can I pass
-    -->
-
-
-
-    <marker id='{{shop.id}}' position="{{shop.latitude}}, {{shop.longitude}}"
-      ng-repeat="shop in vm.markers"
-      on-click="vm.showDetail(shop)">
+    <marker id='{{mark.id}}' position="{{mark.latitude}}, {{mark.longitude}}"
+      ng-repeat="mark in basem.markers"
+      icon="./images/mapicons/iconred.png"
+      <!-- on-click="basem.showDetail(mark)"> -->
     </marker>
+
+
+    <!-- it seems like map confuses something -->
 
     <info-window id="foo-iw">
       <div ng-non-bindable="">
-        id: {{vm.shop.id}}<br/>
-        name: {{vm.shop.address}}<br/>
-        <a href="#" ng-click="vm.clicked()">Click Here</a>
+        id: {{basem.shop.id}}<br/>
+        name: {{basem.shop.address}}<br/>
+        <a href="#" ng-click="basem.clicked()">Click Here</a>
       </div>
     </info-window>
   </ng-map>
 
-  <button ng-click="vm.showDetail(e, vm.shop)">
+  <!-- <button ng-click="vm.showDetail(e, vm.shop)">
     show InfoWindow of the shop
   </button>
   <button ng-click="vm.hideDetail(e, vm.shop)">
     Hide InfoWindow of the shop
-  </button>
+  </button> -->
 
 
-
+<!-- icon="./images/mapicons/iconred.png" -->
 
 
 

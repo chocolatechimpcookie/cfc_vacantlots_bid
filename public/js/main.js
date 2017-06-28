@@ -17,7 +17,7 @@ angular.module('vacantlotsApp', ['ui.router', 'ngMap'])
   {
       url:'/',
       templateUrl:'views/map.html',
-      controller: "MapCtrl as map"
+      controller: "MapCtrl as basem"
   })
   .state('loginPage',
   {
