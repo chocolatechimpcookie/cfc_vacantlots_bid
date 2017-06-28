@@ -22,43 +22,14 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
     vm.markers= [];
 
-// markers appear and dispapear
+    var center = new google.maps.LatLng(40.7356357, -74.18 );
 
-    // vm.initMap = function(mapId)
-    // {
-    //    vm.map = NgMap.initMap(mapId);
-    //    console.log('vm.map 2', vm.map)
-    //  }
+    var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: center,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
 
-    vm.initMap = function(mapId)
-    {
-     vm.map = NgMap.initMap(mapId);
-     console.log('vm.map 2', vm.map)
-    }
-
-
-    vm.genmap =
-    {
-        center:[40.7356357, -74.18 ]
-    };
-
-// when I click it:
-//Possibly unhandled rejection: OVER_QUERY_LIMIT
-//or ZERO RESULTS
-//nothing happens if there's no assigned function
-
-//is it a google maps thing? Do I need to throw more money at this?
-//Why is it making a billion requests?
-
-
-//do it the old fashioned way? map id
-//large arrays, ng-repeat?
-
-//why not nest ng-repeat? why does each element have an ng-repeat
-//ng-repeat logic?
-
-
-//when its just one: Possibly unhandled rejection: ZERO_RESULTS
 
     vm.showInfoWindow = function()
     {
@@ -100,21 +71,20 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           property.vitalHouseNumber
           + property.vitalStreetName;
           ;
-
-          tmpmarkers.push(
-          // vm.markers.push(
-          {
-            latitude: property.latitude,
-            longitude: property.longitude,
-            address: address,
-            // icon: '../../images/mapicons/iconred.png',
-            id: property._id
+          var propertyLatLng = new google.maps.LatLng(property.latitude,
+              property.longitude);
+          var propertyMarker = new google.maps.Marker({
+            position: propertyLatLng
           });
+          tmpmarkers.push(propertyMarker)
 
       }
       vm.markers = tmpmarkers;
       // console.log("these are the markers");
       console.log(vm.markers);
+
+      var markerCluster = new MarkerClusterer(map,
+                       vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
 
       // So here, we either push the markers directly into vm.markers or we
       // create a temp array and then then make markers equivelent to it
