@@ -11,6 +11,8 @@ const bcrypt = require('bcryptjs')
 const CronJob = require('cron').CronJob
 const { User, AbandonedLot, Bid, Favorite } = require('./models.js')
 
+
+
 let jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader()
 jwtOptions.secretOrKey = 'tasmanianDevil'
@@ -170,15 +172,18 @@ const job = new CronJob({
 job.start()
 
 //if lots collection is empty at startup request lots immediately
-AbandonedLot.count({},(err, c) => {
+
+AbandonedLot.count({}, (err, c) => {
   if (c === 0) {
     lotsRequest()
   }
 })
 
 
+
+
 app.get('/', (req, res) => {
-  res.sendFile(process.cwd() + '/public/index.html')
+  res.sendFile(process.cwd() + '/index.html')
 })
 
 //send lot data to front
