@@ -2,7 +2,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 {
     var vm = this;
     vm.markers= [];
-
+    // MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_
+    // = 'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m';
 
     NgMap.getMap().then(function(map)
     {

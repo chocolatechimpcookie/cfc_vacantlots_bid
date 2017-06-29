@@ -7,13 +7,18 @@
   - Slower development
   - Not dependent on any other developers
   - Learn how the Googlemaps API works
-
+  - Might be faster
 
 
 ##  Weird bug
   - It has something to do with calling the controller "map"
   - it was not the surrounding wrapper
-  - 
+  -
 
 ## Other Ngmap stuff
   - Ngmap forces 300px height blocks on map and has to be overridden. very weird
+
+
+##  Links
+  - https://ngmap.github.io
+  - https://github.com/allenhwkim/angularjs-google-maps
