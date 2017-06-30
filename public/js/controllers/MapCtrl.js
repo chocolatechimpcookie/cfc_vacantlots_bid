@@ -30,6 +30,13 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
+    var streetviewMap = new google.maps.Map(document.getElementById('streetview'), {
+          zoom: 13,
+          center: center,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    myStreetView = new google.maps.StreetViewPanorama(streetviewMap);
+
     var infowindow = new google.maps.InfoWindow();
 
 

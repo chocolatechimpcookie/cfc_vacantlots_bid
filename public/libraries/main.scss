@@ -74,11 +74,28 @@ body, html {
 //     position: absolute;
 // }
 
-#map
+
+#map-container
 {
     height: 100%;
     width: 100%;
     position: absolute;
+}
+
+
+#map
+{
+    height: 60%;
+    width: 100%;
+    position: absolute;
+}
+
+#streetview
+{
+    height: 40%;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
 }
 
 .middle {
