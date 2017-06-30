@@ -13,8 +13,42 @@
 
 //this needs to be changed, perhaps in a seperate files with a more descriptive name
 
+var map;
+var panorama;
 
+function processSVData(data, status) {
+        console.log('AAAAAAAAAAAA')
+        console.log(data)
+        console.log('AAAAAAAAAAAA')
+        if (status === 'OK') {
 
+          var marker = new google.maps.Marker({
+            position: data.location.latLng,
+            map: map,
+            title: data.location.description
+          });
+
+          panorama.setPano(data.location.pano);
+          panorama.setPov({
+            heading: 270,
+            pitch: 0
+          });
+          panorama.setVisible(true);
+
+          marker.addListener('click', function() {
+            var markerPanoID = data.location.pano;
+            // Set the Pano to use the passed panoID.
+            panorama.setPano(markerPanoID);
+            panorama.setPov({
+              heading: 270,
+              pitch: 0
+            });
+            panorama.setVisible(true);
+          });
+        } else {
+          console.error('Street View data not found for this location.');
+        }
+      }
 
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
@@ -24,18 +58,17 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
     var center = new google.maps.LatLng(40.7356357, -74.18 );
 
-    var map = new google.maps.Map(document.getElementById('map'), {
+    var sv = new google.maps.StreetViewService();
+
+    map = new google.maps.Map(document.getElementById('map'), {
           zoom: 13,
           center: center,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
-    var streetviewMap = new google.maps.Map(document.getElementById('streetview'), {
-          zoom: 13,
-          center: center,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-    myStreetView = new google.maps.StreetViewPanorama(streetviewMap);
+    panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
+
+    sv.getPanorama({location: center, radius: 50}, processSVData);
 
     var infowindow = new google.maps.InfoWindow();
 
