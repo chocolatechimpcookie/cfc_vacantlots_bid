@@ -71,6 +71,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     sv.getPanorama({location: center, radius: 50}, processSVData);
 
     var infowindow = new google.maps.InfoWindow();
+    document.getElementById('streetview').style.display = 'none';
 
 
     $http.get('/map').then(function success(res)
@@ -118,6 +119,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
             return function() {
                 infowindow.setContent(locations[i][0]);
                 infowindow.open(map, propertyMarker);
+                console.log('AAAAAAAAAAAAA')
+                console.log('In property click')
+                document.getElementById('streetview').style.display = '';
+                console.log(propertyMarker.getPosition())
+                sv.getPanorama({location: propertyMarker.getPosition(), radius: 50}, processSVData);
+                console.log('AAAAAAAAAAAAA')
             }
       })(propertyMarker, i));
 
