@@ -19,29 +19,7 @@ var panorama;
 function processSVData(data, status) {
         if (status === 'OK') {
 
-          var marker = new google.maps.Marker({
-            position: data.location.latLng,
-            map: map,
-            title: data.location.description
-          });
-
           panorama.setPano(data.location.pano);
-          panorama.setPov({
-            heading: 270,
-            pitch: 0
-          });
-          panorama.setVisible(true);
-
-          marker.addListener('click', function() {
-            var markerPanoID = data.location.pano;
-            // Set the Pano to use the passed panoID.
-            panorama.setPano(markerPanoID);
-            panorama.setPov({
-              heading: 270,
-              pitch: 0
-            });
-            panorama.setVisible(true);
-          });
         } else {
           console.error('Street View data not found for this location.');
         }
@@ -131,6 +109,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
                       heading: heading,
                       pitch: 0
                   });
+                  panorama.setVisible(true);
                   setTimeout(function() {
                   marker = new google.maps.Marker({
                       position: markerPosition,
