@@ -17,9 +17,6 @@ var map;
 var panorama;
 
 function processSVData(data, status) {
-        console.log('AAAAAAAAAAAA')
-        console.log(data)
-        console.log('AAAAAAAAAAAA')
         if (status === 'OK') {
 
           var marker = new google.maps.Marker({
@@ -119,12 +116,28 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
             return function() {
                 infowindow.setContent(locations[i][0]);
                 infowindow.open(map, propertyMarker);
-                console.log('AAAAAAAAAAAAA')
-                console.log('In property click')
                 document.getElementById('streetview').style.display = '';
                 console.log(propertyMarker.getPosition())
-                sv.getPanorama({location: propertyMarker.getPosition(), radius: 50}, processSVData);
-                console.log('AAAAAAAAAAAAA')
+                var markerPosition = propertyMarker.getPosition()
+                sv.getPanorama({location: markerPosition, radius: 50}, processSVData);
+
+                //You simultaneously set the streetView location and also get it's new
+                //location. So you need to add a listener that will execute the
+                //getLocation request after you have set the location.
+                google.maps.event.addListenerOnce(panorama, 'status_changed', function () {
+                  var heading = google.maps.geometry.spherical.computeHeading(panorama.getLocation().latLng,
+                                                                              markerPosition);
+                  panorama.setPov({
+                      heading: heading,
+                      pitch: 0
+                  });
+                  setTimeout(function() {
+                  marker = new google.maps.Marker({
+                      position: markerPosition,
+                      map: panorama,
+                  });
+                  if (marker && marker.setMap) marker.setMap(panorama);}, 500);
+              });
             }
       })(propertyMarker, i));
 
