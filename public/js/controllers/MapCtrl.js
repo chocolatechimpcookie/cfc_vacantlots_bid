@@ -15,10 +15,12 @@
 
 var map;
 var panorama;
+var panoramaDate;
+
 
 function processSVData(data, status) {
         if (status === 'OK') {
-
+          panoramaDate = data.imageDate
           panorama.setPano(data.location.pano);
         } else {
           console.error('Street View data not found for this location.');
@@ -51,8 +53,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
     $http.get('/map').then(function success(res)
     {
-      console.log("result");
-      console.log(res);
       var properties = res.data;
       var address="";
       var tmpmarkers = [];
@@ -92,17 +92,20 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           locations.push([address, property.latitude, property.longitude, i])
           google.maps.event.addListener(propertyMarker, 'click', (function(propertyMarker, i) {
             return function() {
-                infowindow.setContent(locations[i][0]);
-                infowindow.open(map, propertyMarker);
-                document.getElementById('streetview').style.display = '';
-                console.log(propertyMarker.getPosition())
                 var markerPosition = propertyMarker.getPosition()
                 sv.getPanorama({location: markerPosition, radius: 50}, processSVData);
 
                 //You simultaneously set the streetView location and also get it's new
                 //location. So you need to add a listener that will execute the
-                //getLocation request after you have set the location.
+                //getLocation request after you have set the location. This is also important
+                // for the panoramaDate variable.
                 google.maps.event.addListenerOnce(panorama, 'status_changed', function () {
+
+                  addressAndDate = '<div> Address: '+locations[i][0]+'</div><div>Image date: ' + panoramaDate+'</div>'
+                  infowindow.setContent(addressAndDate);
+                  infowindow.open(map, propertyMarker);
+                  document.getElementById('streetview').style.display = '';
+
                   var heading = google.maps.geometry.spherical.computeHeading(panorama.getLocation().latLng,
                                                                               markerPosition);
                   panorama.setPov({
@@ -122,14 +125,9 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
       }
       vm.markers = tmpmarkers;
-      // console.log("these are the markers");
-      console.log(vm.markers);
 
       var markerCluster = new MarkerClusterer(map,
                        vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
-
-      // So here, we either push the markers directly into vm.markers or we
-      // create a temp array and then then make markers equivelent to it
 
     }, function err(res)
     {
@@ -138,45 +136,3 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
 
 }]);
-
-
-// var createMarker = function(i, address, latitude, longitude, idKey)
-// {
-//   // if (idKey == null)
-//   // {
-//   //   idKey = "id";
-//   // }
-//   var ret =
-//
-//   // ret[idKey] = i;
-//   return ret;
-// };
-
-
-// console.log(vm.map.center);
-//
-// if (localStorage.getItem("token"))
-// {
-//     console.log("Login token is present");
-//     console.log(localStorage.getItem("token"));
-// }
-//
-// // uiGmapGoogleMapApi is a promise.
-// // The "then" callback function provides the google.maps object.
-// uiGmapGoogleMapApi.then(function(maps)
-// {
-// });
-//
-// //Creates object containing info needed to create Google maps marker
-
-//
-// var markers = [];
-// var properties;
-// // HTTP get to load property data from JSON file.
-
-//
-// vm.goBid = function (marker, event, model)
-// {
-//    sharedpropertiesService.setString(model.title)
-//    $state.go('bidPage')
-// };
