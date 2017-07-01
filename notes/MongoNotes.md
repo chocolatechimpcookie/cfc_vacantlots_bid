@@ -20,3 +20,8 @@ ubuntu@ip-172-26-1-81:~$ mongoimport --db cfc --collection properties --type csv
 2017-03-15T07:29:21.943-0400	connected to: localhost
 2017-03-15T07:29:22.001-0400	imported 2367 documents
 ```
+
+This command makes sure that mongodb starts after a reboot
+$ sudo systemctl enable mongod.service
+Created symlink from /etc/systemd/system/multi-user.target.wants/mongod.service to /lib/systemd/system/mongod.service.
+
