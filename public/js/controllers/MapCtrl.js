@@ -17,86 +17,78 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
         center:[40.7356357, -74.18 ]
     };
 
-// when I click it:
-//Possibly unhandled rejection: OVER_QUERY_LIMIT
-//or ZERO RESULTS
-//nothing happens if there's no assigned function
-
-//is it a google maps thing? Do I need to throw more money at this?
-//Why is it making a billion requests?
-
-
-//do it the old fashioned way? map id
-//large arrays, ng-repeat?
-
-//why not nest ng-repeat? why does each element have an ng-repeat
-//ng-repeat logic?
-
-
-//when its just one: Possibly unhandled rejection: ZERO_RESULTS
-
-    // vm.showInfoWindow = function()
-    // {
-    //   // console.log(stuff);
-    //   console.log("clicked");
-    //   // vm.store = vm.stores[storeId];
-    //   // vm.map.showInfoWindow(vm.store.infoWindow, this);
-    // };
-
-    $http.get('/map').then(function success(res)
+    var getProperties = sharedpropertiesService.getProperties();
+    if (getProperties.length > 1)
     {
-      console.log("result");
-      console.log(res);
-      var properties = res.data;
-      var address="";
-      var tmpmarkers = [];
-      var propertyname = "";
-      var propnamet;
-      console.log(properties[0]);
+      vm.markers = getProperties;
+    }
+    else
+    {
+      propertyservercall();
 
-      for (var i = 0; i < properties.length; i++)
+    }
+
+    function propertyservercall()
+    {
+      $http.get('/map').then(function success(res)
       {
-          property = properties[i];
-          propnamet= "";
-          propertyname ="";
-          propnamet = property.vitalStreetName.trim();
-          propnamet = propnamet.split(" ");
-          for (var x = 0; x < propnamet.length; x++)
-          {
-            propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
-          }
-          address =
-          property.vitalHouseNumber
-          + propertyname;
-          ;
-
-
-          address =
-          property.vitalHouseNumber
-          + property.vitalStreetName;
-          ;
-
-          tmpmarkers.push(
-          // vm.markers.push(
-          {
-            latitude: property.latitude,
-            longitude: property.longitude,
-            address: address,
-            // icon: '../../images/mapicons/iconred.png',
-            id: property._id
-          });
-
-      }
-      vm.markers = tmpmarkers;
-      // console.log("these are the markers");
-      console.log(vm.markers);
-      // So here, we either push the markers directly into vm.markers or we
-      // create a temp array and then then make markers equivelent to it
-
-    }, function err(res)
-    {
+        console.log("result");
         console.log(res);
-    });
+        var properties = res.data;
+        var address="";
+        var tmpmarkers = [];
+        var propertyname = "";
+        var propnamet;
+        console.log(properties[0]);
+
+        for (var i = 0; i < properties.length; i++)
+        {
+            property = properties[i];
+            propnamet= "";
+            propertyname ="";
+            propnamet = property.vitalStreetName.trim();
+            propnamet = propnamet.split(" ");
+            for (var x = 0; x < propnamet.length; x++)
+            {
+              propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
+            }
+            address =
+            property.vitalHouseNumber
+            + propertyname;
+            ;
+
+
+            address =
+            property.vitalHouseNumber
+            + property.vitalStreetName;
+            ;
+
+            tmpmarkers.push(
+            // vm.markers.push(
+            {
+              latitude: property.latitude,
+              longitude: property.longitude,
+              address: address,
+              // icon: '../../images/mapicons/iconred.png',
+              id: property._id
+            });
+
+        }
+        vm.markers = tmpmarkers;
+        // console.log("these are the markers");
+        console.log(vm.markers);
+        sharedpropertiesService.setProperties(vm.markers);
+        
+        // So here, we either push the markers directly into vm.markers or we
+        // create a temp array and then then make markers equivelent to it
+
+      }, function err(res)
+      {
+          console.log(res);
+      });
+    }
+    // console.log("shared properties "+ sharedpropertiesService.getMarkers().length);
+
 
     vm.showBox = function(e, boxinfo)
     {
@@ -112,15 +104,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     };
 
 
-
-
-
-
-
 }]);
-
-
-
 
 
 
