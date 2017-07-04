@@ -32,16 +32,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
   vm.markers= [];
 
-  var center = new google.maps.LatLng(40.7356357, -74.18 );
-  vm.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 13,
-        center: center,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
-
   vm.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
   var sv = new google.maps.StreetViewService();
-  sv.getPanorama({location: center, radius: 50}, vm.processSVData);
 
   var infowindow = new google.maps.InfoWindow();
   document.getElementById('streetview').style.display = 'none';
@@ -51,7 +43,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     var properties = res.data;
     var address="";
     var tmpmarkers = [];
-    var locations = [];
+    vm.locations = [];
     var propertyname = "";
     var propnamet;
     console.log(properties[0]);
@@ -78,56 +70,82 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       + property.vitalStreetName;
       ;
       var propertyLatLng = new google.maps.LatLng(property.latitude,
-          property.longitude);
+        property.longitude);
       var propertyMarker = new google.maps.Marker({
         position: propertyLatLng
       });
       tmpmarkers.push(propertyMarker)
 
-      locations.push([address, property.latitude, property.longitude, i])
-      google.maps.event.addListener(propertyMarker, 'click', (function(propertyMarker, i) {
-        return function() {
-          var markerPosition = propertyMarker.getPosition()
-          sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
-
-          //You simultaneously set the streetView location and also get it's new
-          //location. So you need to add a listener that will execute the
-          //getLocation request after you have set the location. This is also important
-          // for the panoramaDate variable.
-          google.maps.event.addListenerOnce(vm.panorama, 'status_changed', function () {
-
-            addressAndDate = '<div> Address: '+locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
-            infowindow.setContent(addressAndDate);
-            infowindow.open(vm.map, propertyMarker);
-            document.getElementById('streetview').style.display = '';
-
-            var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
-                                                                      markerPosition);
-            vm.panorama.setPov({
-              heading: heading,
-              pitch: 0
-            });
-            vm.panorama.setVisible(true);
-            setTimeout(function() {
-            marker = new google.maps.Marker({
-              position: markerPosition,
-              map: vm.panorama,
-            });
-            if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
-          });
-        }
-      })(propertyMarker, i));
+      vm.locations.push([address, property.latitude, property.longitude, i])
 
     }
     vm.markers = tmpmarkers;
-
-    var markerCluster = new MarkerClusterer(vm.map,
-                   vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
-
+    console.log('Wait for it...')
+//
   }, function err(res)
   {
     console.log(res);
-  });
+  }).then(function success(res)
+  {
+    //Getting the map is asynchronous. You don't get the map until the callback function is executed.
+    // So we have to wait for the map in order to set the property markers
+    console.log('WOHO')
+    console.log(NgMap)
+    console.log(vm.markers)
+    console.log('WOHO')
 
+    NgMap.getMap()
+    NgMap.getMap().then(function(map)
+    {
+      console.log('map', map);
+      vm.map = map;
+      vm.center = map.getCenter();
+      sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
+
+      for (var i = 0; i < vm.markers.length; i++)
+      {
+        var propertyMarker = vm.markers[i]
+        google.maps.event.addListener(propertyMarker, 'click', (function(propertyMarker, i) {
+          return function() {
+            var markerPosition = propertyMarker.getPosition()
+            sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
+
+            //You simultaneously set the streetView location and also get it's new
+            //location. So you need to add a listener that will execute the
+            //getLocation request after you have set the location. This is also important
+            // for the panoramaDate variable.
+            google.maps.event.addListenerOnce(vm.panorama, 'status_changed', function () {
+              addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
+              infowindow.setContent(addressAndDate);
+              infowindow.open(vm.map, propertyMarker);
+              document.getElementById('streetview').style.display = '';
+
+              var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
+                                                                      markerPosition);
+              vm.panorama.setPov({
+                heading: heading,
+                pitch: 0
+              });
+              vm.panorama.setVisible(true);
+              setTimeout(function() {
+              marker = new google.maps.Marker({
+                position: markerPosition,
+                map: vm.panorama,
+              });
+              if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+            });
+          }
+        })(propertyMarker, i));
+      }
+
+      var markerCluster = new MarkerClusterer(vm.map,
+                 vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
+
+    });
+  }, function err(res)
+  {
+    console.log('CCCCCCCC')
+    console.log(res)
+  })
 
 }]);
