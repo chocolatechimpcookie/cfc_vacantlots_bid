@@ -13,7 +13,6 @@
 
 //this needs to be changed, perhaps in a seperate files with a more descriptive name
 
-var panorama;
 var panoramaDate;
 
 /**
@@ -27,7 +26,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   vm.processSVData = function processSVData(data, status) {
     if (status === 'OK') {
       panoramaDate = data.imageDate
-      panorama.setPano(data.location.pano);
+      vm.panorama.setPano(data.location.pano);
     } else {
       console.error('Street View data not found for this location.');
     }
@@ -42,7 +41,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
 
-  panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
+  vm.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
   var sv = new google.maps.StreetViewService();
   sv.getPanorama({location: center, radius: 50}, vm.processSVData);
 
@@ -97,26 +96,26 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           //location. So you need to add a listener that will execute the
           //getLocation request after you have set the location. This is also important
           // for the panoramaDate variable.
-          google.maps.event.addListenerOnce(panorama, 'status_changed', function () {
+          google.maps.event.addListenerOnce(vm.panorama, 'status_changed', function () {
 
             addressAndDate = '<div> Address: '+locations[i][0]+'</div><div>Image date: ' + panoramaDate+'</div>'
             infowindow.setContent(addressAndDate);
             infowindow.open(vm.map, propertyMarker);
             document.getElementById('streetview').style.display = '';
 
-            var heading = google.maps.geometry.spherical.computeHeading(panorama.getLocation().latLng,
+            var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
                                                                       markerPosition);
-            panorama.setPov({
+            vm.panorama.setPov({
               heading: heading,
               pitch: 0
             });
-            panorama.setVisible(true);
+            vm.panorama.setVisible(true);
             setTimeout(function() {
             marker = new google.maps.Marker({
               position: markerPosition,
-              map: panorama,
+              map: vm.panorama,
             });
-            if (marker && marker.setMap) marker.setMap(panorama);}, 500);
+            if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
           });
         }
       })(propertyMarker, i));
