@@ -13,7 +13,6 @@
 
 //this needs to be changed, perhaps in a seperate files with a more descriptive name
 
-var map;
 var panorama;
 var panoramaDate;
 
@@ -37,7 +36,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   vm.markers= [];
 
   var center = new google.maps.LatLng(40.7356357, -74.18 );
-  map = new google.maps.Map(document.getElementById('map'), {
+  vm.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 13,
         center: center,
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -102,7 +101,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
             addressAndDate = '<div> Address: '+locations[i][0]+'</div><div>Image date: ' + panoramaDate+'</div>'
             infowindow.setContent(addressAndDate);
-            infowindow.open(map, propertyMarker);
+            infowindow.open(vm.map, propertyMarker);
             document.getElementById('streetview').style.display = '';
 
             var heading = google.maps.geometry.spherical.computeHeading(panorama.getLocation().latLng,
@@ -125,7 +124,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     }
     vm.markers = tmpmarkers;
 
-    var markerCluster = new MarkerClusterer(map,
+    var markerCluster = new MarkerClusterer(vm.map,
                    vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
 
   }, function err(res)
