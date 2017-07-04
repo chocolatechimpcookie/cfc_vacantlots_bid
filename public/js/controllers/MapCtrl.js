@@ -21,18 +21,18 @@ var panoramaDate;
  * Processes streetview data from google streetview service. It saves the date of the
  * panorama in the panoramaDate global variable, and it sets the location of the global panorama.
  */
-function processSVData(data, status) {
-  if (status === 'OK') {
-    panoramaDate = data.imageDate
-    panorama.setPano(data.location.pano);
-  } else {
-    console.error('Street View data not found for this location.');
-  }
-}
-
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
   var vm = this;
+
+  vm.processSVData = function processSVData(data, status) {
+    if (status === 'OK') {
+      panoramaDate = data.imageDate
+      panorama.setPano(data.location.pano);
+    } else {
+      console.error('Street View data not found for this location.');
+    }
+  }
 
   vm.markers= [];
 
@@ -45,7 +45,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
   panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
   var sv = new google.maps.StreetViewService();
-  sv.getPanorama({location: center, radius: 50}, processSVData);
+  sv.getPanorama({location: center, radius: 50}, vm.processSVData);
 
   var infowindow = new google.maps.InfoWindow();
   document.getElementById('streetview').style.display = 'none';
@@ -92,7 +92,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       google.maps.event.addListener(propertyMarker, 'click', (function(propertyMarker, i) {
         return function() {
           var markerPosition = propertyMarker.getPosition()
-          sv.getPanorama({location: markerPosition, radius: 50}, processSVData);
+          sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
 
           //You simultaneously set the streetView location and also get it's new
           //location. So you need to add a listener that will execute the
