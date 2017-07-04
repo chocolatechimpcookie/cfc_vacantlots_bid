@@ -13,8 +13,6 @@
 
 //this needs to be changed, perhaps in a seperate files with a more descriptive name
 
-var panoramaDate;
-
 /**
  * Processes streetview data from google streetview service. It saves the date of the
  * panorama in the panoramaDate global variable, and it sets the location of the global panorama.
@@ -25,7 +23,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
   vm.processSVData = function processSVData(data, status) {
     if (status === 'OK') {
-      panoramaDate = data.imageDate
+      vm.panoramaDate = data.imageDate
       vm.panorama.setPano(data.location.pano);
     } else {
       console.error('Street View data not found for this location.');
@@ -98,7 +96,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           // for the panoramaDate variable.
           google.maps.event.addListenerOnce(vm.panorama, 'status_changed', function () {
 
-            addressAndDate = '<div> Address: '+locations[i][0]+'</div><div>Image date: ' + panoramaDate+'</div>'
+            addressAndDate = '<div> Address: '+locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
             infowindow.setContent(addressAndDate);
             infowindow.open(vm.map, propertyMarker);
             document.getElementById('streetview').style.display = '';
