@@ -36,6 +36,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   var sv = new google.maps.StreetViewService();
 
   var infowindow = new google.maps.InfoWindow();
+
   document.getElementById('streetview').style.display = 'none';
 
   $http.get('/map').then(function success(res)
@@ -80,8 +81,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
     }
     vm.markers = tmpmarkers;
-    console.log('Wait for it...')
-//
   }, function err(res)
   {
     console.log(res);
@@ -89,15 +88,9 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   {
     //Getting the map is asynchronous. You don't get the map until the callback function is executed.
     // So we have to wait for the map in order to set the property markers
-    console.log('WOHO')
-    console.log(NgMap)
-    console.log(vm.markers)
-    console.log('WOHO')
-
     NgMap.getMap()
     NgMap.getMap().then(function(map)
     {
-      console.log('map', map);
       vm.map = map;
       vm.center = map.getCenter();
       sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
@@ -144,7 +137,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     });
   }, function err(res)
   {
-    console.log('CCCCCCCC')
     console.log(res)
   })
 
