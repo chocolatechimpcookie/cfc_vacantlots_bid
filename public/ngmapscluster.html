@@ -4,26 +4,34 @@
 <head>
   <title>Dynamic ngMap demo</title>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-  <script src="https://maps.google.com/maps/api/js?libraries=placeses,visualization,drawing,geometry,places"></script>
+ <!-- <script src="https://maps.google.com/maps/api/js?libraries=placeses,visualization,drawing,geometry,places"></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM"></script>
 <script src="https://code.angularjs.org/1.3.15/angular.js"></script>
 <script src="https://rawgit.com/allenhwkim/angularjs-google-maps/master/build/scripts/ng-map.js"></script>
   <script src="https://rawgit.com/allenhwkim/angularjs-google-maps/master/testapp/scripts/markerclusterer.js"></script>
   <script>
-    MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_
+    MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ 
       = 'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m';  //changed image path
   </script>
-  <script src="scripts/markers.js"></script>
+  <script src="./ngmapscluster_markers.js"></script>
   <script>
   var app = angular.module('myApp', ['ngMap']);
 
   app.controller('mapController', function($http, $interval, NgMap) {
     var vm = this;
     vm.dynMarkers = [];
+	var infowindow = new google.maps.InfoWindow();
     NgMap.getMap().then(function(map) {
       for (var i=0; i<1000; i++) {
         var latLng = new google.maps.LatLng(markers[i].position[0], markers[i].position[1]);
-        vm.dynMarkers.push(new google.maps.Marker({position:latLng}));
+        var marker = new google.maps.Marker({position:latLng})
+        vm.dynMarkers.push(marker);
+        google.maps.event.addListener(marker, 'click', function (){
+			console.log('AAAAAAAAAAA');
+	    });
       }
+
+	  
       vm.markerClusterer = new MarkerClusterer(map, vm.dynMarkers, {});
     });
   });
