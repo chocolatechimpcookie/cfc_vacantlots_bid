@@ -3,10 +3,13 @@
 
 // var app = angular.module('vacantlotsApp');
 
-angular.module('vacantlotsApp', ['ui.router', 'uiGmapgoogle-maps'])
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
+// angular.module('vacantlotsApp', ['ui.router', 'ngMap'])
+angular.module('vacantlotsApp', ['ui.router', 'ngMap'])
+.config(['$stateProvider', '$urlRouterProvider', '$qProvider', function($stateProvider, $urlRouterProvider, $qProvider)
 {
   $urlRouterProvider.otherwise('/');
+  // $qProvider.errorOnUnhandledRejections(false);
+
   //$locationProvider.html5Mode(true);
   //$locationProvider.html5Mode({ enabled: true, requireBase: false });
   $stateProvider
