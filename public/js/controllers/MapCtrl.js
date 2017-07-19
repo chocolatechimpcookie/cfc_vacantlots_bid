@@ -109,29 +109,31 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
   //Getting the map is asynchronous. You don't get the map until the callback function is executed.
   // So we have to wait for the map in order to set the property markers
-  NgMap.getMap().then(function(map)
-  {
-  vm.map = map;
-  vm.center = map.getCenter();
-  vm.sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
+  NgMap.getMap().then(setupMap);
 
-  for (var i = 0; i < vm.markers.length; i++)
+  function setupMap(map)
   {
-    var propertyMarker = vm.markers[i]
-    google.maps.event.addListener(propertyMarker, 'click',
-                                  setupPanoramaAtMarkerWrapper(vm, propertyMarker, i));
-  }
+    vm.map = map;
+    vm.center = map.getCenter();
+    vm.sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
 
-  var markerCluster = new MarkerClusterer(vm.map,
+    for (var i = 0; i < vm.markers.length; i++)
+    {
+      var propertyMarker = vm.markers[i]
+      google.maps.event.addListener(propertyMarker, 'click',
+                                    setupPanoramaAtMarkerWrapper(vm, propertyMarker, i));
+    }
+
+    var markerCluster = new MarkerClusterer(vm.map,
              vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
-  });
+  }
 }]);
 
-// FIXME: Break up this function. It does too many things.
 function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i){
  function setupPanoramaAtMarker() {
    var markerPosition = propertyMarker.getPosition()
    vm.sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
+
    //You simultaneously set the streetView location and also get it's new
    //location. So you need to add a listener that will execute the
    //getLocation request after you have set the location. This is also important
