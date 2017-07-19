@@ -21,15 +21,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 {
   var vm = this;
 
-  vm.processSVData = function processSVData(data, status) {
-    if (status === 'OK') {
-      vm.panoramaDate = data.imageDate
-      vm.panorama.setPano(data.location.pano);
-    } else {
-      console.error('Street View data not found for this location.');
-    }
-  }
-
   vm.markers= [];
   vm.locations = [];
 
@@ -114,42 +105,56 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   {
   vm.map = map;
   vm.center = map.getCenter();
-  sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
+  sv.getPanorama({location: vm.center, radius: 50}, processSVData);
+
+  function processSVData(data, status) {
+    if (status === 'OK') {
+      vm.panoramaDate = data.imageDate
+      vm.panorama.setPano(data.location.pano);
+    } else {
+      console.error('Street View data not found for this location.');
+    }
+  }
 
   for (var i = 0; i < vm.markers.length; i++)
   {
     var propertyMarker = vm.markers[i]
-    google.maps.event.addListener(propertyMarker, 'click', (function(propertyMarker, i) {
-      return function() {
-        var markerPosition = propertyMarker.getPosition()
-        sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
+    google.maps.event.addListener(propertyMarker, 'click',
+                                  getPanoramaPointedAndSetInfoWindowWrapper(propertyMarker, i));
+  }
 
-        //You simultaneously set the streetView location and also get it's new
-        //location. So you need to add a listener that will execute the
-        //getLocation request after you have set the location. This is also important
-        // for the panoramaDate variable.
-        google.maps.event.addListenerOnce(vm.panorama, 'status_changed', function () {
-          addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
-          infowindow.setContent(addressAndDate);
-          infowindow.open(vm.map, propertyMarker);
-          document.getElementById('streetview').style.display = '';
+  // FIXME: Break up this function. It does too many things.
+  function getPanoramaPointedAndSetInfoWindowWrapper(propertyMarker, i){
+    function getPanoramaPointedAndSetInfoWindow() {
+      var markerPosition = propertyMarker.getPosition()
+      sv.getPanorama({location: markerPosition, radius: 50}, processSVData);
 
-          var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
+      //You simultaneously set the streetView location and also get it's new
+      //location. So you need to add a listener that will execute the
+      //getLocation request after you have set the location. This is also important
+      // for the panoramaDate variable.
+      google.maps.event.addListenerOnce(vm.panorama, 'status_changed', function () {
+        addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
+        infowindow.setContent(addressAndDate);
+        infowindow.open(vm.map, propertyMarker);
+        document.getElementById('streetview').style.display = '';
+
+        var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
                                                                   markerPosition);
-          vm.panorama.setPov({
-            heading: heading,
-            pitch: 0
-          });
-          vm.panorama.setVisible(true);
-          setTimeout(function() {
-          marker = new google.maps.Marker({
-            position: markerPosition,
-            map: vm.panorama,
-          });
-          if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+        vm.panorama.setPov({
+          heading: heading,
+          pitch: 0
         });
-      }
-    })(propertyMarker, i));
+        vm.panorama.setVisible(true);
+        setTimeout(function() {
+        marker = new google.maps.Marker({
+          position: markerPosition,
+          map: vm.panorama,
+        });
+        if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+      });
+    }
+    return getPanoramaPointedAndSetInfoWindow;
   }
 
   var markerCluster = new MarkerClusterer(vm.map,
