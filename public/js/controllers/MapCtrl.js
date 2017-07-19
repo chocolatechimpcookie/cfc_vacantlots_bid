@@ -25,11 +25,10 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   vm.locations = [];
 
   vm.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
+  document.getElementById('streetview').style.display = 'none';
   vm.sv = new google.maps.StreetViewService();
 
-  vm.infowindow = new google.maps.InfoWindow();
-
-  document.getElementById('streetview').style.display = 'none';
+  vm.infowindow = new google.maps.InfoWindow()
 
   var getProperties = sharedpropertiesService.getProperties();
   if (getProperties.length > 1)
@@ -98,15 +97,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     });
   }
 
-  vm.processSVData = function(data, status) {
-    if (status === 'OK') {
-      vm.panoramaDate = data.imageDate
-      vm.panorama.setPano(data.location.pano);
-    } else {
-      console.error('Street View data not found for this location.');
-    }
-  }
-
   //Getting the map is asynchronous. You don't get the map until the callback function is executed.
   // So we have to wait for the map in order to set the property markers
   NgMap.getMap().then(setupMap);
@@ -126,6 +116,15 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
     var markerCluster = new MarkerClusterer(vm.map,
              vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
+  }
+
+  vm.processSVData = function(data, status) {
+    if (status === 'OK') {
+      vm.panoramaDate = data.imageDate
+      vm.panorama.setPano(data.location.pano);
+    } else {
+      console.error('Street View data not found for this location.');
+    }
   }
 }]);
 
