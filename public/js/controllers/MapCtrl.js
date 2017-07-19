@@ -98,15 +98,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     });
   }
 
-
-  //Getting the map is asynchronous. You don't get the map until the callback function is executed.
-  // So we have to wait for the map in order to set the property markers
-  NgMap.getMap().then(function(map)
-  {
-  vm.map = map;
-  vm.center = map.getCenter();
-  sv.getPanorama({location: vm.center, radius: 50}, processSVData);
-
   function processSVData(data, status) {
     if (status === 'OK') {
       vm.panoramaDate = data.imageDate
@@ -116,12 +107,24 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     }
   }
 
+  //Getting the map is asynchronous. You don't get the map until the callback function is executed.
+  // So we have to wait for the map in order to set the property markers
+  NgMap.getMap().then(function(map)
+  {
+  vm.map = map;
+  vm.center = map.getCenter();
+  sv.getPanorama({location: vm.center, radius: 50}, processSVData);
+
   for (var i = 0; i < vm.markers.length; i++)
   {
     var propertyMarker = vm.markers[i]
     google.maps.event.addListener(propertyMarker, 'click',
                                   setupPanoramaAtMarkerWrapper(propertyMarker, i));
   }
+
+  var markerCluster = new MarkerClusterer(vm.map,
+             vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
+  });
 
   // FIXME: Break up this function. It does too many things.
   function setupPanoramaAtMarkerWrapper(propertyMarker, i){
@@ -133,36 +136,36 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       //location. So you need to add a listener that will execute the
       //getLocation request after you have set the location. This is also important
       // for the panoramaDate variable.
-      google.maps.event.addListenerOnce(vm.panorama, 'status_changed', pointPanoramaAndSetInfoWindow());
-
-      function pointPanoramaAndSetInfoWindow() {
-        addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
-        infowindow.setContent(addressAndDate);
-        infowindow.open(vm.map, propertyMarker);
-        document.getElementById('streetview').style.display = '';
-
-        var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
-                                                                  markerPosition);
-        vm.panorama.setPov({
-          heading: heading,
-          pitch: 0
-        });
-        vm.panorama.setVisible(true);
-        setTimeout(function() {
-        marker = new google.maps.Marker({
-          position: markerPosition,
-          map: vm.panorama,
-        });
-        if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
-      }
+      google.maps.event.addListenerOnce(vm.panorama, 'status_changed',
+                                        pointPanoramaAndSetInfoWindowWrapper(markerPosition, propertyMarker, i));
     }
 
     return setupPanoramaAtMarker;
   }
 
-  var markerCluster = new MarkerClusterer(vm.map,
-             vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
+  function pointPanoramaAndSetInfoWindowWrapper(markerPosition, propertyMarker, i){
+    function pointPanoramaAndSetInfoWindow() {
+      addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
+      infowindow.setContent(addressAndDate);
+      infowindow.open(vm.map, propertyMarker);
+      document.getElementById('streetview').style.display = '';
 
-});
+      var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
+                                                                    markerPosition);
+      vm.panorama.setPov({
+        heading: heading,
+        pitch: 0
+      });
+      vm.panorama.setVisible(true);
+      setTimeout(function() {
+      marker = new google.maps.Marker({
+        position: markerPosition,
+        map: vm.panorama,
+      });
+      if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+    }
+
+    return pointPanoramaAndSetInfoWindow
+  }
 
 }]);
