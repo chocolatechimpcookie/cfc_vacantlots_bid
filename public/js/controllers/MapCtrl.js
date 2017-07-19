@@ -120,12 +120,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   {
     var propertyMarker = vm.markers[i]
     google.maps.event.addListener(propertyMarker, 'click',
-                                  getPanoramaPointedAndSetInfoWindowWrapper(propertyMarker, i));
+                                  setupPanoramaAtMarkerWrapper(propertyMarker, i));
   }
 
   // FIXME: Break up this function. It does too many things.
-  function getPanoramaPointedAndSetInfoWindowWrapper(propertyMarker, i){
-    function getPanoramaPointedAndSetInfoWindow() {
+  function setupPanoramaAtMarkerWrapper(propertyMarker, i){
+    function setupPanoramaAtMarker() {
       var markerPosition = propertyMarker.getPosition()
       sv.getPanorama({location: markerPosition, radius: 50}, processSVData);
 
@@ -133,7 +133,9 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       //location. So you need to add a listener that will execute the
       //getLocation request after you have set the location. This is also important
       // for the panoramaDate variable.
-      google.maps.event.addListenerOnce(vm.panorama, 'status_changed', function () {
+      google.maps.event.addListenerOnce(vm.panorama, 'status_changed', pointPanoramaAndSetInfoWindow());
+
+      function pointPanoramaAndSetInfoWindow() {
         addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
         infowindow.setContent(addressAndDate);
         infowindow.open(vm.map, propertyMarker);
@@ -152,9 +154,10 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           map: vm.panorama,
         });
         if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
-      });
+      }
     }
-    return getPanoramaPointedAndSetInfoWindow;
+
+    return setupPanoramaAtMarker;
   }
 
   var markerCluster = new MarkerClusterer(vm.map,
