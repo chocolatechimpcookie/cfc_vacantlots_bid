@@ -1,22 +1,10 @@
-// angular.module('vacantlotsApp').config(function(uiGmapGoogleMapApiProvider)
-// {
-//     console.log('In config');
-//     uiGmapGoogleMapApiProvider.configure(
-//     {
-//         //TODO: Factor this into another js file that isn't tracked with git?
-//         key: "AIzaSyA5sCewJikG42pgRQOIJ_NjnVv3c6O_d6I",
-//         v: '3.20', //defaults to latest 3.X anyhow
-//         libraries: 'weather,geometry,visualization'
-//     });
-// });
-
-
-//this needs to be changed, perhaps in a seperate files with a more descriptive name
-
 /**
  * Processes streetview data from google streetview service. It saves the date of the
  * panorama in the panoramaDate global variable, and it sets the location of the global panorama.
  */
+
+
+
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
   var vm = this;
@@ -44,8 +32,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   {
     $http.get('/map').then(function success(res)
     {
-      console.log("result");
-      console.log(res);
       var properties = res.data;
       var address="";
       var tmpmarkers = [];
