@@ -25,11 +25,11 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   }
   else
   {
-    propertyservercall();
+    //propertyservercall();
   }
 
-  function propertyservercall()
-  {
+  var propertyservercall = new Promise(function(resolve, reject) {
+
     $http.get('/map').then(function success(res)
     {
       var properties = res.data;
@@ -76,21 +76,30 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
         // So here, we either push the markers directly into vm.markers or we
         // create a temp array and then then make markers equivelent to it
+      resolve()
 
       }, function err(res)
     {
       console.log(res);
+      reject()
     });
-  }
+  });
 
   //Getting the map is asynchronous. You don't get the map until the callback function is executed.
   // So we have to wait for the map in order to set the property markers
-  NgMap.getMap().then(setupMap);
+  mapLoadedToVM = new Promise(function(resolve, reject){
+    NgMap.getMap().then(function(map){
+     vm.map = map
+     resolve()
+    })
+  });
 
-  function setupMap(map)
+  Promise.all([propertyservercall, mapLoadedToVM]).then(setupMap);
+
+  function setupMap()
   {
-    vm.map = map;
-    vm.center = map.getCenter();
+    console.log('T4 '+performance.now())
+    vm.center = vm.map.getCenter();
     vm.sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
 
     for (var i = 0; i < vm.markers.length; i++)
@@ -108,14 +117,17 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     if (status === 'OK') {
       vm.panoramaDate = data.imageDate
       vm.panorama.setPano(data.location.pano);
+      console.log('T8 '+performance.now())
     } else {
       console.error('Street View data not found for this location.');
     }
   }
+  console.log('T9 '+performance.now())
 }]);
 
 function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i){
  function setupPanoramaAtMarker() {
+   console.log('T6 '+performance.now())
    var markerPosition = propertyMarker.getPosition()
    vm.sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
 
@@ -131,6 +143,7 @@ function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i){
 
 function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i){
   function pointPanoramaAndSetInfoWindow() {
+    console.log('T7 '+performance.now())
     addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
     vm.infowindow.setContent(addressAndDate);
     vm.infowindow.open(vm.map, propertyMarker);
