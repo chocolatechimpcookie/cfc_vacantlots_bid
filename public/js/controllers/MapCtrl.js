@@ -18,72 +18,69 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
   vm.infowindow = new google.maps.InfoWindow()
 
-  var getProperties = sharedpropertiesService.getProperties();
-  if (getProperties.length > 1)
-  {
-    vm.markers = getProperties;
-  }
-  else
-  {
-    //propertyservercall();
-  }
-
-  var propertyservercall = new Promise(function(resolve, reject) {
-
-    $http.get('/map').then(function success(res)
-    {
-      var properties = res.data;
-      var address="";
-      var tmpmarkers = [];
-      var propertyname = "";
-      var propnamet;
-      console.log(properties[0]);
-
-      for (var i = 0; i < properties.length; i++)
-      {
-        property = properties[i];
-        propnamet= "";
-        propertyname ="";
-        propnamet = property.vitalStreetName.trim();
-        propnamet = propnamet.split(" ");
-        for (var x = 0; x < propnamet.length; x++)
-        {
-          propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
-        }
-        address =
-        property.vitalHouseNumber
-        + propertyname;
-        ;
-
-        address =
-        property.vitalHouseNumber
-        + property.vitalStreetName;
-        ;
-
-        var propertyLatLng = new google.maps.LatLng(property.latitude,
-        property.longitude);
-        var propertyMarker = new google.maps.Marker({
-          position: propertyLatLng
-        });
-        tmpmarkers.push(propertyMarker)
-
-        vm.locations.push([address, property.latitude, property.longitude, i])
-      }
-      vm.markers = tmpmarkers;
-      // console.log("these are the markers");
-      console.log(vm.markers);
-      sharedpropertiesService.setProperties(vm.markers);
-
-        // So here, we either push the markers directly into vm.markers or we
-        // create a temp array and then then make markers equivelent to it
+  //TODO: Make this less nested
+  var propertiesLoadedToVM = new Promise(function(resolve, reject) {
+    var getProperties = sharedpropertiesService.getProperties();
+    if (getProperties.length > 1){
+      vm.markers = getProperties;
       resolve()
-
+    }
+    else{
+      $http.get('/map').then(function success(res)
+      {
+        Timeout(processProperties(res)
+        resolve()
       }, function err(res)
-    {
-      console.log(res);
-      reject()
-    });
+      {
+        console.log(res);
+        reject()
+      });
+    }
   });
+
+  function processProperties(res){
+    var properties = res.data;
+    var address="";
+    var tmpmarkers = [];
+    var propertyname = "";
+    var propnamet;
+    console.log(properties[0]);
+
+    for (var i = 0; i < properties.length; i++)
+    {
+      property = properties[i];
+      propnamet= "";
+      propertyname ="";
+      propnamet = property.vitalStreetName.trim();
+      propnamet = propnamet.split(" ");
+      for (var x = 0; x < propnamet.length; x++)
+      {
+        propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
+      }
+      address =
+      property.vitalHouseNumber
+      + propertyname;
+      ;
+
+      address =
+      property.vitalHouseNumber
+      + property.vitalStreetName;
+      ;
+
+      var propertyLatLng = new google.maps.LatLng(property.latitude,
+      property.longitude);
+      var propertyMarker = new google.maps.Marker({
+        position: propertyLatLng
+      });
+      tmpmarkers.push(propertyMarker)
+
+      vm.locations.push([address, property.latitude, property.longitude, i])
+    }
+    vm.markers = tmpmarkers;
+    // console.log("these are the markers");
+    console.log(vm.markers);
+    sharedpropertiesService.setProperties(vm.markers);
+  }
 
   //Getting the map is asynchronous. You don't get the map until the callback function is executed.
   // So we have to wait for the map in order to set the property markers
@@ -94,7 +91,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     })
   });
 
-  Promise.all([propertyservercall, mapLoadedToVM]).then(setupMap);
+  Promise.all([propertiesLoadedToVM, mapLoadedToVM]).then(setupMap);
 
   function setupMap()
   {
