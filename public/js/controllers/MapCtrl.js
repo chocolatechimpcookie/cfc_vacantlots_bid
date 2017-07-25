@@ -143,6 +143,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       console.error('Street View data not found for this location.');
     }
   }
+
+  vm.clicked = function()
+  {
+    console.log('AAAAAAAABBBBB')
+    $state.go('bidPage');
+  }
 }]);
 
 /* Using wrappers here so that I can define the callback function with variables given to the wrapper function */
@@ -168,12 +174,16 @@ function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker
   * and set the point of view or the streetview to point towards the selected marker.
   */
   function pointPanoramaAndSetInfoWindow() {
-    address = '<div> Address: '+vm.locations[i][0]+'</div>'
+    address = vm.locations[i][0]
+    addressDiv = '<div> Address: '+address+'</div>'
     date = '<div>Image date: ' + vm.panoramaDate+'</div>'
-    button = '<div><button onclick="clickBid()">BID</button></div>'
-    vm.infowindow.setContent(address + date + button);
+    button = '<div><button id="bidButton">BID</button></div>'
+
+    vm.infowindow.setContent(addressDiv + date + button);
     vm.infowindow.open(vm.map, propertyMarker);
     document.getElementById('streetview').style.display = '';
+    // FIXME: Can we do this with angular instead?
+    document.getElementById("bidButton").addEventListener("click", vm.clicked);
 
     vm.sharedpropertiesService.setProperty(address);
 
@@ -193,9 +203,4 @@ function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker
   }
 
   return pointPanoramaAndSetInfoWindow
-}
-
-function clickBid()
-{
-  console.log('AAAAAAVVVVV')
 }
