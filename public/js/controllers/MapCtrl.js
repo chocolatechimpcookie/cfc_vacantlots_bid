@@ -18,7 +18,7 @@
  * cause a request to find the nearest streetview location. The streetview point of view is then set to the
  * marker position.
  */
-angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
+angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', function($state, $http, sharedpropertiesService)
 {
   var vm = this;
   vm.sharedpropertiesService = sharedpropertiesService
