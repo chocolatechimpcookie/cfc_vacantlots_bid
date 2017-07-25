@@ -11,11 +11,12 @@
 // });
 
 
-//this needs to be changed, perhaps in a seperate files with a more descriptive name
+//this needs to be changed, perhaps in a separate files with a more descriptive name
 
 /**
- * Processes streetview data from google streetview service. It saves the date of the
- * panorama in the panoramaDate global variable, and it sets the location of the global panorama.
+ * Creates google map and streetview populated with location markers. Handles clicks on the markers, which
+ * cause a request to find the nearest streetview location. The streetview point of view is then set to the
+ * marker position.
  */
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
@@ -38,6 +39,11 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
   vm.infowindow = new google.maps.InfoWindow()
 
+  /**
+   * Promise to ensure the properties have been loaded
+   * either from the server or the sharedpropertiesService. The loading is
+   * asynchronous so we need a way to ensure that it is done.
+   */
   //TODO: Make this less nested
   var propertiesLoadedToVM = new Promise(function(resolve, reject) {
     var getProperties = sharedpropertiesService.getProperties();
@@ -58,6 +64,10 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     }
   });
 
+  /**
+   * Extracts useful information from property data sent from the server.
+   * It then it creates googleMaps markers for each property and saves to vm.
+   */
   function processProperties(res){
     var properties = res.data;
     var address="";
@@ -103,6 +113,10 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
   propertiesLoadedToVM.then(setupMap);
 
+  /**
+   * Initialize markers, marker clusterer, and panorama and then specify what to do
+   * when markers are clicked.
+   */
   function setupMap()
   {
     vm.center = vm.map.getCenter();
@@ -119,6 +133,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
              vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
   }
 
+  /* We can't get some information from streetview until after we have gotten the panorama.*/
   vm.processSVData = function(data, status) {
     if (status === 'OK') {
       vm.panoramaDate = data.imageDate
@@ -129,15 +144,17 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   }
 }]);
 
+/* Using wrappers here so that I can define the callback function with variables given to the wrapper function */
 function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i){
+ /**
+  * Given a marker position, it finds the nearest streetView panorama and gets it.
+  * This is an asynchronous call, so we use a listener that will execute the
+  * the pointing of the streetview after we have the panorama (which contains its location).
+  */
  function setupPanoramaAtMarker() {
    var markerPosition = propertyMarker.getPosition()
    vm.sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
 
-   //You simultaneously set the streetView location and also get it's new
-   //location. So you need to add a listener that will execute the
-   //getLocation request after you have set the location. This is also important
-   // for the panoramaDate variable.
    google.maps.event.addListenerOnce(vm.panorama, 'status_changed',
                                      pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i));
  }
@@ -145,6 +162,10 @@ function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i){
 }
 
 function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i){
+ /**
+  * Once we have gotten all the information we can set the infowindow content
+  * and set the point of view or the streetview to point towards the selected marker.
+  */
   function pointPanoramaAndSetInfoWindow() {
     addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
     vm.infowindow.setContent(addressAndDate);
