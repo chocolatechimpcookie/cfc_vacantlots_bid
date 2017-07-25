@@ -21,6 +21,7 @@
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'NgMap', function($state, $http, sharedpropertiesService, NgMap)
 {
   var vm = this;
+  vm.sharedpropertiesService = sharedpropertiesService
 
   var center = new google.maps.LatLng(40.7356357, -74.18 );
   vm.map = new google.maps.Map(document.getElementById('map'), {
@@ -167,10 +168,14 @@ function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker
   * and set the point of view or the streetview to point towards the selected marker.
   */
   function pointPanoramaAndSetInfoWindow() {
-    addressAndDate = '<div> Address: '+vm.locations[i][0]+'</div><div>Image date: ' + vm.panoramaDate+'</div>'
-    vm.infowindow.setContent(addressAndDate);
+    address = '<div> Address: '+vm.locations[i][0]+'</div>'
+    date = '<div>Image date: ' + vm.panoramaDate+'</div>'
+    button = '<div><button onclick="clickBid()">BID</button></div>'
+    vm.infowindow.setContent(address + date + button);
     vm.infowindow.open(vm.map, propertyMarker);
     document.getElementById('streetview').style.display = '';
+
+    vm.sharedpropertiesService.setProperty(address);
 
     var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
                                                                     markerPosition);
@@ -188,4 +193,9 @@ function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker
   }
 
   return pointPanoramaAndSetInfoWindow
+}
+
+function clickBid()
+{
+  console.log('AAAAAAVVVVV')
 }
