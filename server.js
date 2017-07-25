@@ -170,7 +170,7 @@ const job = new CronJob({
 job.start()
 
 //if lots collection is empty at startup request lots immediately
-AbandonedLot.count({},(err, c) => {
+AbandonedLot.count({}, (err, c) => {
   if (c === 0) {
     lotsRequest()
   }
@@ -271,7 +271,8 @@ app.get('/avgbid/:id', passport.authenticate('jwt', {session: false}), (req, res
 })
 
 app.post('/register', (req, res) => {
-  if (req.body.firstname && req.body.lastname && req.body.username && req.body.password && req.body.email && req.body.phone) {
+  let validEmail = req.body.email ? (/^[^@]+@[^@]+\.[a-z]{2,25}/).test(req.body.email) : false
+  if (req.body.firstname && req.body.lastname && req.body.username && req.body.password && validEmail && req.body.phone) {
 
     let item = {
         firstname : req.body.firstname,
