@@ -1,17 +1,4 @@
-// angular.module('vacantlotsApp').config(function(uiGmapGoogleMapApiProvider)
-// {
-//     console.log('In config');
-//     uiGmapGoogleMapApiProvider.configure(
-//     {
-//         //TODO: Factor this into another js file that isn't tracked with git?
-//         key: "AIzaSyA5sCewJikG42pgRQOIJ_NjnVv3c6O_d6I",
-//         v: '3.20', //defaults to latest 3.X anyhow
-//         libraries: 'weather,geometry,visualization'
-//     });
-// });
 
-
-//this needs to be changed, perhaps in a separate files with a more descriptive name
 
 /**
  * Creates google map and streetview populated with location markers. Handles clicks on the markers, which
@@ -24,11 +11,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   vm.sharedpropertiesService = sharedpropertiesService
 
   var center = new google.maps.LatLng(40.7356357, -74.18 );
-  vm.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 13,
-        center: center,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
+  vm.map = new google.maps.Map(document.getElementById('map'),
+  {
+    zoom: 13,
+    center: center,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
 
 
   vm.markers= [];
@@ -69,7 +57,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
    * Extracts useful information from property data sent from the server.
    * It then it creates googleMaps markers for each property and saves to vm.
    */
-  function processProperties(res){
+  function processProperties(res)
+  {
     var properties = res.data;
     var address="";
     var tmpmarkers = [];
@@ -131,15 +120,19 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     }
 
     var markerCluster = new MarkerClusterer(vm.map,
-             vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
+      vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
   }
 
   /* We can't get some information from streetview until after we have gotten the panorama.*/
-  vm.processSVData = function(data, status) {
-    if (status === 'OK') {
+  vm.processSVData = function(data, status)
+  {
+    if (status === 'OK')
+    {
       vm.panoramaDate = data.imageDate
       vm.panorama.setPano(data.location.pano);
-    } else {
+    }
+    else
+    {
       console.error('Street View data not found for this location.');
     }
   }
@@ -149,10 +142,13 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     console.log('AAAAAAAABBBBB')
     $state.go('bidPage');
   }
+
+
 }]);
 
 /* Using wrappers here so that I can define the callback function with variables given to the wrapper function */
-function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i){
+function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i)
+{
  /**
   * Given a marker position, it finds the nearest streetView panorama and gets it.
   * This is an asynchronous call, so we use a listener that will execute the
@@ -168,18 +164,21 @@ function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i){
  return setupPanoramaAtMarker;
 }
 
-function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i){
+function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i)
+{
  /**
   * Once we have gotten all the information we can set the infowindow content
   * and set the point of view or the streetview to point towards the selected marker.
   */
-  function pointPanoramaAndSetInfoWindow() {
-    address = vm.locations[i][0]
-    addressDiv = '<div> Address: '+address+'</div>'
-    date = '<div>Image date: ' + vm.panoramaDate+'</div>'
-    button = '<div><button id="bidButton">BID</button></div>'
+  function pointPanoramaAndSetInfoWindow()
+  {
+    var address = vm.locations[i][0];
+    var currentinfowindowHTML =
+      '<h1>'+address+'</h1>'
+    // + '<div>Image date: ' + vm.panoramaDate+'</div>'
+    + '<div><button id="bidButton" class="btn genbutton">Bid</button></div>';
 
-    vm.infowindow.setContent(addressDiv + date + button);
+    vm.infowindow.setContent(currentinfowindowHTML);
     vm.infowindow.open(vm.map, propertyMarker);
     document.getElementById('streetview').style.display = '';
     // FIXME: Can we do this with angular instead?
