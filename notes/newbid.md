@@ -17,7 +17,9 @@
     - starred
   - send
     - Placing bids
--   Case in vid view
+- bidview
+  - Streetname case?
+  - 
 
 Cina's existing
   - test1
