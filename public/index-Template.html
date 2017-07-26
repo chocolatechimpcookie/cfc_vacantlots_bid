@@ -1,0 +1,242 @@
+<html ng-app="bidApp">
+    <head>
+        <meta charset="utf-8">
+        <title>Bid App</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    </head>
+    <script>
+        //this is an ugly front end to demonstrate what the server can currently do
+        //if you are currently logged in and refresh the page the jwt will still exist even though the message won't say so
+        var bidApp = angular.module('bidApp', [])
+        bidApp.controller('login', ['$scope', '$http', function ($scope, $http) {
+
+            //login
+            $scope.loginUsername = ""
+            $scope.loginPassword = ""
+
+            //register
+            $scope.regUsername = ""
+            $scope.regPassword = ""
+            $scope.first = ""
+            $scope.last = ""
+            $scope.email = ""
+            $scope.phone = ""
+
+            //"logged in"/"logged out"
+            $scope.msg = ""
+
+            //bid amount
+            $scope.bidAmount = ""
+
+            $scope.displayLots = false
+
+            var lots = []
+
+            $scope.haveUserInfo = false
+
+            var userInfo = null
+
+            $http({
+                method: 'GET',
+                url: '/map',
+                data: null
+            }).then(function success(res) {
+                lots = res.data
+                $scope.displayLots = true
+            }, function err(res) {
+                console.log('error getting lots')
+            })
+
+            //$scope.loginStatus purpose:
+            //Contains API call for checking if user is logged in or not
+            $scope.loginStatus = function() {
+                $http({
+                    method: 'GET',
+                    url: '/loginstatus',
+                    data: null,
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    $scope.msg = 'logged in as ' + "'" + res.data.username + "'"
+                }, function err(res) {
+                    console.log('not logged in')
+                    $scope.msg = 'not logged in'
+                })
+            }
+            $scope.loginStatus()
+
+            $scope.login = function() {
+                if ($scope.loginUsername && $scope.loginPassword) {
+                    $http({
+                        method: 'POST',
+                        url: '/login',
+                        data: {username: $scope.loginUsername,
+                               password: $scope.loginPassword}
+                    }).then(function success(res) {
+                        console.log('success login')
+                        const data = res.data
+                        //if user received jwt
+                        if (data.token) {
+                            localStorage.setItem("token", data.token)
+                            $scope.loginStatus()
+                        } else {
+                            console.log("No token received")
+                        }
+                    }, function err(res) {
+                        console.log('error logging in')
+                        console.log(res)
+                    })
+                }
+            }
+
+            $scope.register = function() {
+                if ($scope.regUsername && $scope.regPassword && $scope.email && $scope.first && $scope.last && $scope.phone) {
+                    $http({
+                        method: 'POST',
+                        url: '/register',
+                        data: {firstname: $scope.first,
+                               lastname: $scope.last,
+                               username: $scope.regUsername,
+                               password: $scope.regPassword,
+                               email: $scope.email,
+                               phone: $scope.phone}
+                    }).then(function success(res) {
+                        console.log(res)
+                        console.log('success register')
+                    }, function err(res) {
+                        console.log(res)
+                        console.log('error registering')
+                    })
+                }
+            }
+
+            //$scope.avgbid purpose:
+            //Contains API call for when you want to know the number of bids and average bid on a specific lot
+            $scope.avgbid = function() {
+                $http({
+                    method: 'GET',
+                    url: '/avgbid/' + lots[Math.floor(Math.random() * lots.length)]['lotID'],
+                    data: null,
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                    //number of bids (by unique users) is res.data.bids,
+                    //average of bids is res.data.avg
+                }, function err(res) {
+                    console.log(res)
+                    console.log("error retrieving average bid")
+                })
+            }
+
+            //$scope.bid purpose:
+            //Contains API call for when the user wants to submit a bid, this will take the bid amount and lotID and they will be stored as a bid
+            $scope.bid = function() {
+                if ($scope.bidAmount) {
+                    $http({
+                        method: 'POST',
+                        url: '/bid',
+                        data: {bid: $scope.bidAmount,
+                               lotID: lots[Math.floor(Math.random() * lots.length)]['lotID']},
+                        headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                    }).then(function success(res) {
+                        console.log(res.data)
+                        //keeps userInfo up to date
+                        $scope.userInfo()
+                    }, function err(res) {
+                        console.log(res)
+                        console.log("error bidding")
+                    })
+                }
+            }
+
+            //$scope.favorite purpose:
+            //Contains API call for when the user wants to make a new favorite, this will take a lotID and store it as a favorite
+            $scope.favorite = function() {
+                $http({
+                    method: 'POST',
+                    url: '/favorite',
+                    data: {lotID: lots[Math.floor(Math.random() * lots.length)]['lotID']},
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                    //keeps userInfo up to date
+                    $scope.userInfo()
+                }, function err(res) {
+                    console.log(res)
+                    console.log("error favoriting")
+                })
+            }
+
+            //$scope.userInfo purpose:
+            //Contains API call for retrieving user info (name, email, phone, bids, favorites)
+            $scope.userInfo = function() {
+                $http({
+                    method: 'GET',
+                    url: '/userinfo',
+                    data: null,
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                    userInfo = res.data
+                    $scope.haveUserInfo = true
+
+                }, function err(res) {
+                    console.log(res)
+                    console.log("user is not logged in")
+                })
+            }
+
+            //$scope.removeFavorite purpose:
+            //Contains API call for when the user wants to delete a favorite, this will take a lotID and delete the favorite associated with that lotID and the user
+            $scope.removeFavorite = function() {
+                $http({
+                    method: 'DELETE',
+                    url: '/favorite/' + userInfo.favorites[Math.floor(Math.random() * userInfo.favorites.length)]['lotID'],
+                    headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+                }).then(function success(res) {
+                    console.log(res.data)
+                    //keeps userInfo up to date
+                    $scope.userInfo()
+                }, function err(res) {
+                    console.log(res)
+                    console.log("error deleting favorite")
+                })
+            }
+
+            //deletes jwt from local storage
+            $scope.logout = function() {
+                localStorage.removeItem("token")
+                $scope.msg = "logged out"
+            }
+        }])
+    </script>
+    <body ng-controller="login">
+        <label>Register</label>
+        <form ng-submit="register()">
+            <input type="text" ng-model="first" placeholder="first name">
+            <input type="text" ng-model="last" placeholder="last name">
+            <input type="text" ng-model="regUsername" placeholder="username">
+            <input type="text" ng-model="regPassword" placeholder="password">
+            <input type="text" ng-model="email" placeholder="email">
+            <input type="text" ng-model="phone" placeholder="phone number">
+            <input type="submit" value="register">
+        </form>
+
+        <label>Login</label>
+        <form ng-submit="login()">
+            <input type="text" ng-model="loginUsername" placeholder="username">
+            <input type="text" ng-model="loginPassword" placeholder="password">
+            <input type="submit" value="login">
+        </form>
+
+        $<input type="text" ng-model="bidAmount" placeholder="bid amount">
+        <button ng-click="bid()" ng-if="displayLots">place bid on random lot</button>
+        <button ng-click="avgbid()" ng-if="displayLots">request average bid on random lot</button>
+        <button ng-click="favorite()" ng-if="displayLots">make random lot a favorite</button>
+        <button ng-click="removeFavorite()" ng-if="haveUserInfo">remove a favorite lot from favorites</button>
+        <br>
+        <button ng-click="userInfo()">request user info</button>
+        <br>
+        <button ng-click="logout()">Log Out</button>
+        <div>{{msg}}</div>
+    </body>
+<html>

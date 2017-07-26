@@ -1,70 +1,205 @@
-var app
-app = angular.module('vacantlotsApp');
 
-app.config(function(uiGmapGoogleMapApiProvider) {
-    console.log('In config')
-    uiGmapGoogleMapApiProvider.configure({
-        //TODO: Factor this into another js file that isn't tracked with git?
-        key: "AIzaSyA5sCewJikG42pgRQOIJ_NjnVv3c6O_d6I",
-        v: '3.20', //defaults to latest 3.X anyhow
-        libraries: 'weather,geometry,visualization'
-    });
-})
 
-app.controller('MapCtrl', function($scope, uiGmapGoogleMapApi, $state, sharedProperties, $http) {
-    console.log('In controller')
-    // Do stuff with your $scope.
-    // Note: Some of the directives require at least something to be defined originally!
-    // e.g. $scope.markers = []
-    $scope.map = { center: { latitude: 40.7356357, longitude: -74.18 }, zoom: 13 };
+/**
+ * Creates google map and streetview populated with location markers. Handles clicks on the markers, which
+ * cause a request to find the nearest streetview location. The streetview point of view is then set to the
+ * marker position.
+ */
+angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', function($state, $http, sharedpropertiesService)
+{
+  var vm = this;
+  vm.sharedpropertiesService = sharedpropertiesService
 
-    // uiGmapGoogleMapApi is a promise.
-    // The "then" callback function provides the google.maps object.
-    uiGmapGoogleMapApi.then(function(maps) {
-    });
+  var center = new google.maps.LatLng(40.7356357, -74.18 );
+  vm.map = new google.maps.Map(document.getElementById('map'),
+  {
+    zoom: 13,
+    center: center,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
 
-    //Creates object containing info needed to create Google maps marker
-    var createMarker = function(i, address, latitude, longitude, idKey) {
-      if (idKey == null) {
-        idKey = "id";
+
+  vm.markers= [];
+  vm.locations = [];
+
+  vm.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
+  document.getElementById('streetview').style.display = 'none';
+  vm.sv = new google.maps.StreetViewService();
+
+  vm.infowindow = new google.maps.InfoWindow()
+
+  /**
+   * Promise to ensure the properties have been loaded
+   * either from the server or the sharedpropertiesService. The loading is
+   * asynchronous so we need a way to ensure that it is done.
+   */
+  //TODO: Make this less nested
+  var propertiesLoadedToVM = new Promise(function(resolve, reject) {
+    var getProperties = sharedpropertiesService.getProperties();
+    if (getProperties.length > 1){
+      vm.markers = getProperties;
+      resolve()
+    }
+    else{
+      $http.get('/map').then(function success(res)
+      {
+        processProperties(res)
+        resolve()
+      }, function err(res)
+      {
+        console.log(res)
+        reject()
+      });
+    }
+  });
+
+  /**
+   * Extracts useful information from property data sent from the server.
+   * It then it creates googleMaps markers for each property and saves to vm.
+   */
+  function processProperties(res)
+  {
+    var properties = res.data;
+    var address="";
+    var tmpmarkers = [];
+    var propertyname = "";
+    var propnamet;
+    console.log(properties[0]);
+
+    for (var i = 0; i < properties.length; i++)
+    {
+      property = properties[i];
+      propnamet= "";
+      propertyname ="";
+      propnamet = property.vitalStreetName.trim();
+      propnamet = propnamet.split(" ");
+      for (var x = 0; x < propnamet.length; x++)
+      {
+        propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
       }
-      var ret = {
-        latitude: latitude,
-        longitude: longitude,
-        title: address,
-        icon: 'https://cdn1.iconfinder.com/data/icons/freeline/32/home_house_real_estate-32.png'
-        //id: i
-      };
-      ret[idKey] = i;
-      return ret;
-    };
+      address =
+      property.vitalHouseNumber
+      + propertyname;
+      ;
 
-    var markers = [];
-    var properties;
-    // HTTP get to load property data from JSON file.
-    $http.get('/map').then(function success(res)
-            {
-                properties = res.data;
-                //TODO: Need some way to filter properties. There are too many to look at at once.
-                var numProperties = properties.length;
-                for (var i = 0; i < numProperties; i++) {
-                    property = properties[i]
-                    houseNumber = property.vitalHouseNumber
-                    street = property.vitalStreetName
-                    address = houseNumber + ' ' + street
-                    latitude = property.latitude
-                    longitude = property.longitude
-                    console.log(i, address, latitude, longitude)
-                    markers.push(createMarker(i, address, latitude, longitude))
-                }
-                $scope.markers = markers;
-            }, function err(res)
-            {
-                console.log(res);
-            });
+      address =
+      property.vitalHouseNumber
+      + property.vitalStreetName;
+      ;
+      var propertyLatLng = new google.maps.LatLng(property.latitude,
+          property.longitude);
+      var propertyMarker = new google.maps.Marker({
+        position: propertyLatLng
+      });
+      tmpmarkers.push(propertyMarker)
 
-    $scope.goBid = function (marker, event, model){
-               sharedProperties.setString(model.title)
-               $state.go('bidPage')
-           };
-});
+      vm.locations.push([address, property.latitude, property.longitude, i])
+    }
+    vm.markers = tmpmarkers;
+    // console.log("these are the markers");
+    console.log(vm.markers);
+    sharedpropertiesService.setProperties(vm.markers);
+  }
+
+  propertiesLoadedToVM.then(setupMap);
+
+  /**
+   * Initialize markers, marker clusterer, and panorama and then specify what to do
+   * when markers are clicked.
+   */
+  function setupMap()
+  {
+    vm.center = vm.map.getCenter();
+    vm.sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
+
+    for (var i = 0; i < vm.markers.length; i++)
+    {
+      var propertyMarker = vm.markers[i]
+      google.maps.event.addListener(propertyMarker, 'click',
+                                    setupPanoramaAtMarkerWrapper(vm, propertyMarker, i));
+    }
+
+    var markerCluster = new MarkerClusterer(vm.map,
+      vm.markers, {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m'});
+  }
+
+  /* We can't get some information from streetview until after we have gotten the panorama.*/
+  vm.processSVData = function(data, status)
+  {
+    if (status === 'OK')
+    {
+      vm.panoramaDate = data.imageDate
+      vm.panorama.setPano(data.location.pano);
+    }
+    else
+    {
+      console.error('Street View data not found for this location.');
+    }
+  }
+
+  vm.clicked = function()
+  {
+    console.log('AAAAAAAABBBBB')
+    $state.go('bidPage');
+  }
+
+
+}]);
+
+/* Using wrappers here so that I can define the callback function with variables given to the wrapper function */
+function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i)
+{
+ /**
+  * Given a marker position, it finds the nearest streetView panorama and gets it.
+  * This is an asynchronous call, so we use a listener that will execute the
+  * the pointing of the streetview after we have the panorama (which contains its location).
+  */
+ function setupPanoramaAtMarker() {
+   var markerPosition = propertyMarker.getPosition()
+   vm.sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
+
+   google.maps.event.addListenerOnce(vm.panorama, 'status_changed',
+                                     pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i));
+ }
+ return setupPanoramaAtMarker;
+}
+
+function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i)
+{
+ /**
+  * Once we have gotten all the information we can set the infowindow content
+  * and set the point of view or the streetview to point towards the selected marker.
+  */
+  function pointPanoramaAndSetInfoWindow()
+  {
+    var address = vm.locations[i][0];
+    var currentinfowindowHTML =
+      '<h1>'+address+'</h1>'
+    // + '<div>Image date: ' + vm.panoramaDate+'</div>'
+    + '<div><button id="bidButton" class="btn genbutton">Bid</button></div>';
+
+    vm.infowindow.setContent(currentinfowindowHTML);
+    vm.infowindow.open(vm.map, propertyMarker);
+    document.getElementById('streetview').style.display = '';
+    // FIXME: Can we do this with angular instead?
+    document.getElementById("bidButton").addEventListener("click", vm.clicked);
+
+    vm.sharedpropertiesService.setProperty(address);
+
+    var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
+                                                                    markerPosition);
+    vm.panorama.setPov({
+      heading: heading,
+      pitch: 0
+    });
+    vm.panorama.setVisible(true);
+    setTimeout(function() {
+    marker = new google.maps.Marker({
+      position: markerPosition,
+      map: vm.panorama,
+    });
+    if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+  }
+
+  return pointPanoramaAndSetInfoWindow
+}

@@ -12,11 +12,11 @@
             
             <h1> Welcome </h1>
             
-            <form id="login_form" >
+            <form id="login_form" ng-submit="login.submit()" >
                 Username
-                <input type="text" class="form-control"></input>
+                <input name="Username" type="text" class="form-control" ng-model="login.username" required></input>
                 Password
-                <input type="password" class="form-control"></input>
+                <input name="Password" type="password" class="form-control" ng-model="login.password" required></input>
 
                 <button type="submit" class="btn submit_form" >Login</button>
             </form>
