@@ -114,9 +114,9 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
     for (var i = 0; i < vm.markers.length; i++)
     {
-      var propertyMarker = vm.markers[i]
+      var propertyMarker = vm.markers[i];
       google.maps.event.addListener(propertyMarker, 'click',
-                                    setupPanoramaAtMarkerWrapper(vm, propertyMarker, i));
+                                    setupPanoramaAtMarkerWrapper(propertyMarker, i));
     }
 
     var markerCluster = new MarkerClusterer(vm.map,
@@ -144,62 +144,72 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   }
 
 
-}]);
 
-/* Using wrappers here so that I can define the callback function with variables given to the wrapper function */
-function setupPanoramaAtMarkerWrapper(vm, propertyMarker, i)
-{
- /**
-  * Given a marker position, it finds the nearest streetView panorama and gets it.
-  * This is an asynchronous call, so we use a listener that will execute the
-  * the pointing of the streetview after we have the panorama (which contains its location).
-  */
- function setupPanoramaAtMarker() {
-   var markerPosition = propertyMarker.getPosition()
-   vm.sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
 
-   google.maps.event.addListenerOnce(vm.panorama, 'status_changed',
-                                     pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i));
- }
- return setupPanoramaAtMarker;
-}
 
-function pointPanoramaAndSetInfoWindowWrapper(vm, markerPosition, propertyMarker, i)
-{
- /**
-  * Once we have gotten all the information we can set the infowindow content
-  * and set the point of view or the streetview to point towards the selected marker.
-  */
-  function pointPanoramaAndSetInfoWindow()
+  //This is in the global scope, might want to integrate it back in the controller
+
+  /* Using wrappers here so that I can define the callback function with variables given to the wrapper function */
+  function setupPanoramaAtMarkerWrapper(propertyMarker, i)
   {
-    var address = vm.locations[i][0];
-    var currentinfowindowHTML =
-      '<h1>'+address+'</h1>'
-    // + '<div>Image date: ' + vm.panoramaDate+'</div>'
-    + '<div><button id="bidButton" class="btn genbutton">Bid</button></div>';
+   /**
+    * Given a marker position, it finds the nearest streetView panorama and gets it.
+    * This is an asynchronous call, so we use a listener that will execute the
+    * the pointing of the streetview after we have the panorama (which contains its location).
+    */
+   function setupPanoramaAtMarker() {
+     var markerPosition = propertyMarker.getPosition()
+     vm.sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
 
-    vm.infowindow.setContent(currentinfowindowHTML);
-    vm.infowindow.open(vm.map, propertyMarker);
-    document.getElementById('streetview').style.display = '';
-    // FIXME: Can we do this with angular instead?
-    document.getElementById("bidButton").addEventListener("click", vm.clicked);
-
-    vm.sharedpropertiesService.setProperty(address);
-
-    var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
-                                                                    markerPosition);
-    vm.panorama.setPov({
-      heading: heading,
-      pitch: 0
-    });
-    vm.panorama.setVisible(true);
-    setTimeout(function() {
-    marker = new google.maps.Marker({
-      position: markerPosition,
-      map: vm.panorama,
-    });
-    if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+     google.maps.event.addListenerOnce(vm.panorama, 'status_changed',
+                                       pointPanoramaAndSetInfoWindowWrapper(markerPosition, propertyMarker, i));
+   }
+   return setupPanoramaAtMarker;
   }
 
-  return pointPanoramaAndSetInfoWindow
-}
+  function pointPanoramaAndSetInfoWindowWrapper(markerPosition, propertyMarker, i)
+  {
+   /**
+    * Once we have gotten all the information we can set the infowindow content
+    * and set the point of view or the streetview to point towards the selected marker.
+    */
+    function pointPanoramaAndSetInfoWindow()
+    {
+      console.log("VM locations");
+      console.log(vm.locations);
+      console.log("markers");
+      console.log(vm.markers);
+      var address = vm.locations[i][0];
+      var currentinfowindowHTML =
+        '<h1>'+address+'</h1>'
+      // + '<div>Image date: ' + vm.panoramaDate+'</div>'
+      + '<div><button id="bidButton" class="btn genbutton">Bid</button></div>';
+
+      vm.infowindow.setContent(currentinfowindowHTML);
+      vm.infowindow.open(vm.map, propertyMarker);
+      document.getElementById('streetview').style.display = '';
+      // FIXME: Can we do this with angular instead?
+      document.getElementById("bidButton").addEventListener("click", vm.clicked);
+
+      vm.sharedpropertiesService.setProperty(address);
+
+      var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
+                                                                      markerPosition);
+      vm.panorama.setPov({
+        heading: heading,
+        pitch: 0
+      });
+      vm.panorama.setVisible(true);
+      setTimeout(function() {
+      marker = new google.maps.Marker({
+        position: markerPosition,
+        map: vm.panorama,
+      });
+      if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+    }
+
+    return pointPanoramaAndSetInfoWindow
+  }
+
+
+}]);
