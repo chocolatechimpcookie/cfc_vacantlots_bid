@@ -8,7 +8,7 @@
 angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', function($state, $http, sharedpropertiesService)
 {
   var vm = this;
-  vm.sharedpropertiesService = sharedpropertiesService
+  vm.sharedpropertiesService = sharedpropertiesService;
 
   var center = new google.maps.LatLng(40.7356357, -74.18 );
   vm.map = new google.maps.Map(document.getElementById('map'),
@@ -25,8 +25,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   vm.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
   document.getElementById('streetview').style.display = 'none';
   vm.sv = new google.maps.StreetViewService();
-
-  vm.infowindow = new google.maps.InfoWindow()
+  vm.infowindow = new google.maps.InfoWindow();
 
   /**
    * Promise to ensure the properties have been loaded
@@ -34,21 +33,25 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
    * asynchronous so we need a way to ensure that it is done.
    */
   //TODO: Make this less nested
-  var propertiesLoadedToVM = new Promise(function(resolve, reject) {
+  var propertiesLoadedToVM = new Promise(function(resolve, reject)
+  {
     var getProperties = sharedpropertiesService.getProperties();
-    if (getProperties.length > 1){
+    if (getProperties.length > 1)
+    {
       vm.markers = getProperties;
       resolve()
     }
-    else{
+    else
+    {
       $http.get('/map').then(function success(res)
       {
-        processProperties(res)
-        resolve()
-      }, function err(res)
+        processProperties(res);
+        resolve();
+      },
+      function err(res)
       {
-        console.log(res)
-        reject()
+        console.log(res);
+        reject();
       });
     }
   });
@@ -61,9 +64,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   {
     var properties = res.data;
     var address="";
-    var tmpmarkers = [];
+    vm.markers = [];
     var propertyname = "";
     var propnamet;
+    console.log("properties without 0");
+    console.log(properties);
+    console.log("Properties with 0");
     console.log(properties[0]);
 
     for (var i = 0; i < properties.length; i++)
@@ -77,26 +83,20 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       {
         propertyname +=" " + propnamet[x][0] +  propnamet[x].slice(1).toLowerCase();
       }
-      address =
-      property.vitalHouseNumber
-      + propertyname;
-      ;
+      address = property.vitalHouseNumber + propertyname;
 
-      address =
-      property.vitalHouseNumber
-      + property.vitalStreetName;
-      ;
-      var propertyLatLng = new google.maps.LatLng(property.latitude,
-          property.longitude);
-      var propertyMarker = new google.maps.Marker({
-        position: propertyLatLng
-      });
-      tmpmarkers.push(propertyMarker)
+      var propertyLatLng = new google.maps.LatLng(property.latitude, property.longitude);
+      var propertyMarker = new google.maps.Marker({ position: propertyLatLng });
 
-      vm.locations.push([address, property.latitude, property.longitude, i])
+      // tmpmarkers.push(propertyMarker);
+      vm.markers.push(propertyMarker);
+      vm.locations.push([address, property.latitude, property.longitude, property.lotID]);
+      //i is redundant
     }
-    vm.markers = tmpmarkers;
-    // console.log("these are the markers");
+    // vm.markers = tmpmarkers;
+    console.log("these are the locations");
+    console.log(vm.locations);
+    console.log("these are the markers");
     console.log(vm.markers);
     sharedpropertiesService.setProperties(vm.markers);
   }
@@ -157,12 +157,12 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     * This is an asynchronous call, so we use a listener that will execute the
     * the pointing of the streetview after we have the panorama (which contains its location).
     */
-   function setupPanoramaAtMarker() {
+   function setupPanoramaAtMarker()
+   {
      var markerPosition = propertyMarker.getPosition()
      vm.sv.getPanorama({location: markerPosition, radius: 50}, vm.processSVData);
-
      google.maps.event.addListenerOnce(vm.panorama, 'status_changed',
-                                       pointPanoramaAndSetInfoWindowWrapper(markerPosition, propertyMarker, i));
+      pointPanoramaAndSetInfoWindowWrapper(markerPosition, propertyMarker, i));
    }
    return setupPanoramaAtMarker;
   }
@@ -175,11 +175,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     */
     function pointPanoramaAndSetInfoWindow()
     {
-      console.log("VM locations");
-      console.log(vm.locations);
-      console.log("markers");
-      console.log(vm.markers);
       var address = vm.locations[i][0];
+      //it's an array of an array
       var currentinfowindowHTML =
         '<h1>'+address+'</h1>'
       // + '<div>Image date: ' + vm.panoramaDate+'</div>'
@@ -195,17 +192,20 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 
       var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
                                                                       markerPosition);
-      vm.panorama.setPov({
+      vm.panorama.setPov(
+      {
         heading: heading,
         pitch: 0
       });
       vm.panorama.setVisible(true);
-      setTimeout(function() {
-      marker = new google.maps.Marker({
-        position: markerPosition,
-        map: vm.panorama,
-      });
-      if (marker && marker.setMap) marker.setMap(vm.panorama);}, 500);
+      setTimeout(function()
+      {
+        marker = new google.maps.Marker({
+          position: markerPosition,
+          map: vm.panorama,
+        });
+        if (marker && marker.setMap) marker.setMap(vm.panorama);
+      }, 500);
     }
 
     return pointPanoramaAndSetInfoWindow
