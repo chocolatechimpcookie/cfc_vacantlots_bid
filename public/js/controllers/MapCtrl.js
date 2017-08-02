@@ -33,13 +33,16 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
    * asynchronous so we need a way to ensure that it is done.
    */
   //TODO: Make this less nested
+
+
+  //**It's a good idea to check how new property data is here via a link like this
   var propertiesLoadedToVM = new Promise(function(resolve, reject)
   {
     var getProperties = sharedpropertiesService.getProperties();
     if (getProperties.length > 1)
     {
       vm.markers = getProperties;
-      resolve()
+      resolve();
     }
     else
     {
@@ -188,7 +191,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       // FIXME: Can we do this with angular instead?
       document.getElementById("bidButton").addEventListener("click", vm.clicked);
 
-      vm.sharedpropertiesService.setProperty(address);
+      vm.sharedpropertiesService.setProperty(vm.locations[i]);
 
       var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
                                                                       markerPosition);

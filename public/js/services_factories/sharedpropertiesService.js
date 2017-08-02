@@ -2,6 +2,7 @@ angular.module('vacantlotsApp').service('sharedpropertiesService', function()
   {
     var property = {};
     var properties = [];
+
     return {
         getProperty: function()
         {

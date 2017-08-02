@@ -5,7 +5,24 @@
 - Is sharedpropertiesService being applied appropriately? it is being put on vm
 - resolve?
 - reject?
-
+- maybe eventually get rid of bidpage? Do I even need it?
+  - Depends on how much information I am willing to put in the bidPage
+  - Depends on whether its a good idea to keep it there
+  - Maybe get rid of bidview and integrate bid functionality?
+  - Benefits of getting rid of bid page
+    - Less reloading of the map?
+    - Wouldn’t have to switch views
+    - Less jumpy for the user
+    - The user would prefer to see all this info before bidding. Putting the info
+    all in a bidpage breaks the flow of things. Though you could try to balance stuff.
+    - I won't have to repeat any information or functionality in the bid page
+    - Won't have to set up returning the current property
+  - Drawbacks
+    - Harder to display things while having all this map stuff in its way? May have responsive issues
+    Though of course, I could put the bid content within the same infowindow, even hide and show stuff
+    - More code seperation having them seperate
+- what does resolve reject do
+- Issue of page reloading, if you are on a bid or specific property, you lose your spot
 
 ### Brainstorming/Scratch
 - *Need* to fix the bid id first since you gotta link it to bid view and service
@@ -26,6 +43,12 @@
   - what should be pushed to sharedpropertiesService?
     - depends on what gets saved when you return to maps
     - definitely locations
+    - Do I need markers? What's the difference?
+    - Do I need property? Considering I can just access the properties?
+    - What is it doing?
+      - check in beginning
+      - vm.markers -> setProperties
+      - pointPanoramaAndSetInfoWindow -> setProperty of locations[]
   - vm.markers
     - *sharedpropertiesService uses it on setProperties, why tho; why not locations*
     - Looks like it may just be what is sent to GoogleMaps and processed
@@ -47,7 +70,6 @@
     - vm.locations
     - vm.markers -->
   - What is lotID and how does it differ from `_id`?
-  - `_id` and other properties need to be in the sharedpropertiesService
   - need the other icons
   - Where is the average bid?
   - Where is the bid calls?
