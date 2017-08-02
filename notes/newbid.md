@@ -23,6 +23,7 @@
     - More code seperation having them seperate
 - what does resolve reject do
 - Issue of page reloading, if you are on a bid or specific property, you lose your spot
+- improve modal, maybe integrate a function where until click close, next state does not fire
 
 ### Brainstorming/Scratch
 - *Need* to fix the bid id first since you gotta link it to bid view and service

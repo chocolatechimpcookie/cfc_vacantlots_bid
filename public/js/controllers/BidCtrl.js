@@ -1,4 +1,4 @@
- angular.module('vacantlotsApp').controller('BidCtrl',  ['$http', 'sharedpropertiesService', function($http, sharedpropertiesService)
+ angular.module('vacantlotsApp').controller('BidCtrl',  ['$http', '$state', 'sharedpropertiesService', function($http, $state, sharedpropertiesService)
  {
     console.log('In bid control.');
   	var vm = this;
@@ -17,6 +17,7 @@
     }).then(function success(res)
     {
         console.log(res.data)
+        vm.bidAverage = "$ " + res.data.avg;
         //number of bids (by unique users) is res.data.bids,
         //average of bids is res.data.avg
     }, function err(res)
@@ -30,16 +31,22 @@
       $http({
           method: 'POST',
           url: '/bid',
-          data: {bid: $scope.bidAmount,
-                 lotID: lots[Math.floor(Math.random() * lots.length)]['lotID']},
+          data: {bid: vm.bidAmount,
+                 lotID: vm.bidpropertyLotid},
           headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
       }).then(function success(res) {
+          console.log("response bid");
           console.log(res.data)
           //keeps userInfo up to date
-          $scope.userInfo()
+          // $scope.userInfo()
+          popupModal("Bid", "Your bid has been successful");
+          $state.go('homePage');
+
       }, function err(res) {
           console.log(res)
           console.log("error bidding")
+          popupModal("Bid", "Your bid has not been succesful");
+
       })
     }
 
