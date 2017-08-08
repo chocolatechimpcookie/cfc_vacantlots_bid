@@ -18,19 +18,15 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   if(sharedpropertiesService.getCenter())
   {
     console.log("truemap");
-    // var center = new google.maps.LatLng(40.7356357, -74.18 );
     console.log(sharedpropertiesService.getCenter());
     center = sharedpropertiesService.getCenter();
     zoom = sharedpropertiesService.getZoom();
-    // center = new google.maps.LatLng(43, -74.18 );
-
   }
   else
   {
     console.log("falsemap");
     center = new google.maps.LatLng(40.7356357, -74.18 );
     zoom = 13;
-
   }
 
 
@@ -139,21 +135,6 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
    */
   function setupMap()
   {
-    console.log(" get center in setup map");
-    console.log(vm.map.getCenter());
-
-    // if(sharedpropertiesService.getCenter())
-    // {
-    //   console.log("existing center");
-    //   console.log(sharedpropertiesService.getCenter());
-    //   vm.center = sharedpropertiesService.getCenter();
-    // }
-    // else
-    // {
-    //   console.log("not exising center");
-    //   vm.center = vm.map.getCenter();
-    //
-    // }
     vm.center = vm.map.getCenter();
 
     vm.sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);

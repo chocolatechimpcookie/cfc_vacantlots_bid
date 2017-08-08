@@ -2,6 +2,8 @@
 - Need to fix the bid id first since you gotta link it to bid view and service
 - then bid view
 - then bid imagePath
+- bid page
+  - Have a custom URL so that you can return to a particular item
 - if there is a way to bring the user back to where they were in on the map, position wise
 - Is sharedpropertiesService being applied appropriately? it is being put on vm
 - resolve?
@@ -27,6 +29,9 @@
 - improve modal, maybe integrate a function where until click close, next state does not fire
 
 ### Brainstorming/Scratch
+- I want average bid on infowindow and other info
+  - Will have to setup service with it
+  - is the infowindow built at the time of clicking or is it setup for each at the marker?
 - *Need* to fix the bid id first since you gotta link it to bid view and service
   - vm.locations?
     - What is position 3 in 1086 - 1096 McCarter in vm.locations?
@@ -118,13 +123,16 @@
   - click 194 newton, bug
     - Uncaught TypeError: Cannot read property 'addEventListener' of null
     - MapCtrl.js:177 Uncaught TypeError: Cannot read property '0' of undefined
-  - Uncaught TypeError: Cannot read property '0' of undefined
-    at Wf.pointPanoramaAndSetInfoWindow (MapCtrl.js:182)
-    at Wf.<anonymous> (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:102)
-    at Object._.A.trigger (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:101)
-    at Ib (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:38)
-    at Ib (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:38)
-    at Ib (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:38)
-    at o3._.k.set (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:103)
-    at streetview.js:96
-    at js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:35
+  - Cannot read property '0' of undefined
+    - Happens when clicking random markers
+    - Uncaught TypeError: Cannot read property '0' of undefined
+      at Wf.pointPanoramaAndSetInfoWindow (MapCtrl.js:182)
+      at Wf.<anonymous> (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:102)
+      at Object._.A.trigger (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:101)
+      at Ib (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:38)
+      at Ib (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:38)
+      at Ib (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:38)
+      at o3._.k.set (js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:103)
+      at streetview.js:96
+      at js?key=AIzaSyB_vAujLUGyZ7Rt5S3Ah36-jmliZ69uRGM:35
+  - angular1_6_1.min.js:122 Error: Could not resolve 'myBids' from state '
