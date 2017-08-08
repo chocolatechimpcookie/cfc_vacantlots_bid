@@ -44,7 +44,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   vm.locations = [];
 
   vm.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'));
-  document.getElementById('streetview').style.display = 'none';
+  // document.getElementById('streetview').style.display = 'none';
   vm.sv = new google.maps.StreetViewService();
   vm.infowindow = new google.maps.InfoWindow();
 
@@ -242,23 +242,28 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
         console.log("vmlocations");
         console.log(vm.locations[i]);
         console.log(average_bid);
-        var currentinfowindowHTML =
-          '<h1>'+address+'</h1>'
-        // + '<div>Image date: ' + vm.panoramaDate+'</div>'
-        +'<h2>'+ average_bid +'</h2>'
-        +'<p></p>'
-        + '<button id="bookmark"><i class="material-icons" style="font-size:30px; width:100%">bookmark</i></button><br>'
-        + '<button><i class="material-icons" style="font-size:30px;  width:100%">camera enhance</i></button><br>'
-        + '<div><button id="bidButton" class="btn genbutton">Bid</button></div>';
 
+        var currentinfowindowHTML =
+        '<div style="width: 200px; overflow: hidden;">'
+          + '<h2>'+address+'</h1>'
+          // + '<div>Image date: ' + vm.panoramaDate+'</div>'
+          +'<h3>'+ average_bid +'</h2>'
+          +'<p></p>'
+          + '<button id="bookmark" style="margin-right: 5px; width:40px;"><i class="material-icons" style="">bookmark</i></button>'
+          + '<button id="panorama_button"style="width:40px;"><i class="material-icons" style="">camera enhance</i></button>'
+          + '<br><br>'
+          + '<button id="bidButton" class="btn genbutton">Bid</button>';
+        + "</div>"
 
         vm.infowindow.setContent(currentinfowindowHTML);
         vm.infowindow.open(vm.map, propertyMarker);
-        document.getElementById('streetview').style.display = '';
         // FIXME: Can we do this with angular instead?
         document.getElementById("bidButton").addEventListener("click", vm.clicked);
+        document.getElementById("panorama_button").addEventListener("click", vm.panorama_clicked);
+
         vm.sharedpropertiesService.setProperty(vm.locations[i]);
-        // vm.sharedpropertiesService.setCenter(vm.map.getCenter());
+
+
 
         var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
                                                                         markerPosition);
@@ -267,7 +272,9 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           heading: heading,
           pitch: 0
         });
+
         vm.panorama.setVisible(true);
+
         setTimeout(function()
         {
           marker = new google.maps.Marker({
@@ -276,10 +283,22 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
           });
           if (marker && marker.setMap) marker.setMap(vm.panorama);
         }, 500);
+
       }
     }
 
     return pointPanoramaAndSetInfoWindow
+  }
+
+  // vm.processSVData = function(data, status)
+
+  vm.panorama_clicked = function()
+  {
+    // document.getElementById("modal_text_header").innerHTML = header;
+    // document.getElementById("modal_text_body").innerHTML = message;
+    // document.getElementById('streetview').style.display = '';
+
+    $("#popup_preview_property").modal('show');
   }
 
 

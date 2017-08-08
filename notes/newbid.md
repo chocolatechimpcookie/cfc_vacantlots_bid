@@ -1,43 +1,22 @@
-**Pick one thing at a time to fix**
-<!-- - Need to fix the bid id first since you gotta link it to bid view and service -->
-- **then bid view**
-- **then bid imagePath**
+### Pick one thing at a time to fix
 - when you press X on infowindow, the infowindow should disappear and so should show my property
-- bid page
-  - Have a custom URL so that you can return to a particular item
-<!-- - if there is a way to bring the user back to where they were in on the map, position wise -->
-<!-- - Is sharedpropertiesService being applied appropriately? it is being put on vm -->
+- Have a custom URL so that you can return to a particular item
 - resolve?
 - reject?
 - Issue of page reloading, if you are on a bid or specific property, you lose your spot
 - improve modal, maybe integrate a function where until click close, next state does not fire
 - **Filters**
-  - https://appendto.com/2016/09/advanced-google-maps-with-javascript-filtering-and-displaying-information/
--
+  -https://appendto.com/2016/09/advanced-google-maps-with-javascript-filtering-and-displaying-information/
 - login, logged out restrictions
   - Capability of bidding needs to be restricted to who logged in.
   - Logging out on view X, will send you back to view Y
-- Change infowindow UI
-<!-- - Why are these functions outside of the controller?
-    - Won't need to pass vm when its in there -->
 - Why do callback functions need to be wrapped?
 - Turn DOM manip on map view into jquery?
-- Property view
+- Preview Property view
   - How can I manipulate its position?
+  - Put an option to it in a button in the infowindow and then stick it in a modal
+    - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
 - Fix DOM manipulation on bidview
-- Bidding calls
-  - retrieve
-    - existing bids on something
-    - average bid
-      - In bid view and on infowindow
-        - When you open info window, grab it
-        - then push it to a service
-    - your favorites
-    - starred
-  - send
-    - Placing bids
-<!-- - bidview
-  - Streetname case? -->
 - Change icons for individual places
 
 ### Brainstorming/Scratch
@@ -94,6 +73,26 @@
   - Where is the bid calls?
   - So some properties don't have an available street view, and this needs to be handled
   - One is for information for info window, one is for the markers
+
+
+### Done
+<!-- - if there is a way to bring the user back to where they were in on the map, position wise -->
+<!-- - Is sharedpropertiesService being applied appropriately? it is being put on vm -->
+<!-- - Bidding calls
+  - retrieve
+    - existing bids on something
+    - average bid
+      - In bid view and on infowindow
+        - When you open info window, grab it
+        - then push it to a service
+    - your favorites
+    - starred
+  - send
+    - Placing bids -->
+<!-- - bidview
+  - Streetname case? -->
+  <!-- - Why are these functions outside of the controller?
+      - Won't need to pass vm when its in there -->
 
 
 

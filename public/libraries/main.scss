@@ -21,7 +21,7 @@
   }
 }
 
-#popup_modal
+#popup_modal, #popup_preview_property
 {
     width: 90% !important;
     padding-right:0 !important;
@@ -81,6 +81,66 @@
         font-size: 20px;
     }
 }
+
+
+
+
+#popup_preview_property
+{
+    width: 60% !important;
+    height: 60% !important;
+
+    .modal-dialog
+    {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    .modal-content, .modal-body
+    {
+      width: 100% !important;
+      height: 100% !important;
+      // padding-right:0 !important;
+    }
+
+    #streetview
+    {
+      width: 100% !important;
+      height: 100% !important;
+      overflow: auto;
+    }
+
+
+    .modal-footer
+    {
+        border:none;
+        text-align: center;
+
+        button
+        {
+            height: 60px;
+            //margin-top: 15px;
+            //margin-bottom: 15px;
+            width:214px;
+            color:white;
+            font-weight: 800;
+            font-size: 25px;
+            background-color: #00BFFF;
+
+            margin-left: auto;
+            margin-right: auto;
+            //text-align: center;
+
+            &:hover, &:active
+            {
+              //box-shadow: 2px 1pbx 1px 1px grey;
+               background-color:#1E90FF;
+            }
+        }
+    }
+
+
+}
+
 
 //default values
 
