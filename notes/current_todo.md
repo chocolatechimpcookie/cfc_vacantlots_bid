@@ -1,7 +1,8 @@
 **Pick one thing at a time to fix**
-- Need to fix the bid id first since you gotta link it to bid view and service
-- then bid view
-- then bid imagePath
+<!-- - Need to fix the bid id first since you gotta link it to bid view and service -->
+- **then bid view**
+- **then bid imagePath**
+- when you press X on infowindow, the infowindow should disappear and so should show my property
 - bid page
   - Have a custom URL so that you can return to a particular item
 - if there is a way to bring the user back to where they were in on the map, position wise
@@ -27,6 +28,8 @@
 - what does resolve reject do
 - Issue of page reloading, if you are on a bid or specific property, you lose your spot
 - improve modal, maybe integrate a function where until click close, next state does not fire
+- **Filters**
+  - https://appendto.com/2016/09/advanced-google-maps-with-javascript-filtering-and-displaying-information/
 
 ### Brainstorming/Scratch
 - I want average bid on infowindow and other info
