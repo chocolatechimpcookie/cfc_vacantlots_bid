@@ -208,35 +208,75 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     {
       var address = vm.locations[i][0];
       //it's an array of an array
-      var currentinfowindowHTML =
-        '<h1>'+address+'</h1>'
-      // + '<div>Image date: ' + vm.panoramaDate+'</div>'
-      + '<div><button id="bidButton" class="btn genbutton">Bid</button></div>';
-
-      vm.infowindow.setContent(currentinfowindowHTML);
-      vm.infowindow.open(vm.map, propertyMarker);
-      document.getElementById('streetview').style.display = '';
-      // FIXME: Can we do this with angular instead?
-      document.getElementById("bidButton").addEventListener("click", vm.clicked);
-      vm.sharedpropertiesService.setProperty(vm.locations[i]);
-      // vm.sharedpropertiesService.setCenter(vm.map.getCenter());
-
-      var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
-                                                                      markerPosition);
-      vm.panorama.setPov(
+      var average_bid;
+      $http(
       {
-        heading: heading,
-        pitch: 0
+          method: 'GET',
+          url: '/avgbid/' + vm.locations[i][3],
+          data: null,
+          headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+      }).then(function success(res)
+      {
+          console.log("res data");
+          console.log(res.data)
+          if (res.data.avg)
+          {
+            average_bid = "$" + res.data.avg;
+          }
+          else
+          {
+            average_bid = "No bids";
+          }
+          postCalls();
+      }, function err(res)
+      {
+          console.log(res)
+          console.log("error retrieving average bid")
       });
-      vm.panorama.setVisible(true);
-      setTimeout(function()
+
+
+
+
+      function postCalls()
       {
-        marker = new google.maps.Marker({
-          position: markerPosition,
-          map: vm.panorama,
+        console.log("vmlocations");
+        console.log(vm.locations[i]);
+        console.log(average_bid);
+        var currentinfowindowHTML =
+          '<h1>'+address+'</h1>'
+        // + '<div>Image date: ' + vm.panoramaDate+'</div>'
+        +'<h2>'+ average_bid +'</h2>'
+        +'<p></p>'
+        + '<button id="bookmark"><i class="material-icons" style="font-size:30px; width:100%">bookmark</i></button><br>'
+        + '<button><i class="material-icons" style="font-size:30px;  width:100%">camera enhance</i></button><br>'
+        + '<div><button id="bidButton" class="btn genbutton">Bid</button></div>';
+
+
+        vm.infowindow.setContent(currentinfowindowHTML);
+        vm.infowindow.open(vm.map, propertyMarker);
+        document.getElementById('streetview').style.display = '';
+        // FIXME: Can we do this with angular instead?
+        document.getElementById("bidButton").addEventListener("click", vm.clicked);
+        vm.sharedpropertiesService.setProperty(vm.locations[i]);
+        // vm.sharedpropertiesService.setCenter(vm.map.getCenter());
+
+        var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
+                                                                        markerPosition);
+        vm.panorama.setPov(
+        {
+          heading: heading,
+          pitch: 0
         });
-        if (marker && marker.setMap) marker.setMap(vm.panorama);
-      }, 500);
+        vm.panorama.setVisible(true);
+        setTimeout(function()
+        {
+          marker = new google.maps.Marker({
+            position: markerPosition,
+            map: vm.panorama,
+          });
+          if (marker && marker.setMap) marker.setMap(vm.panorama);
+        }, 500);
+      }
     }
 
     return pointPanoramaAndSetInfoWindow

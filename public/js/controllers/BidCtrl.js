@@ -8,6 +8,7 @@
     vm.bidAmount;
     console.log(vm.bidpropertyAddress);
 
+    //thinking of keeping this here in case I integrate URL -> bid page
     $http(
     {
         method: 'GET',
