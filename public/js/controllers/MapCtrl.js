@@ -9,15 +9,40 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
 {
   var vm = this;
   vm.sharedpropertiesService = sharedpropertiesService;
+  // if (vm.map.getCenter())
+  vm.map = false;
+  var center;
+  var zoom;
+  console.log(" get center before");
+  // console.log(vm.map.getCenter());
+  if(sharedpropertiesService.getCenter())
+  {
+    console.log("truemap");
+    // var center = new google.maps.LatLng(40.7356357, -74.18 );
+    console.log(sharedpropertiesService.getCenter());
+    center = sharedpropertiesService.getCenter();
+    zoom = sharedpropertiesService.getZoom();
+    // center = new google.maps.LatLng(43, -74.18 );
 
-  var center = new google.maps.LatLng(40.7356357, -74.18 );
+  }
+  else
+  {
+    console.log("falsemap");
+    center = new google.maps.LatLng(40.7356357, -74.18 );
+    zoom = 13;
+
+  }
+
+
   vm.map = new google.maps.Map(document.getElementById('map'),
   {
-    zoom: 13,
+    zoom: zoom,
     center: center,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
 
+  console.log(" get center before");
+  console.log(vm.map.getCenter());
 
   vm.markers= [];
   vm.locations = [];
@@ -26,6 +51,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   document.getElementById('streetview').style.display = 'none';
   vm.sv = new google.maps.StreetViewService();
   vm.infowindow = new google.maps.InfoWindow();
+
 
   /**
    * Promise to ensure the properties have been loaded
@@ -75,6 +101,7 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     console.log("Properties with 0");
     console.log(properties[0]);
 
+
     for (var i = 0; i < properties.length; i++)
     {
       property = properties[i];
@@ -112,7 +139,23 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
    */
   function setupMap()
   {
+    console.log(" get center in setup map");
+    console.log(vm.map.getCenter());
+
+    // if(sharedpropertiesService.getCenter())
+    // {
+    //   console.log("existing center");
+    //   console.log(sharedpropertiesService.getCenter());
+    //   vm.center = sharedpropertiesService.getCenter();
+    // }
+    // else
+    // {
+    //   console.log("not exising center");
+    //   vm.center = vm.map.getCenter();
+    //
+    // }
     vm.center = vm.map.getCenter();
+
     vm.sv.getPanorama({location: vm.center, radius: 50}, vm.processSVData);
 
     for (var i = 0; i < vm.markers.length; i++)
@@ -143,6 +186,10 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   vm.clicked = function()
   {
     console.log('AAAAAAAABBBBB')
+    sharedpropertiesService.setCenter(vm.map.getCenter());
+    sharedpropertiesService.setZoom(vm.map.getZoom());
+    console.log("vmmap");
+    console.log(vm.map.getZoom());
     $state.go('bidPage');
   }
 
@@ -190,8 +237,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
       document.getElementById('streetview').style.display = '';
       // FIXME: Can we do this with angular instead?
       document.getElementById("bidButton").addEventListener("click", vm.clicked);
-
       vm.sharedpropertiesService.setProperty(vm.locations[i]);
+      // vm.sharedpropertiesService.setCenter(vm.map.getCenter());
 
       var heading = google.maps.geometry.spherical.computeHeading(vm.panorama.getLocation().latLng,
                                                                       markerPosition);

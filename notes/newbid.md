@@ -2,6 +2,7 @@
 - Need to fix the bid id first since you gotta link it to bid view and service
 - then bid view
 - then bid imagePath
+- if there is a way to bring the user back to where they were in on the map, position wise
 - Is sharedpropertiesService being applied appropriately? it is being put on vm
 - resolve?
 - reject?
