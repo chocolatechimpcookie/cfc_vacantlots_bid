@@ -1,24 +1,36 @@
-### Pick one thing at a time to fix
-- when you press X on infowindow, the infowindow should disappear and so should show my property
-- Have a custom URL so that you can return to a particular item
-- resolve?
-- reject?
-- Issue of page reloading, if you are on a bid or specific property, you lose your spot
-- improve modal, maybe integrate a function where until click close, next state does not fire
-- **Filters**
-  -https://appendto.com/2016/09/advanced-google-maps-with-javascript-filtering-and-displaying-information/
-- login, logged out restrictions
-  - Capability of bidding needs to be restricted to who logged in.
-  - Logging out on view X, will send you back to view Y
-- Why do callback functions need to be wrapped?
-- Turn DOM manip on map view into jquery?
-- Preview Property view
-  - How can I manipulate its position?
-  - Put an option to it in a button in the infowindow and then stick it in a modal
-    - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
-    - I bet it has something do with the order in which the property view is being sent into the modal
-- Fix DOM manipulation on bidview
-- Change icons for individual places
+## Pick one thing at a time to fix
+  - Why do callback functions need to be wrapped?
+  - Turn DOM manip on map view into jquery?
+  - Preview Property view
+    - How can I manipulate its position?
+    - Put an option to it in a button in the infowindow and then stick it in a modal
+      - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
+      - I bet it has something do with the order in which the property view is being sent into the modal
+  - Fix DOM manipulation on bidview
+
+
+## Bugs
+  - There's this bug in mobile where if you brush the side bar away, the header creates line breaks
+  - resolve?
+  - reject?
+
+
+
+
+## Improvement
+  - Issue of page reloading, if you are on a bid or specific property, you lose your spot
+  - Have a custom URL so that you can return to a particular item
+  - Change icons for individual places
+  - improve modal, maybe integrate a function where until click close, next state does not fire
+  - Clean up CSS
+  - On mobile, when you minimize, the site header acts strangely and the spaces break
+
+## Features
+  - **Filters**
+    -https://appendto.com/2016/09/advanced-google-maps-with-javascript-filtering-and-displaying-information/
+    - login, logged out restrictions
+      - Capability of bidding needs to be restricted to who logged in.
+      - Logging out on view X, will send you back to view Y
 
 ### Brainstorming/Scratch
 - I want average bid on infowindow and other info
