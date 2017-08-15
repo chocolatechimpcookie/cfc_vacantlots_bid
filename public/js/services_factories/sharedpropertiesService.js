@@ -1,5 +1,5 @@
 angular.module('vacantlotsApp').service('sharedpropertiesService', function()
-  {
+{
     var property = {};
     var properties = [];
     var center;

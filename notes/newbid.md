@@ -16,6 +16,7 @@
   - How can I manipulate its position?
   - Put an option to it in a button in the infowindow and then stick it in a modal
     - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
+    - I bet it has something do with the order in which the property view is being sent into the modal
 - Fix DOM manipulation on bidview
 - Change icons for individual places
 

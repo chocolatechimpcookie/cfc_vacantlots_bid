@@ -1,14 +1,14 @@
 //console.log("test hamburger outside");
-
+//
 angular.module('vacantlotsApp').controller('SidebarController', function()
 {
-	console.log("test hamburger inside1");
+	console.log("test sidebarController");
 	this.state = false;
 });
-
+//
 angular.module('vacantlotsApp').directive('sidebarDirective', function()
 {
-    console.log("test hamburger inside 2");
+    console.log("test sidebarDirective");
 
     return {
         link : function(scope, element, attr)
@@ -35,4 +35,18 @@ $(document).ready(function()
         $("#wrapper").toggleClass("toggled");
     });
 
+		// $()
+
 });
+
+
+
+// Both of these seem to be doing the same thing
+//	But disabling either will cause it not to work
+// show is not a class in the index or scss
+// why
+// maybe one of them is a slide
+// not seeing how the slide works
+// not seeing how angular applies to this,
+
+//also the hamburger button disappears when you minimize
