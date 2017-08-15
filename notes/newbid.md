@@ -13,6 +13,7 @@
   - There's this bug in mobile where if you brush the side bar away, the header creates line breaks
   - resolve?
   - reject?
+  - ON mobile, clicking markers does not open info window
 
 
 
