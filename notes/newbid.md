@@ -4,8 +4,8 @@
   - Preview Property view
     - How can I manipulate its position?
     - Put an option to it in a button in the infowindow and then stick it in a modal
-      - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
-      - I bet it has something do with the order in which the property view is being sent into the modal
+        - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
+        - I bet it has something do with the order in which the property view is being sent into the modal
   - Fix DOM manipulation on bidview
 
 
@@ -15,7 +15,7 @@
   - reject?
   - ON mobile, clicking markers does not open info window
 
-
+Double tab nested bullets
 
 
 ## Improvement
@@ -25,6 +25,10 @@
   - improve modal, maybe integrate a function where until click close, next state does not fire
   - Clean up CSS
   - On mobile, when you minimize, the site header acts strangely and the spaces break
+  - nicer favicon
+  - if you click on the map when the user has maximized menu, menu is minimized
+      - Everytime you click menu, there could be a variable. If you click away from it and that variable is on, it minimizes the menu. There already is a class. Its just it applies whenever you click menu
+      - It just seems like there are special features
 
 ## Features
   - **Filters**
