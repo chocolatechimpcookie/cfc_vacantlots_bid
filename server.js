@@ -256,7 +256,7 @@ app.get('/avgbid/:id', passport.authenticate('jwt', {session: false}), (req, res
     } else {
       userHash = {}
 
-      const uniqueUserBids = bids.slice().sort((a,b) => b - a)
+      const uniqueUserBids = bids.slice().sort((a,b) => b.bidDate - a.bidDate)
       .filter(bid => userHash[bid.username] === undefined ? userHash[bid.username] = true : false)
 
       const avg = uniqueUserBids.reduce((total, bid) => total + bid.amount, 0) / uniqueUserBids.length

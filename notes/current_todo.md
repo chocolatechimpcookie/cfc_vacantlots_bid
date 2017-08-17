@@ -1,41 +1,35 @@
-## Pick one thing at a time to fix
-  - Why do callback functions need to be wrapped?
-  - Turn DOM manip on map view into jquery?
-  - Preview Property view
-    - How can I manipulate its position?
-    - Put an option to it in a button in the infowindow and then stick it in a modal
-        - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
-        - I bet it has something do with the order in which the property view is being sent into the modal
-  - Fix DOM manipulation on bidview
-
-
-## Bugs
-  - There's this bug in mobile where if you brush the side bar away, the header creates line breaks
-  - resolve?
-  - reject?
-  - ON mobile, clicking markers does not open info window
-
-Double tab nested bullets
-
-
-## Improvement
-  - Issue of page reloading, if you are on a bid or specific property, you lose your spot
+**Pick one thing at a time to fix**
+<!-- - Need to fix the bid id first since you gotta link it to bid view and service -->
+- **then bid view**
+- **then bid imagePath**
+- when you press X on infowindow, the infowindow should disappear and so should show my property
+- bid page
   - Have a custom URL so that you can return to a particular item
-  - Change icons for individual places
-  - improve modal, maybe integrate a function where until click close, next state does not fire
-  - Clean up CSS
-  - On mobile, when you minimize, the site header acts strangely and the spaces break
-  - nicer favicon
-  - if you click on the map when the user has maximized menu, menu is minimized
-      - Everytime you click menu, there could be a variable. If you click away from it and that variable is on, it minimizes the menu. There already is a class. Its just it applies whenever you click menu
-      - It just seems like there are special features
-
-## Features
-  - **Filters**
-    -https://appendto.com/2016/09/advanced-google-maps-with-javascript-filtering-and-displaying-information/
-    - login, logged out restrictions
-      - Capability of bidding needs to be restricted to who logged in.
-      - Logging out on view X, will send you back to view Y
+- if there is a way to bring the user back to where they were in on the map, position wise
+- Is sharedpropertiesService being applied appropriately? it is being put on vm
+- resolve?
+- reject?
+- maybe eventually get rid of bidpage? Do I even need it?
+  - Depends on how much information I am willing to put in the bidPage
+  - Depends on whether its a good idea to keep it there
+  - Maybe get rid of bidview and integrate bid functionality?
+  - Benefits of getting rid of bid page
+    - Less reloading of the map?
+    - Wouldn’t have to switch views
+    - Less jumpy for the user
+    - The user would prefer to see all this info before bidding. Putting the info
+    all in a bidpage breaks the flow of things. Though you could try to balance stuff.
+    - I won't have to repeat any information or functionality in the bid page
+    - Won't have to set up returning the current property
+  - Drawbacks
+    - Harder to display things while having all this map stuff in its way? May have responsive issues
+    Though of course, I could put the bid content within the same infowindow, even hide and show stuff
+    - More code seperation having them seperate
+- what does resolve reject do
+- Issue of page reloading, if you are on a bid or specific property, you lose your spot
+- improve modal, maybe integrate a function where until click close, next state does not fire
+- **Filters**
+  - https://appendto.com/2016/09/advanced-google-maps-with-javascript-filtering-and-displaying-information/
 
 ### Brainstorming/Scratch
 - I want average bid on infowindow and other info
@@ -92,11 +86,19 @@ Double tab nested bullets
   - So some properties don't have an available street view, and this needs to be handled
   - One is for information for info window, one is for the markers
 
-
-### Done
-<!-- - if there is a way to bring the user back to where they were in on the map, position wise -->
-<!-- - Is sharedpropertiesService being applied appropriately? it is being put on vm -->
-<!-- - Bidding calls
+### Things to do
+- login, logged out restrictions
+  - Capability of bidding needs to be restricted to who logged in.
+  - Logging out on view X, will send you back to view Y
+- Change infowindow UI
+<!-- - Why are these functions outside of the controller?
+    - Won't need to pass vm when its in there -->
+- Why do callback functions need to be wrapped?
+- Turn DOM manip on map view into jquery?
+- Property view
+  - How can I manipulate its position?
+- Fix DOM manipulation on bidview
+- Bidding calls
   - retrieve
     - existing bids on something
     - average bid
@@ -106,11 +108,10 @@ Double tab nested bullets
     - your favorites
     - starred
   - send
-    - Placing bids -->
-<!-- - bidview
-  - Streetname case? -->
-  <!-- - Why are these functions outside of the controller?
-      - Won't need to pass vm when its in there -->
+    - Placing bids
+- bidview
+  - Streetname case?
+- Change icons for individual places
 
 
 
