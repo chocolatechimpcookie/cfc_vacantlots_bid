@@ -41,6 +41,7 @@ app.use(express.static('public'))
 
 //global Lots array filled with lots for sending to user via /map URL
 Lots = []
+LotUpdateTime = 0
 
 const range = (lo, hi) => Array.from({ length: hi - lo }, (_, i) => lo + i)
 const url_front = 'http://data.ci.newark.nj.us/api/action/datastore_search?offset='
@@ -181,6 +182,11 @@ app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/public/index.html')
 })
 
+//send time of last lot data update to front
+app.get('/date', (req, res) => {
+  res.status(200).json(LotUpdateTime)
+})
+
 //send lot data to front
 app.get('/map',  (req, res) => {
 
@@ -198,6 +204,7 @@ app.get('/map',  (req, res) => {
           delete newLot['_id']
           return newLot
         })
+        LotUpdateTime = Date.now()
 
         res.status(200).json(Lots)
       } else {
