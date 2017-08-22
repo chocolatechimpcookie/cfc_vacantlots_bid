@@ -47,6 +47,18 @@
                 console.log('error getting lots')
             })
 
+            //how to use the date route (res.data will be 0 if the server just started up and the map route has not been used by any users yet, shouldn't be an issue though)
+            $http({
+                method: 'GET',
+                url: '/date',
+                data: null
+            }).then(function success(res) {
+                date = res.data
+                console.log(date)
+            }, function err(res) {
+                console.log('error getting date')
+            })
+
             //$scope.loginStatus purpose:
             //Contains API call for checking if user is logged in or not
             $scope.loginStatus = function() {
