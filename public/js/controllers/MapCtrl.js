@@ -299,7 +299,36 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     // document.getElementById('streetview').style.display = '';
 
     $("#popup_preview_property").modal('show');
+
+    $('#popup_preview_property').on('shown.bs.modal', function () {
+        google.maps.event.trigger(vm.panorama, "resize");
+    });
+
   }
+
+  // $('#popup_preview_property').on('shown.bs.modal', function ()
+  // {
+  //   google.maps.event.trigger(vm.map, "resize");
+  //
+  // });
+
+
+  // var map;
+  //
+  // google.maps.event.addDomListener(window, 'load', initialize);
+  //
+  // function initialize() {
+  //    var mapCanvas = document.getElementById('map');
+  //    var mapOptions = {
+  //       center: new google.maps.LatLng(44.5403, -78.5463),
+  //       zoom: 8,
+  //       mapTypeId: google.maps.MapTypeId.ROADMAP
+  //    }
+  //    map = new google.maps.Map(mapCanvas, mapOptions)
+  // }
+
+
+
 
 
 }]);
