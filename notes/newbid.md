@@ -1,6 +1,7 @@
 ## Pick one thing at a time to fix
   - Why do callback functions need to be wrapped?
   - Turn DOM manip on map view into jquery?
+  - if theres no property view, no issues, a modal comes or something
   - Preview Property view
     - How can I manipulate its position?
     - Put an option to it in a button in the infowindow and then stick it in a modal
