@@ -1,11 +1,9 @@
-
-
 /**
  * Creates google map and streetview populated with location markers. Handles clicks on the markers, which
  * cause a request to find the nearest streetview location. The streetview point of view is then set to the
  * marker position.
  */
-angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', function($state, $http, sharedpropertiesService)
+angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'sharedpropertiesService', 'accountService', function($state, $http, sharedpropertiesService, accountService)
 {
   var vm = this;
   vm.sharedpropertiesService = sharedpropertiesService;
@@ -14,6 +12,8 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
   var center;
   var zoom;
   console.log(" get center before");
+  vm.accountService = accountService;
+
   // console.log(vm.map.getCenter());
   if(sharedpropertiesService.getCenter())
   {
@@ -171,7 +171,15 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     sharedpropertiesService.setZoom(vm.map.getZoom());
     console.log("vmmap");
     console.log(vm.map.getZoom());
-    $state.go('bidPage');
+    if (vm.accountService.getLogstatus())
+    {
+      $state.go('bidPage');
+    }
+    else
+    {
+      popupModal("Not Logged In", "Not logged in. Please login.");
+
+    }
   }
 
 
@@ -208,31 +216,43 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
     {
       var address = vm.locations[i][0];
       //it's an array of an array
+
       var average_bid;
-      $http(
+
+      if (vm.accountService.getLogstatus())
       {
-          method: 'GET',
-          url: '/avgbid/' + vm.locations[i][3],
-          data: null,
-          headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
-      }).then(function success(res)
+        $http(
+        {
+            method: 'GET',
+            url: '/avgbid/' + vm.locations[i][3],
+            data: null,
+            headers: {'Authorization': 'JWT ' + localStorage.getItem("token")}
+        }).then(function success(res)
+        {
+            console.log("res data");
+            console.log(res.data)
+            if (res.data.avg)
+            {
+              average_bid = "$" + res.data.avg;
+            }
+            else
+            {
+              average_bid = "No bids";
+            }
+            postCalls();
+        }, function err(res)
+        {
+            console.log(res)
+            console.log("error retrieving average bid")
+        });
+
+      }
+      else
       {
-          console.log("res data");
-          console.log(res.data)
-          if (res.data.avg)
-          {
-            average_bid = "$" + res.data.avg;
-          }
-          else
-          {
-            average_bid = "No bids";
-          }
-          postCalls();
-      }, function err(res)
-      {
-          console.log(res)
-          console.log("error retrieving average bid")
-      });
+        postCalls();
+
+      }
+
 
 
 
@@ -242,18 +262,43 @@ angular.module('vacantlotsApp').controller('MapCtrl', ['$state', '$http', 'share
         console.log("vmlocations");
         console.log(vm.locations[i]);
         console.log(average_bid);
+        // if(localStorage.getItem("token"))
+        // {
+        //
+        // }
 
-        var currentinfowindowHTML =
-        '<div style="width: 200px; overflow: hidden;">'
-          + '<h2>'+address+'</h1>'
-          // + '<div>Image date: ' + vm.panoramaDate+'</div>'
-          +'<h3>'+ average_bid +'</h2>'
-          +'<p></p>'
-          + '<button id="bookmark" style="margin-right: 5px; width:40px;"><i class="material-icons" style="">bookmark</i></button>'
-          + '<button id="panorama_button"style="width:40px;"><i class="material-icons" style="">camera enhance</i></button>'
-          + '<br><br>'
-          + '<button id="bidButton" class="btn genbutton">Bid</button>';
-        + "</div>"
+
+        var currentinfowindowHTML;
+
+        if (vm.accountService.getLogstatus())
+        {
+          currentinfowindowHTML =
+          '<div style="width: 200px; overflow: hidden;">'
+            + '<h2>'+address+'</h1>'
+            // + '<div>Image date: ' + vm.panoramaDate+'</div>'
+            +'<h3>'+ average_bid +'</h2>'
+            +'<p></p>'
+            + '<button id="bookmark" style="margin-right: 5px; width:40px;"><i class="material-icons" style="">bookmark</i></button>'
+            + '<button id="panorama_button"style="width:40px;"><i class="material-icons" style="">camera enhance</i></button>'
+            + '<br><br>'
+            + '<button id="bidButton" class="btn genbutton">Bid</button>'
+          + "</div>";
+        }
+        else
+        {
+          currentinfowindowHTML = 
+          '<div style="width: 200px; overflow: hidden;">'
+            + '<h2>'+address+'</h1>'
+            // + '<div>Image date: ' + vm.panoramaDate+'</div>'
+            // +'<h3>'+ average_bid +'</h2>'
+            +'<p></p>'
+            + '<button id="bookmark" style="margin-right: 5px; width:40px;"><i class="material-icons" style="">bookmark</i></button>'
+            + '<button id="panorama_button"style="width:40px;"><i class="material-icons" style="">camera enhance</i></button>'
+            + '<br><br>'
+            + '<button id="bidButton" class="btn genbutton">Bid</button>'
+          + "</div>";
+
+        }
 
         vm.infowindow.setContent(currentinfowindowHTML);
         vm.infowindow.open(vm.map, propertyMarker);
