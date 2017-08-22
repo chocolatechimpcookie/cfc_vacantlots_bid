@@ -1,13 +1,14 @@
 ## Pick one thing at a time to fix
   - Why do callback functions need to be wrapped?
   - Turn DOM manip on map view into jquery?
+  - if theres no property view, no issues, a modal comes or something
   - Preview Property view
     - How can I manipulate its position?
     - Put an option to it in a button in the infowindow and then stick it in a modal
         - It's in the modal but I have to change and readjust the width of the page and it suddenly appears.
         - I bet it has something do with the order in which the property view is being sent into the modal
   - Fix DOM manipulation on bidview
-
+  - logout from bidpage doesn't redirect you anywhere
 
 ## Bugs
   - There's this bug in mobile where if you brush the side bar away, the header creates line breaks
