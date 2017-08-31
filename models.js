@@ -45,7 +45,7 @@ const favoriteSchema = new mongoose.Schema({
 })
 
 const User = mongoose.model('user', userSchema)
-const AbandonedLot = mongoose.model('lotsWithBids', abandonedLotSchema)
+const AbandonedLot = mongoose.model('abandonedLot', abandonedLotSchema)
 const Bid = mongoose.model('bid', bidSchema)
 const Favorite = mongoose.model('favorite', favoriteSchema)
 
