@@ -1,3 +1,6 @@
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
 const express = require('express')
 const rp = require('request-promise')
 const fetch = require('node-fetch')
@@ -10,6 +13,17 @@ const JwtStrategy = passportJWT.Strategy
 const bcrypt = require('bcryptjs')
 const CronJob = require('cron').CronJob
 const { User, AbandonedLot, Bid, Favorite } = require('./models.js')
+
+const privateKey  = fs.readFileSync('/etc/nginx/ssl/server.key', 'utf8')
+const certificate = fs.readFileSync('/etc/nginx/ssl/server.crt', 'utf8')
+
+const credentials = {key: privateKey, cert: certificate}
+
+const httpServer = http.createServer(app)
+const httpsServer = https.createServer(credentials, app)
+
+httpServer.listen(8080)
+httpsServer.listen(8443)
 
 let jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader()
@@ -446,8 +460,9 @@ app.delete('/favorite/:id', passport.authenticate('jwt', { session: false }), (r
     })
 })
 
-const port = process.env.PORT || 3000;
+//don't need if using HTTPS
+// const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log('Listening on port ' + port)
-})
+// app.listen(port, () => {
+//   console.log('Listening on port ' + port)
+// })
