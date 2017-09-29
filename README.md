@@ -26,3 +26,18 @@ Then start you node server
 ```bash
 $ node server.js
 ```
+
+## Run indefinitely on small server
+Go to the cloned repo and checkout the `deploy` branch.
+Get the mongo server running indefinitely. Normally you can
+use a service, but on a small server you may need the --smallfiles
+and --nojournal options which significantly decrease the memory footprint
+of the mongo database. You can run it indefinitely using `nohup`:
+```bash
+$ sudo nohup mongod --smallfiles --nojournal &
+```
+
+Then start you node server (sudo is necessary because we are using port 80)
+```bash
+$ sudo forever start server.js
+```
