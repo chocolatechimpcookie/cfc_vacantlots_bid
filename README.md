@@ -15,7 +15,7 @@ This area will be populated shortly
 ## THE RESTART
 From the directory of the user that will run this service 
 
-Reminder: the app is running at this user and not as root!
+Reminder: the app is running as this user and not as root!
 
 Stop server app:
 ```bash
