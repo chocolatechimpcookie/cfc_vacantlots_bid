@@ -10,8 +10,34 @@ this will help to encourage new opportunities for the city.
 src="https://cloud.githubusercontent.com/assets/6666044/25560528/2fdaa548-2d24-11e7-805c-3041efe5969d.png">
 
 ## Install
+This area will be populated shortly 
 
-Needs work...
+## THE RESTART
+From the directory of the user that will run this service 
+
+Reminder: the app is running at this user and not as root!
+
+Stop server app:
+```bash
+$ cd ../code/cfc_vacantlots_bid
+$ forever stopall
+```
+
+Stop mongodb:
+```bash
+$ sudo mongo --eval "db.getSiblingDB('admin').shutdownServer()"
+```
+
+Start mongodb:
+```bash
+$ sudo nohup mongod --smallfiles --nojournal &
+```
+
+START server app
+```bash
+$ forever start server.js
+```
+Now Check your Link
 
 ## Run on server
 
